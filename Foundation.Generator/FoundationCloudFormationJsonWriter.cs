@@ -59,8 +59,10 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
     private void ProcessMigrationFunction(FoundationAnnotationReport report, IJsonWriter jsonWriter)
     {
         var resourcePath = $"Resources.{report.MigrationFunctionModel.Name}";
-        var metadataToolPath = $"{resourcePath}.Metadata.Foundation.Tool";
-        jsonWriter.SetToken($"{metadataToolPath}", typeof(Generator).FullName);
+        var fullName = typeof(Generator).FullName.Replace(".",string.Empty);
+        var metadataRootPath = $"{resourcePath}.Metadata.{fullName}";
+        var versionPath = $"{metadataRootPath}.Version";
+        jsonWriter.SetToken(versionPath, typeof(Generator).Assembly.GetName().Version.ToString());
     }
 
     private void RemoveOrphanedResources()

@@ -156,7 +156,10 @@
     "FoundationSampleFunctionsMigrateGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
-        "Tool": "Amazon.Lambda.Annotations"
+        "Tool": "Amazon.Lambda.Annotations",
+        "FoundationGeneratorsGenerator": {
+          "Version": "1.0.0.0"
+        }
       },
       "Properties": {
         "Runtime": "dotnet6",
