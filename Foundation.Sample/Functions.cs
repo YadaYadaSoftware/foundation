@@ -1,5 +1,6 @@
 using Amazon.Lambda.Core;
 using Amazon.Lambda.Annotations;
+using Foundation.Annotations;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
@@ -109,6 +110,13 @@ You can make the following requests to invoke other Lambda functions perform cal
         {
             context.Logger.LogInformation($"{x} divide {y} is {x / y}");
             return x / y;
+        }
+
+        [LambdaFunction]
+        [MigrationFunction]
+        public Task<int> Migrate(ILambdaContext context)
+        {
+            return Task.FromResult(0);
         }
     }
 }

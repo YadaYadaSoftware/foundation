@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Generators", "Fo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "Foundation.Sample\Sample.csproj", "{131D31DA-C3C2-45C9-9FC9-4BB586B2FFE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Annotations", "Foundation.Annotations\Foundation.Annotations.csproj", "{82AC84EA-D00C-4DCF-B809-2AAEF381BA6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{131D31DA-C3C2-45C9-9FC9-4BB586B2FFE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{131D31DA-C3C2-45C9-9FC9-4BB586B2FFE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{131D31DA-C3C2-45C9-9FC9-4BB586B2FFE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82AC84EA-D00C-4DCF-B809-2AAEF381BA6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82AC84EA-D00C-4DCF-B809-2AAEF381BA6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82AC84EA-D00C-4DCF-B809-2AAEF381BA6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82AC84EA-D00C-4DCF-B809-2AAEF381BA6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
