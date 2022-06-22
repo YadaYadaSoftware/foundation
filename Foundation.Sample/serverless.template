@@ -177,7 +177,13 @@
       "Type": "AWS::CloudFormation::CustomResource",
       "Metadata": {
         "FoundationGeneratorsGenerator": {
-          "Version": "1.0.0.0"
+          "Version": "1.0.0.0",
+          "MigrationType": "Sample.Migrations.Migration1"
+        }
+      },
+      "Properties": {
+        "StackName": {
+          "Ref": "AWS::StackName"
         }
       }
     }

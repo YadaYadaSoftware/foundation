@@ -4,6 +4,7 @@ using Amazon.Lambda.Annotations.SourceGenerator.Models;
 using Amazon.Lambda.Annotations.SourceGenerator.Writers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json.Linq;
 
 namespace Foundation.Generators;
 
@@ -32,8 +33,6 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         }
 
         var originalContent = _fileManager.ReadAllText(foundationAnnotationReport.CloudFormationTemplatePath);
-        var templateDirectory = _directoryManager.GetDirectoryName(foundationAnnotationReport.CloudFormationTemplatePath);
-        var relativeProjectUri = _directoryManager.GetRelativePath(templateDirectory, foundationAnnotationReport.ProjectRootDirectory);
 
         if (string.IsNullOrEmpty(originalContent))
         {
@@ -44,8 +43,9 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
             _jsonWriter.Parse(originalContent);
         }
 
+
         ProcessMigrationFunction(foundationAnnotationReport, _jsonWriter);
-        ProcessMigrations(foundationAnnotationReport, _jsonWriter);
+        var processedMigrations = ProcessMigrations(foundationAnnotationReport, _jsonWriter);
 
         var json = _jsonWriter.GetPrettyJson();
         _fileManager.WriteAllText(report.CloudFormationTemplatePath, json);
@@ -74,6 +74,32 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         var metadataRootPath = GetMetadataPath(customResourcePath);
         var versionPath = $"{metadataRootPath}.Version";
         jsonWriter.SetToken(versionPath, typeof(Generator).Assembly.GetName().Version.ToString());
+        jsonWriter.SetToken($"{metadataRootPath}.MigrationType", migrationType.ContainingNamespace + "." + migrationType.Name);
+
+        var propertiesPath = $"{customResourcePath}.Properties";
+
+        jsonWriter.SetToken($"{propertiesPath}.StackName", new JObject(new JProperty("Ref","AWS::StackName")));
+
+        /*
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "ApplyMigration",
+            "Arn"
+          ]
+        },
+        "StackName": {
+          "Ref": "AWS::StackName"
+        },
+        "MigrationName": "20220513195220_MigrationJobDiscriminator",
+        "SqlBucket": {
+          "Ref": "PipelineBucket"
+        },
+        "Branch": {
+          "Ref": "Branch"
+        }
+      }
+      */
 
         return resourceName;
 
