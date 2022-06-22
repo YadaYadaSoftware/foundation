@@ -199,6 +199,33 @@
           "Ref": "BranchParm"
         }
       }
+    },
+    "MigrationJobDiscriminator": {
+      "Type": "AWS::CloudFormation::CustomResource",
+      "Metadata": {
+        "FoundationGeneratorsGenerator": {
+          "Version": "1.0.0.0",
+          "MigrationType": "BubbleBoy.Data.Migrations.MigrationJobDiscriminator"
+        }
+      },
+      "Properties": {
+        "StackName": {
+          "Ref": "AWS::StackName"
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "FoundationSampleFunctionsMigrateGenerated",
+            "Arn"
+          ]
+        },
+        "MigrationName": "20220513195220_MigrationJobDiscriminator",
+        "SqlBucket": {
+          "Ref": "MySqlBucket"
+        },
+        "Branch": {
+          "Ref": "BranchParm"
+        }
+      }
     }
   },
   "Outputs": {
@@ -207,6 +234,16 @@
       "Value": {
         "Fn::Sub": "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
       }
+    }
+  },
+  "Parameters": {
+    "BranchParm": {
+      "Type": "String",
+      "Default": "UNFORMATTED"
+    },
+    "MySqlBucket": {
+      "Type": "String",
+      "Default": "arn:aws:iam::768033286672:role/yadayada-master-deploy-LambdaExecutionRole-HYJT9XKQ0LKN"
     }
   }
 }

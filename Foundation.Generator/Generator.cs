@@ -25,11 +25,17 @@ namespace Foundation.Generators
         
         public void Initialize(GeneratorInitializationContext context)
         {
+#if DEBUG
+            Debugger.Launch();
+#endif
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
 
         public void Execute(GeneratorExecutionContext context)
         {
+#if DEBUG
+            Debugger.Launch();
+#endif
             var diagnosticReporter = new DiagnosticReporter(context);
 
             try
