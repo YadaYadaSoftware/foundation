@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.Lambda.Annotations.SourceGenerator" Version="0.5.1-preview-167-annotations-eventbridgerule" />
+    <PackageReference Include="Amazon.Lambda.Annotations.SourceGenerator" Version="0.5.1-preview-171-annotations-eventbridgerule" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
