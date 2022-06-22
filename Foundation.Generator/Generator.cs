@@ -34,7 +34,7 @@ namespace Foundation.Generators
         public void Execute(GeneratorExecutionContext context)
         {
 #if DEBUG
-            //Debugger.Launch();
+            Debugger.Launch();
 #endif
             var diagnosticReporter = new DiagnosticReporter(context);
 
