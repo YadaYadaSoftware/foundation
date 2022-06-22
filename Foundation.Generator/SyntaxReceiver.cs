@@ -12,7 +12,6 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
     {
-        Debugger.Launch();
         if (context.Node is ClassDeclarationSyntax classDeclarationSyntax && classDeclarationSyntax.AttributeLists.Count > 0)
         {
             // Get the symbol being declared by the class, and keep it if its annotated
