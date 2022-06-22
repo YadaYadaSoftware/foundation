@@ -45,6 +45,10 @@ public class MigrationFunctionAttributeBuilder
             {
                 data.SqlBucket = value;
             }
+            if (pair.Key == nameof(data.Branch) && pair.Value.Value is string branch)
+            {
+                data.Branch = branch;
+            }
 
         }
 
@@ -54,11 +58,10 @@ public class MigrationFunctionAttributeBuilder
 
 public class FoundationLambdaFunctionModel : ILambdaFunctionSerializable
 {
-    private string _sourceGeneratorVersion;
-
-    public FoundationLambdaFunctionModel(LambdaFunctionModel model, string sqlBucket)
+    public FoundationLambdaFunctionModel(LambdaFunctionModel model, string sqlBucket, string branch)
     {
         SqlBucket = sqlBucket;
+        Branch = branch;
         Handler = model.Handler;
         Name = model.Name;
         Timeout = model.Timeout;
@@ -79,11 +82,9 @@ public class FoundationLambdaFunctionModel : ILambdaFunctionSerializable
     public LambdaPackageType PackageType { get; }
     public IList<AttributeModel> Attributes { get; }
 
-    public string SourceGeneratorVersion
-    {
-        get => _sourceGeneratorVersion;
-        set => _sourceGeneratorVersion = value;
-    }
+    public string SourceGeneratorVersion { get; set; }
+
+    public string Branch { get; }
 }
 
 public static class MigrationModelBuilder
@@ -104,6 +105,6 @@ public static class MigrationModelBuilder
 
 
 
-        return new MigrationModel(lambdaFunctionModel, receiverMigrationClass.ContainingNamespace.ToString(), receiverMigrationClass.Name, migrationId, lambdaFunctionModel.Name, lambdaFunctionModel.SqlBucket);
+        return new MigrationModel(lambdaFunctionModel, receiverMigrationClass.ContainingNamespace.ToString(), receiverMigrationClass.Name, migrationId, lambdaFunctionModel.Name, lambdaFunctionModel.SqlBucket, lambdaFunctionModel.Branch);
     }
 }

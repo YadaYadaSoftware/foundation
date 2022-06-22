@@ -11,4 +11,5 @@ public interface IMigrationModel
     string FullName { get; }
     string Id { get; }
     string SqlBucket { get; }
+    string Branch { get; }
 }

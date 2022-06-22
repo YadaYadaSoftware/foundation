@@ -82,6 +82,7 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         jsonWriter.SetToken($"{propertiesPath}.ServiceToken", new JObject(new JProperty("Fn::GetAtt", new JArray(migrationModel.FunctionResourceName, "Arn"))));
         jsonWriter.SetToken($"{propertiesPath}.MigrationName", migrationModel.Id);
         jsonWriter.SetToken($"{propertiesPath}.SqlBucket", GetValueOrRef(migrationModel.SqlBucket));
+        jsonWriter.SetToken($"{propertiesPath}.Branch", GetValueOrRef(migrationModel.Branch));
 
 
         /*

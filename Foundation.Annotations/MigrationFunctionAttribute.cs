@@ -6,5 +6,7 @@ namespace Foundation.Annotations
     public class MigrationFunctionAttribute : Attribute
     {
         public string SqlBucket { get; set; }
+
+        public string Branch { get; set; }
     }
 }

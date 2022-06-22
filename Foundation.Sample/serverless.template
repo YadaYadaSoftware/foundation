@@ -194,6 +194,9 @@
         "MigrationName": "migration1",
         "SqlBucket": {
           "Ref": "MySqlBucket"
+        },
+        "Branch": {
+          "Ref": "BranchParm"
         }
       }
     }

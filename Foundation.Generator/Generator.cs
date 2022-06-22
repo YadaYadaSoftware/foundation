@@ -99,14 +99,15 @@ namespace Foundation.Generators
             AttributeModel[] attributes = new AttributeModel[lambdaFunctionModel.Attributes.Count+1];
             lambdaFunctionModel.Attributes.CopyTo(attributes, 0);
             var sqlBucket = string.Empty;
+            var branch = string.Empty;
             if (lambdaMethodSymbol.GetAttributes().SingleOrDefault(_ => _.AttributeClass.Name == nameof(MigrationFunctionAttribute)) is {} att)
             {
                 var built = MigrationFunctionAttributeBuilder.Build(att, context);
                 sqlBucket = built.SqlBucket;
-                attributes[attributes.Length - 1] = new AttributeModel(){};
+                branch = built.Branch;
 
             }
-            return new FoundationLambdaFunctionModel(lambdaFunctionModel, sqlBucket);
+            return new FoundationLambdaFunctionModel(lambdaFunctionModel, sqlBucket, branch );
         }
     }
 }
