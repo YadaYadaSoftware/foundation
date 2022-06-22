@@ -3,6 +3,7 @@ using Amazon.Lambda.Annotations.SourceGenerator.FileIO;
 using Amazon.Lambda.Annotations.SourceGenerator.Models;
 using Amazon.Lambda.Annotations.SourceGenerator.Writers;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Foundation.Generators;
 
@@ -43,17 +44,35 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
             _jsonWriter.Parse(originalContent);
         }
 
-
-        var processedLambdaFunctions = new HashSet<string>();
-
         ProcessMigrationFunction(foundationAnnotationReport, _jsonWriter);
-
-        //RemoveOrphanedResources();
+        ProcessMigrations(foundationAnnotationReport, _jsonWriter);
 
         var json = _jsonWriter.GetPrettyJson();
         _fileManager.WriteAllText(report.CloudFormationTemplatePath, json);
 
         _diagnosticReporter.Report(Diagnostic.Create(DiagnosticDescriptors.CodeGeneration, Location.None, $"{report.CloudFormationTemplatePath}", json));
+    }
+
+    private List<string> ProcessMigrations(FoundationAnnotationReport foundationAnnotationReport, IJsonWriter jsonWriter)
+    {
+        var processedMigrations = new List<string>();
+        foreach (var classDeclarationSyntax in foundationAnnotationReport.MigrationClasses)
+        {
+            string resourceName = ProcessMigration(classDeclarationSyntax, jsonWriter);
+            processedMigrations.Add(resourceName);
+        }
+
+        return processedMigrations;
+    }
+
+    private string ProcessMigration(ITypeSymbol migrationType, IJsonWriter jsonWriter)
+    {
+        var resourceName = migrationType.Name.Replace(".", string.Empty);
+        var customResourcePath = $"Resources.{resourceName}";
+        var typePath = $"{customResourcePath}.Type";
+        jsonWriter.SetToken(typePath, "AWS::CloudFormation::CustomResource");
+        return resourceName;
+
     }
 
     private void ProcessMigrationFunction(FoundationAnnotationReport report, IJsonWriter jsonWriter)

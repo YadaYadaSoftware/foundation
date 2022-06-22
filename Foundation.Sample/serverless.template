@@ -172,6 +172,9 @@
         "PackageType": "Zip",
         "Handler": "Foundation.Sample::Foundation.Sample.Functions_Migrate_Generated::Migrate"
       }
+    },
+    "Migration1": {
+      "Type": "AWS::CloudFormation:CustomResource"
     }
   },
   "Outputs": {

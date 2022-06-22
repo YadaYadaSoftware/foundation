@@ -8,6 +8,7 @@ using System.Text;
 using Amazon.Lambda.Annotations.SourceGenerator.Extensions;
 using Amazon.Lambda.Annotations.SourceGenerator.Models;
 using Amazon.Lambda.Annotations.SourceGenerator.Templates;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
 namespace Foundation.Generators
@@ -69,20 +70,29 @@ namespace Foundation.Generators
 
                 //var configureMethodModel = semanticModelProvider.GetConfigureMethodModel(receiver.StartupClasses.FirstOrDefault());
 
-                var semanticModelProvider = new SemanticModelProvider(context);
-                var lambdaMethodModel = semanticModelProvider.GetMethodSemanticModel(receiver.MigrationFunction);
-                var model = LambdaFunctionModelBuilder.Build(lambdaMethodModel, null, context);
+                var semanticModelProvider = new FoundationSemanticModelProvider(context);
+                IMethodSymbol lambdaMethodModel = semanticModelProvider.GetMethodSemanticModel(receiver.MigrationFunction);
 
 
-                var annotationReport = new FoundationAnnotationReport();
+                //Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetTypeInfo()
 
                 var templateFinder = new CloudFormationTemplateFinder(_fileManager, _directoryManager);
                 var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationFunction.SyntaxTree.FilePath);
+                var annotationReport = new FoundationAnnotationReport
+                {
+                    MigrationFunctionModel = LambdaFunctionModelBuilder.Build(lambdaMethodModel, null, context),
+                    CloudFormationTemplatePath = templateFinder.FindCloudFormationTemplate(projectRootDirectory),
+                    ProjectRootDirectory = projectRootDirectory
+                };
 
-                annotationReport.CloudFormationTemplatePath = templateFinder.FindCloudFormationTemplate(projectRootDirectory);
-                annotationReport.ProjectRootDirectory = projectRootDirectory;
-                annotationReport.MigrationFunctionModel = model;
-                annotationReport.MigrationClasses = receiver.MigrationClasses;
+
+                //return semanticModel.GetDeclaredSymbolForNode(declaration, cancellationToken);
+
+                foreach (var receiverMigrationClass in receiver.MigrationClasses)
+                {
+                    annotationReport.MigrationClasses.Add(receiverMigrationClass);
+                }
+
                 var cloudFormationJsonWriter = new FoundationCloudFormationJsonWriter(_fileManager, _directoryManager, _jsonWriter, diagnosticReporter);
                 cloudFormationJsonWriter.ApplyReport(annotationReport);
             }
@@ -94,6 +104,16 @@ namespace Foundation.Generators
                 throw;
 #endif
             }
+        }
+    }
+
+    public class FoundationSemanticModelProvider : SemanticModelProvider
+    {
+        private readonly GeneratorExecutionContext _context;
+
+        public FoundationSemanticModelProvider(GeneratorExecutionContext context) : base(context)
+        {
+            _context = context;
         }
     }
 }
