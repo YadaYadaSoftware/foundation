@@ -19,7 +19,7 @@ public static class FoundationAttributeModelBuilder
         AttributeModel model = null;
         if (att.AttributeClass.Equals(context.Compilation.GetTypeByMetadataName(typeof(MigrationFunctionAttribute).FullName), SymbolEqualityComparer.Default))
         {
-            var data = MigrationFunctionAttributeBuilder.Build(att);
+            var data = MigrationFunctionAttributeBuilder.Build(att, context);
             model = new AttributeModel<MigrationFunctionAttribute>
             {
                 Data = data,
@@ -35,7 +35,7 @@ public static class FoundationAttributeModelBuilder
 
 public class MigrationFunctionAttributeBuilder
 {
-    public static MigrationFunctionAttribute Build(AttributeData att)
+    public static MigrationFunctionAttribute Build(AttributeData att, GeneratorExecutionContext context)
     {
         var data = new MigrationFunctionAttribute();
 
@@ -52,9 +52,43 @@ public class MigrationFunctionAttributeBuilder
     }
 }
 
+public class FoundationLambdaFunctionModel : ILambdaFunctionSerializable
+{
+    private string _sourceGeneratorVersion;
+
+    public FoundationLambdaFunctionModel(LambdaFunctionModel model, string sqlBucket)
+    {
+        SqlBucket = sqlBucket;
+        Handler = model.Handler;
+        Name = model.Name;
+        Timeout = model.Timeout;
+        MemorySize = model.MemorySize;
+        Role = model.Role;
+        Policies = model.Policies;
+        PackageType = model.PackageType;
+        Attributes = model.Attributes;
+    }
+
+    public string SqlBucket { get; }
+    public string Handler { get; }
+    public string Name { get; }
+    public uint? Timeout { get; }
+    public uint? MemorySize { get; }
+    public string Role { get; }
+    public string Policies { get; }
+    public LambdaPackageType PackageType { get; }
+    public IList<AttributeModel> Attributes { get; }
+
+    public string SourceGeneratorVersion
+    {
+        get => _sourceGeneratorVersion;
+        set => _sourceGeneratorVersion = value;
+    }
+}
+
 public static class MigrationModelBuilder
 {
-    public static IMigrationModel Build(ILambdaFunctionSerializable lambdaFunctionModel, ITypeSymbol receiverMigrationClass)
+    public static IMigrationModel Build(FoundationLambdaFunctionModel lambdaFunctionModel, ITypeSymbol receiverMigrationClass)
     {
         if (lambdaFunctionModel.Attributes.SingleOrDefault(_ => _.Type.FullName == typeof(MigrationFunctionAttribute).FullName) is not { } lambdaFunctionAttribute)
         {
@@ -70,6 +104,6 @@ public static class MigrationModelBuilder
 
 
 
-        return new MigrationModel(lambdaFunctionModel, receiverMigrationClass.ContainingNamespace.ToString(), receiverMigrationClass.Name, migrationId, lambdaFunctionModel.Name, "sqlbucket");
+        return new MigrationModel(lambdaFunctionModel, receiverMigrationClass.ContainingNamespace.ToString(), receiverMigrationClass.Name, migrationId, lambdaFunctionModel.Name, lambdaFunctionModel.SqlBucket);
     }
 }

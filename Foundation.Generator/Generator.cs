@@ -55,12 +55,7 @@ namespace Foundation.Generators
                 var semanticModelProvider = new FoundationSemanticModelProvider(context);
 
                 IMethodSymbol lambdaMethodSymbol = semanticModelProvider.GetMethodSemanticModel(receiver.MigrationFunction);
-                LambdaFunctionModel migrationLambdaFunctionModel = LambdaFunctionModelBuilder.Build(lambdaMethodSymbol, null, context);
-                var lambdaMethod = LambdaMethodModelBuilder.Build(lambdaMethodSymbol, null, context);                //
-                // supplemental attribute building
-
-                FoundationAttributeModelBuilder.Build(lambdaMethodSymbol.GetAttributes().Single(_=>_.AttributeClass.Name==nameof(MigrationFunctionAttribute)), context);
-                //
+                var migrationLambdaFunctionModel = FoundationLambdaFunctionModelBuilder.Build(lambdaMethodSymbol, null, context);
                 var templateFinder = new CloudFormationTemplateFinder(_fileManager, _directoryManager);
                 var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationFunction.SyntaxTree.FilePath);
                 var annotationReport = new FoundationAnnotationReport
@@ -90,6 +85,28 @@ namespace Foundation.Generators
                 throw;
 #endif
             }
+        }
+    }
+
+    public class FoundationLambdaFunctionModelBuilder
+    {
+        public static FoundationLambdaFunctionModel Build(IMethodSymbol lambdaMethodSymbol, IMethodSymbol configureMethodSymbol, GeneratorExecutionContext context)
+        {
+
+            var attribute = FoundationAttributeModelBuilder.Build(lambdaMethodSymbol.GetAttributes().Single(_ => _.AttributeClass.Name == nameof(MigrationFunctionAttribute)), context);
+
+            var lambdaFunctionModel = LambdaFunctionModelBuilder.Build(lambdaMethodSymbol, configureMethodSymbol, context);
+            AttributeModel[] attributes = new AttributeModel[lambdaFunctionModel.Attributes.Count+1];
+            lambdaFunctionModel.Attributes.CopyTo(attributes, 0);
+            var sqlBucket = string.Empty;
+            if (lambdaMethodSymbol.GetAttributes().SingleOrDefault(_ => _.AttributeClass.Name == nameof(MigrationFunctionAttribute)) is {} att)
+            {
+                var built = MigrationFunctionAttributeBuilder.Build(att, context);
+                sqlBucket = built.SqlBucket;
+                attributes[attributes.Length - 1] = new AttributeModel(){};
+
+            }
+            return new FoundationLambdaFunctionModel(lambdaFunctionModel, sqlBucket);
         }
     }
 }
