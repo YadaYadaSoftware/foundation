@@ -71,6 +71,10 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         var customResourcePath = $"Resources.{resourceName}";
         var typePath = $"{customResourcePath}.Type";
         jsonWriter.SetToken(typePath, "AWS::CloudFormation::CustomResource");
+        var metadataRootPath = GetMetadataPath(customResourcePath);
+        var versionPath = $"{metadataRootPath}.Version";
+        jsonWriter.SetToken(versionPath, typeof(Generator).Assembly.GetName().Version.ToString());
+
         return resourceName;
 
     }
@@ -78,10 +82,16 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
     private void ProcessMigrationFunction(FoundationAnnotationReport report, IJsonWriter jsonWriter)
     {
         var resourcePath = $"Resources.{report.MigrationFunctionModel.Name}";
-        var fullName = typeof(Generator).FullName.Replace(".",string.Empty);
-        var metadataRootPath = $"{resourcePath}.Metadata.{fullName}";
+        var metadataRootPath = GetMetadataPath(resourcePath);
         var versionPath = $"{metadataRootPath}.Version";
         jsonWriter.SetToken(versionPath, typeof(Generator).Assembly.GetName().Version.ToString());
+    }
+
+    private static string GetMetadataPath(string resourcePath)
+    {
+        var fullName = typeof(Generator).FullName.Replace(".", string.Empty);
+        var metadataRootPath = $"{resourcePath}.Metadata.{fullName}";
+        return metadataRootPath;
     }
 
     private void RemoveOrphanedResources()

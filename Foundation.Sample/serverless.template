@@ -174,7 +174,12 @@
       }
     },
     "Migration1": {
-      "Type": "AWS::CloudFormation:CustomResource"
+      "Type": "AWS::CloudFormation::CustomResource",
+      "Metadata": {
+        "FoundationGeneratorsGenerator": {
+          "Version": "1.0.0.0"
+        }
+      }
     }
   },
   "Outputs": {
