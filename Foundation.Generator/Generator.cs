@@ -71,26 +71,25 @@ namespace Foundation.Generators
                 //var configureMethodModel = semanticModelProvider.GetConfigureMethodModel(receiver.StartupClasses.FirstOrDefault());
 
                 var semanticModelProvider = new FoundationSemanticModelProvider(context);
-                IMethodSymbol lambdaMethodModel = semanticModelProvider.GetMethodSemanticModel(receiver.MigrationFunction);
-
-
-                //Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetTypeInfo()
+                IMethodSymbol lambdaMethodSymbol = semanticModelProvider.GetMethodSemanticModel(receiver.MigrationFunction);
+                ILambdaFunctionSerializable migrationLambdaFunctionModel = LambdaFunctionModelBuilder.Build(lambdaMethodSymbol, null, context);
 
                 var templateFinder = new CloudFormationTemplateFinder(_fileManager, _directoryManager);
                 var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationFunction.SyntaxTree.FilePath);
                 var annotationReport = new FoundationAnnotationReport
                 {
-                    MigrationFunctionModel = LambdaFunctionModelBuilder.Build(lambdaMethodModel, null, context),
+                    MigrationFunctionModel = migrationLambdaFunctionModel,
                     CloudFormationTemplatePath = templateFinder.FindCloudFormationTemplate(projectRootDirectory),
                     ProjectRootDirectory = projectRootDirectory
                 };
 
 
-                //return semanticModel.GetDeclaredSymbolForNode(declaration, cancellationToken);
+
 
                 foreach (var receiverMigrationClass in receiver.MigrationClasses)
                 {
-                    annotationReport.MigrationClasses.Add(receiverMigrationClass);
+                    IMigrationModel migrationModel = MigrationModelBuilder.Build(migrationLambdaFunctionModel, receiverMigrationClass);
+                    annotationReport.Migrations.Add(migrationModel);
                 }
 
                 var cloudFormationJsonWriter = new FoundationCloudFormationJsonWriter(_fileManager, _directoryManager, _jsonWriter, diagnosticReporter);
@@ -105,6 +104,42 @@ namespace Foundation.Generators
 #endif
             }
         }
+    }
+
+    public static class MigrationModelBuilder
+    {
+        public static IMigrationModel Build(ILambdaFunctionSerializable lambdaFunctionModel, ITypeSymbol receiverMigrationClass)
+        {
+            if (receiverMigrationClass.GetAttributes().SingleOrDefault(_ => $"{_.AttributeClass.ContainingNamespace}.{_.AttributeClass.Name}" == "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute") is not { } migrationAttribute
+                || !migrationAttribute.ConstructorArguments.Any())
+            {
+                throw new InvalidOperationException();
+            }
+            string migrationId = migrationAttribute.ConstructorArguments.FirstOrDefault().Value!.ToString();
+
+            return new MigrationModel(lambdaFunctionModel, receiverMigrationClass.ContainingNamespace.ToString(), receiverMigrationClass.Name, migrationId, lambdaFunctionModel.Name);
+        }
+    }
+
+    public class MigrationModel : IMigrationModel
+    {
+        private readonly ILambdaFunctionSerializable _lambdaFunctionModel;
+
+        public MigrationModel(ILambdaFunctionSerializable lambdaFunctionModel, string @namespace, string typeName, string migrationId, string resourceName)
+        {
+            _lambdaFunctionModel = lambdaFunctionModel;
+            Name = typeName;
+            ResourceName = resourceName;
+            Namespace = @namespace;
+            Id = migrationId;
+        }
+
+        public string FunctionResourceName => _lambdaFunctionModel.Name;
+        public string Name { get; }
+        public string ResourceName { get; }
+        public string Namespace { get; }
+        public string FullName => this.Namespace + "." + Name;
+        public string Id { get; }
     }
 
     public class FoundationSemanticModelProvider : SemanticModelProvider

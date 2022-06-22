@@ -7,5 +7,5 @@ namespace Foundation.Generators;
 public class FoundationAnnotationReport : AnnotationReport
 {
     public ILambdaFunctionSerializable MigrationFunctionModel { get; set; }
-    public List<ITypeSymbol> MigrationClasses { get; set; } = new();
+    public List<IMigrationModel> Migrations { get; set; } = new();
 }

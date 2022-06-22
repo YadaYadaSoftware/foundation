@@ -190,7 +190,8 @@
             "FoundationSampleFunctionsMigrateGenerated",
             "Arn"
           ]
-        }
+        },
+        "MigrationName": "migration1"
       }
     }
   },
