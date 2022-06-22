@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "Foundation.Sample
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Annotations", "Foundation.Annotations\Foundation.Annotations.csproj", "{82AC84EA-D00C-4DCF-B809-2AAEF381BA6A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8A8B343A-3E5D-4C4D-AF39-DA6B138D90E4}"
+	ProjectSection(SolutionItems) = preProject
+		Foundation.Annotations.nuspec = Foundation.Annotations.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

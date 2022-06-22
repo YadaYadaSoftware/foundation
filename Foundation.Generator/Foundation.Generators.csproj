@@ -12,7 +12,6 @@
     <PackageReference Include="Amazon.Lambda.Annotations.SourceGenerator" Version="0.5.1-preview-171-annotations-eventbridgerule" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.2.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
 	    <PrivateAssets>all</PrivateAssets>
@@ -20,8 +19,19 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Foundation.Annotations\Foundation.Annotations.csproj" />
+	<ItemGroup>
+		<!-- Generator dependencies, update Libraries/src/Amazon.Lambda.Annotations.nuspec whenever a new generator dependency is added.  -->
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" GeneratePathProperty="true" PrivateAssets="all" />
+	</ItemGroup>
+
+	<Target Name="GetDependencyTargetPaths">
+		<ItemGroup>
+			<TargetPathWithTargetPlatformMoniker Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll" IncludeRuntimeDependency="false" />
+		</ItemGroup>
+	</Target>
+
+	<ItemGroup>
+    <ProjectReference Include="..\Foundation.Annotations\Foundation.Annotations.csproj" OutputItemType="Analyzer"  />
   </ItemGroup>
 
 </Project>
