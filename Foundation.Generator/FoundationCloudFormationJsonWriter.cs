@@ -44,8 +44,8 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         }
 
 
-        ProcessMigrationFunction(foundationAnnotationReport, _jsonWriter);
-        var processedMigrations = ProcessMigrations(foundationAnnotationReport, _jsonWriter);
+        var migrationFunctionResourceName = ProcessMigrationFunction(foundationAnnotationReport, _jsonWriter);
+        var processedMigrations = ProcessMigrations(foundationAnnotationReport, migrationFunctionResourceName, _jsonWriter);
 
         var json = _jsonWriter.GetPrettyJson();
         _fileManager.WriteAllText(report.CloudFormationTemplatePath, json);
@@ -53,19 +53,19 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         _diagnosticReporter.Report(Diagnostic.Create(DiagnosticDescriptors.CodeGeneration, Location.None, $"{report.CloudFormationTemplatePath}", json));
     }
 
-    private List<string> ProcessMigrations(FoundationAnnotationReport foundationAnnotationReport, IJsonWriter jsonWriter)
+    private List<string> ProcessMigrations(FoundationAnnotationReport foundationAnnotationReport, string migrationFunctionResourceName, IJsonWriter jsonWriter)
     {
         var processedMigrations = new List<string>();
         foreach (var classDeclarationSyntax in foundationAnnotationReport.MigrationClasses)
         {
-            string resourceName = ProcessMigration(classDeclarationSyntax, jsonWriter);
-            processedMigrations.Add(resourceName);
+            string migrationResourceName = ProcessMigration(classDeclarationSyntax, migrationFunctionResourceName, jsonWriter);
+            processedMigrations.Add(migrationResourceName);
         }
 
         return processedMigrations;
     }
 
-    private string ProcessMigration(ITypeSymbol migrationType, IJsonWriter jsonWriter)
+    private string ProcessMigration(ITypeSymbol migrationType, string migrationFunctionResourceName, IJsonWriter jsonWriter)
     {
         var resourceName = migrationType.Name.Replace(".", string.Empty);
         var customResourcePath = $"Resources.{resourceName}";
@@ -79,6 +79,7 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         var propertiesPath = $"{customResourcePath}.Properties";
 
         jsonWriter.SetToken($"{propertiesPath}.StackName", new JObject(new JProperty("Ref","AWS::StackName")));
+        jsonWriter.SetToken($"{propertiesPath}.ServiceToken", new JObject(new JProperty("Fn::GetAtt", new JArray(migrationFunctionResourceName,"Arn"))));
 
         /*
       "Properties": {
@@ -105,12 +106,14 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
 
     }
 
-    private void ProcessMigrationFunction(FoundationAnnotationReport report, IJsonWriter jsonWriter)
+    private string ProcessMigrationFunction(FoundationAnnotationReport report, IJsonWriter jsonWriter)
     {
-        var resourcePath = $"Resources.{report.MigrationFunctionModel.Name}";
+        var resourceName = report.MigrationFunctionModel.Name;
+        var resourcePath = $"Resources.{resourceName}";
         var metadataRootPath = GetMetadataPath(resourcePath);
         var versionPath = $"{metadataRootPath}.Version";
         jsonWriter.SetToken(versionPath, typeof(Generator).Assembly.GetName().Version.ToString());
+        return resourceName;
     }
 
     private static string GetMetadataPath(string resourcePath)

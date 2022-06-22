@@ -184,6 +184,12 @@
       "Properties": {
         "StackName": {
           "Ref": "AWS::StackName"
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "FoundationSampleFunctionsMigrateGenerated",
+            "Arn"
+          ]
         }
       }
     }
