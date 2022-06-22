@@ -6,11 +6,12 @@ public class MigrationModel : IMigrationModel
 {
     private readonly ILambdaFunctionSerializable _lambdaFunctionModel;
 
-    public MigrationModel(ILambdaFunctionSerializable lambdaFunctionModel, string @namespace, string typeName, string migrationId, string resourceName)
+    public MigrationModel(ILambdaFunctionSerializable lambdaFunctionModel, string @namespace, string typeName, string migrationId, string resourceName, string sqlBucket)
     {
         _lambdaFunctionModel = lambdaFunctionModel;
         Name = typeName;
         ResourceName = resourceName;
+        SqlBucket = sqlBucket;
         Namespace = @namespace;
         Id = migrationId;
     }
@@ -21,4 +22,5 @@ public class MigrationModel : IMigrationModel
     public string Namespace { get; }
     public string FullName => this.Namespace + "." + Name;
     public string Id { get; }
+    public string SqlBucket { get; }
 }

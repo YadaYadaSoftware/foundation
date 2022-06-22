@@ -191,7 +191,8 @@
             "Arn"
           ]
         },
-        "MigrationName": "migration1"
+        "MigrationName": "migration1",
+        "SqlBucket": "sqlbucket"
       }
     }
   },

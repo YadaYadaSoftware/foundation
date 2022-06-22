@@ -81,7 +81,8 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         jsonWriter.SetToken($"{propertiesPath}.StackName", new JObject(new JProperty("Ref","AWS::StackName")));
         jsonWriter.SetToken($"{propertiesPath}.ServiceToken", new JObject(new JProperty("Fn::GetAtt", new JArray(migrationModel.FunctionResourceName, "Arn"))));
         jsonWriter.SetToken($"{propertiesPath}.MigrationName", migrationModel.Id);
-        
+        jsonWriter.SetToken($"{propertiesPath}.SqlBucket", GetValueOrRef(migrationModel.SqlBucket));
+
 
         /*
       "Properties": {
@@ -129,5 +130,16 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
     {
         throw new NotImplementedException();
     }
+
+    private JToken GetValueOrRef(string value)
+    {
+        if (!value.StartsWith("@"))
+            return value;
+
+        var refNode = new JObject();
+        refNode["Ref"] = value.Substring(1);
+        return refNode;
+    }
+
 
 }

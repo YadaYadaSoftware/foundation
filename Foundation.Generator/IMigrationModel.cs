@@ -1,4 +1,6 @@
-﻿namespace Foundation.Generators;
+﻿using Newtonsoft.Json.Linq;
+
+namespace Foundation.Generators;
 
 public interface IMigrationModel
 {
@@ -8,4 +10,5 @@ public interface IMigrationModel
     string Namespace { get; }
     string FullName { get; }
     string Id { get; }
+    string SqlBucket { get; }
 }

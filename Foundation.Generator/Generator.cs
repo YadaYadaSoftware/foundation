@@ -7,7 +7,9 @@ using System.Diagnostics;
 using System.Text;
 using Amazon.Lambda.Annotations.SourceGenerator.Extensions;
 using Amazon.Lambda.Annotations.SourceGenerator.Models;
+using Amazon.Lambda.Annotations.SourceGenerator.Models.Attributes;
 using Amazon.Lambda.Annotations.SourceGenerator.Templates;
+using Foundation.Annotations;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
@@ -40,12 +42,6 @@ namespace Foundation.Generators
                     return;
                 }
 
-                //// If there are no Lambda methods, return early
-                //if (!receiver.LambdaMethods.Any())
-                //{
-                //    return;
-                //}
-
                 if (receiver.MigrationFunction is null)
                 {
                     return;
@@ -56,24 +52,15 @@ namespace Foundation.Generators
                     return;
                 }
 
-                //var semanticModelProvider = new SemanticModelProvider(context);
-                //if (receiver.StartupClasses.Count > 1)
-                //{
-                //    foreach (var startup in receiver.StartupClasses)
-                //    {
-                //        // If there are more than one startup class, report them as errors
-                //        diagnosticReporter.Report(Diagnostic.Create(DiagnosticDescriptors.MultipleStartupNotAllowed,
-                //            Location.Create(startup.SyntaxTree, startup.Span),
-                //            startup.SyntaxTree.FilePath));
-                //    }
-                //}
-
-                //var configureMethodModel = semanticModelProvider.GetConfigureMethodModel(receiver.StartupClasses.FirstOrDefault());
-
                 var semanticModelProvider = new FoundationSemanticModelProvider(context);
-                IMethodSymbol lambdaMethodSymbol = semanticModelProvider.GetMethodSemanticModel(receiver.MigrationFunction);
-                ILambdaFunctionSerializable migrationLambdaFunctionModel = LambdaFunctionModelBuilder.Build(lambdaMethodSymbol, null, context);
 
+                IMethodSymbol lambdaMethodSymbol = semanticModelProvider.GetMethodSemanticModel(receiver.MigrationFunction);
+                LambdaFunctionModel migrationLambdaFunctionModel = LambdaFunctionModelBuilder.Build(lambdaMethodSymbol, null, context);
+                var lambdaMethod = LambdaMethodModelBuilder.Build(lambdaMethodSymbol, null, context);                //
+                // supplemental attribute building
+
+                FoundationAttributeModelBuilder.Build(lambdaMethodSymbol.GetAttributes().Single(_=>_.AttributeClass.Name==nameof(MigrationFunctionAttribute)), context);
+                //
                 var templateFinder = new CloudFormationTemplateFinder(_fileManager, _directoryManager);
                 var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationFunction.SyntaxTree.FilePath);
                 var annotationReport = new FoundationAnnotationReport
