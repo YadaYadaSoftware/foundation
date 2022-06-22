@@ -20,7 +20,7 @@
           "AWSLambdaBasicExecutionRole"
         ],
         "PackageType": "Zip",
-        "Handler": "Foundation.Sample::Foundation.Sample.Functions_Default_Generated::Default",
+        "Handler": "Sample::Foundation.Sample.Functions_Default_Generated::Default",
         "Events": {
           "RootGet": {
             "Type": "HttpApi",
@@ -50,7 +50,7 @@
           "AWSLambdaBasicExecutionRole"
         ],
         "PackageType": "Zip",
-        "Handler": "Foundation.Sample::Foundation.Sample.Functions_Add_Generated::Add",
+        "Handler": "Sample::Foundation.Sample.Functions_Add_Generated::Add",
         "Events": {
           "RootGet": {
             "Type": "HttpApi",
@@ -80,7 +80,7 @@
           "AWSLambdaBasicExecutionRole"
         ],
         "PackageType": "Zip",
-        "Handler": "Foundation.Sample::Foundation.Sample.Functions_Substract_Generated::Substract",
+        "Handler": "Sample::Foundation.Sample.Functions_Substract_Generated::Substract",
         "Events": {
           "RootGet": {
             "Type": "HttpApi",
@@ -110,7 +110,7 @@
           "AWSLambdaBasicExecutionRole"
         ],
         "PackageType": "Zip",
-        "Handler": "Foundation.Sample::Foundation.Sample.Functions_Multiply_Generated::Multiply",
+        "Handler": "Sample::Foundation.Sample.Functions_Multiply_Generated::Multiply",
         "Events": {
           "RootGet": {
             "Type": "HttpApi",
@@ -140,7 +140,7 @@
           "AWSLambdaBasicExecutionRole"
         ],
         "PackageType": "Zip",
-        "Handler": "Foundation.Sample::Foundation.Sample.Functions_Divide_Generated::Divide",
+        "Handler": "Sample::Foundation.Sample.Functions_Divide_Generated::Divide",
         "Events": {
           "RootGet": {
             "Type": "HttpApi",
@@ -170,7 +170,7 @@
           "AWSLambdaBasicExecutionRole"
         ],
         "PackageType": "Zip",
-        "Handler": "Foundation.Sample::Foundation.Sample.Functions_Migrate_Generated::Migrate"
+        "Handler": "Sample::Foundation.Sample.Functions_Migrate_Generated::Migrate"
       }
     },
     "Migration1": {
