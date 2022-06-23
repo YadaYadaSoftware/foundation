@@ -8,7 +8,6 @@ namespace Foundation.Generators;
 public class SyntaxReceiver : ISyntaxContextReceiver
 {
     public MethodDeclarationSyntax MigrationFunction { get; set; } = null;
-    public List<ITypeSymbol> MigrationClasses { get; } = new();
     public List<(ITypeSymbol classSymbol, ClassDeclarationSyntax classDeclarationSyntax)> MigrationClasses2 { get; } = new();
 
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
@@ -24,24 +23,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
                 {
                     this.MigrationClasses2.Add((classSymbol, classDeclarationSyntax));
                 }
-
-                if (classSymbol.GetAttributes().Any(attr => attr.AttributeClass.Name == "MigrationAttribute"))
-                {
-                    MigrationClasses.Add(classSymbol);
-                }
             }
-
-            // any method with at least one attribute is a candidate of function generation
-            if (context.Node is MethodDeclarationSyntax methodDeclarationSyntax && methodDeclarationSyntax.AttributeLists.Count > 0)
-            {
-                // Get the symbol being declared by the method, and keep it if its annotated
-                var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclarationSyntax);
-                if (methodSymbol.GetAttributes().Any(attr => attr.AttributeClass.Name == nameof(MigrationFunctionAttribute)))
-                {
-                    MigrationFunction = methodDeclarationSyntax;
-                }
-            }
-
         }
         catch (Exception e)
         {

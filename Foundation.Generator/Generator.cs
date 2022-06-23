@@ -43,11 +43,6 @@ namespace Foundation.Generators
                     return;
                 }
 
-                if (!receiver.MigrationClasses.Any())
-                {
-                    return;
-                }
-
                 if (!receiver.MigrationClasses2.Any()) return;
 
 
@@ -60,19 +55,9 @@ namespace Foundation.Generators
 
                 var annotationReport = new FoundationAnnotationReport
                 {
-                    MigrationFunctionModel = migrationLambdaFunctionModel,
                     CloudFormationTemplatePath = templateFinder.FindCloudFormationTemplate(projectRootDirectory),
                     ProjectRootDirectory = projectRootDirectory
                 };
-
-
-
-
-                foreach (var receiverMigrationClass in receiver.MigrationClasses)
-                {
-                    IMigrationModel migrationModel = MigrationModelBuilder.Build(migrationLambdaFunctionModel, receiverMigrationClass);
-                    annotationReport.Migrations.Add(migrationModel);
-                }
 
                 foreach (var typeSymbol in receiver.MigrationClasses2)
                 {
