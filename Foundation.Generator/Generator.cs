@@ -45,9 +45,6 @@ namespace Foundation.Generators
 
                 if (!receiver.MigrationClasses.Any()) return;
 
-
-                var semanticModelProvider = new FoundationSemanticModelProvider(context);
-
                 var templateFinder = new CloudFormationTemplateFinder(_fileManager, _directoryManager);
                 var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationClasses.First().classDeclarationSyntax.SyntaxTree.FilePath);
 

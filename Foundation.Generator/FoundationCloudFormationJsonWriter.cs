@@ -66,7 +66,7 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
 
     private string ProcessMigration(IMigrationModel migrationModel, IJsonWriter jsonWriter)
     {
-        var resourceName = $"Migration{migrationModel.MigrationId}";
+        var resourceName = $"Migration{migrationModel.MigrationId}".Replace("_", string.Empty);
         var customResourcePath = $"Resources.{resourceName}";
         var typePath = $"{customResourcePath}.Type";
         jsonWriter.SetToken(typePath, "AWS::CloudFormation::CustomResource");
