@@ -8,4 +8,5 @@ public class FoundationAnnotationReport : AnnotationReport
 {
     public ILambdaFunctionSerializable MigrationFunctionModel { get; set; }
     public List<IMigrationModel> Migrations { get; set; } = new();
+    public List<IMigrationModel2> Migrations2 { get; set; } = new();
 }

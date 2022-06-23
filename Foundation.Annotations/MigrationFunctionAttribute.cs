@@ -9,4 +9,10 @@ namespace Foundation.Annotations
 
         public string Branch { get; set; }
     }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class MigrationFunction2Attribute : Attribute
+    {
+        public Type MigrationFunction { get; set; }
+    }
 }

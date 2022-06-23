@@ -9,6 +9,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 {
     public MethodDeclarationSyntax MigrationFunction { get; set; } = null;
     public List<ITypeSymbol> MigrationClasses { get; } = new();
+    public List<ITypeSymbol> MigrationClasses2 { get; } = new();
 
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
     {
@@ -16,6 +17,11 @@ public class SyntaxReceiver : ISyntaxContextReceiver
         {
             // Get the symbol being declared by the class, and keep it if its annotated
             ITypeSymbol classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) as ITypeSymbol;
+
+            if (classSymbol.GetAttributes().Any(data => data.AttributeClass.Name == "MigrationFunction2Attribute"))
+            {
+                this.MigrationClasses2.Add(classSymbol);
+            }
             
             if (classSymbol.GetAttributes().Any(attr => attr.AttributeClass.Name == "MigrationAttribute"))
             {
@@ -34,5 +40,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
             }
         }
 
+
     }
+
 }
