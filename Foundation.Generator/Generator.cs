@@ -48,8 +48,6 @@ namespace Foundation.Generators
 
                 var semanticModelProvider = new FoundationSemanticModelProvider(context);
 
-                IMethodSymbol lambdaMethodSymbol = semanticModelProvider.GetMethodSemanticModel(receiver.MigrationFunction);
-                var migrationLambdaFunctionModel = FoundationLambdaFunctionModelBuilder.Build(lambdaMethodSymbol, null, context);
                 var templateFinder = new CloudFormationTemplateFinder(_fileManager, _directoryManager);
                 var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationClasses2.First().classDeclarationSyntax.SyntaxTree.FilePath);
 

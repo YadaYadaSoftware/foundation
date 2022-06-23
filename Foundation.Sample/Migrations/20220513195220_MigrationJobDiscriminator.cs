@@ -1,11 +1,17 @@
-﻿using System;
+﻿using Amazon.Lambda.Annotations;
+using Amazon.Lambda.Core;
+using Foundation.Annotations;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Sample.Migrations;
 
 #nullable disable
 
 namespace BubbleBoy.Data.Migrations
 {
 
+    [MigrationFunction2(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator))]
     public partial class MigrationJobDiscriminator : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -209,6 +209,26 @@
         },
         "MigrationName": "migration1"
       }
+    },
+    "Migration20220513195220_MigrationJobDiscriminator": {
+      "Type": "AWS::CloudFormation::CustomResource",
+      "Metadata": {
+        "FoundationGeneratorsGenerator": {
+          "Version": "1.0.0.0"
+        }
+      },
+      "Properties": {
+        "StackName": {
+          "Ref": "AWS::StackName"
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SampleMigrationsMigrationFunctionsMyMigratorGenerated",
+            "Arn"
+          ]
+        },
+        "MigrationName": "20220513195220_MigrationJobDiscriminator"
+      }
     }
   },
   "Outputs": {

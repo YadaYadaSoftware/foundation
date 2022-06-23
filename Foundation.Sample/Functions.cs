@@ -113,7 +113,6 @@ You can make the following requests to invoke other Lambda functions perform cal
         }
 
         [LambdaFunction]
-        [MigrationFunction(SqlBucket = "@MySqlBucket", Branch = "@BranchParm")]
         public Task<int> Migrate(ILambdaContext context)
         {
             return Task.FromResult(0);

@@ -7,7 +7,6 @@ namespace Foundation.Generators;
 
 public class SyntaxReceiver : ISyntaxContextReceiver
 {
-    public MethodDeclarationSyntax MigrationFunction { get; set; } = null;
     public List<(ITypeSymbol classSymbol, ClassDeclarationSyntax classDeclarationSyntax)> MigrationClasses2 { get; } = new();
 
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
