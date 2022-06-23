@@ -13,33 +13,41 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
     {
-        if (context.Node is ClassDeclarationSyntax classDeclarationSyntax && classDeclarationSyntax.AttributeLists.Count > 0)
+        try
         {
-            // Get the symbol being declared by the class, and keep it if its annotated
-            ITypeSymbol classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) as ITypeSymbol;
+            if (context.Node is ClassDeclarationSyntax classDeclarationSyntax && classDeclarationSyntax.AttributeLists.Count > 0)
+            {
+                // Get the symbol being declared by the class, and keep it if its annotated
+                ITypeSymbol classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) as ITypeSymbol;
 
-            if (classSymbol.GetAttributes().Any(data => data.AttributeClass.Name == "MigrationFunction2Attribute"))
-            {
-                this.MigrationClasses2.Add(classSymbol);
+                if (classSymbol.GetAttributes().Any(data => data.AttributeClass.Name == "MigrationFunction2Attribute"))
+                {
+                    this.MigrationClasses2.Add(classSymbol);
+                }
+
+                if (classSymbol.GetAttributes().Any(attr => attr.AttributeClass.Name == "MigrationAttribute"))
+                {
+                    MigrationClasses.Add(classSymbol);
+                }
             }
-            
-            if (classSymbol.GetAttributes().Any(attr => attr.AttributeClass.Name == "MigrationAttribute"))
+
+            // any method with at least one attribute is a candidate of function generation
+            if (context.Node is MethodDeclarationSyntax methodDeclarationSyntax && methodDeclarationSyntax.AttributeLists.Count > 0)
             {
-                MigrationClasses.Add(classSymbol);
+                // Get the symbol being declared by the method, and keep it if its annotated
+                var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclarationSyntax);
+                if (methodSymbol.GetAttributes().Any(attr => attr.AttributeClass.Name == nameof(MigrationFunctionAttribute)))
+                {
+                    MigrationFunction = methodDeclarationSyntax;
+                }
             }
+
         }
-
-        // any method with at least one attribute is a candidate of function generation
-        if (context.Node is MethodDeclarationSyntax methodDeclarationSyntax && methodDeclarationSyntax.AttributeLists.Count > 0)
+        catch (Exception e)
         {
-            // Get the symbol being declared by the method, and keep it if its annotated
-            var methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclarationSyntax);
-            if (methodSymbol.GetAttributes().Any(attr => attr.AttributeClass.Name == nameof(MigrationFunctionAttribute)))
-            {
-                MigrationFunction = methodDeclarationSyntax;
-            }
-        }
 
+            throw;
+        }
 
     }
 
