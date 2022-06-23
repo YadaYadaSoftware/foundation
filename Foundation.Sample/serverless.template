@@ -173,6 +173,23 @@
         "Handler": "Sample::Foundation.Sample.Functions_Migrate_Generated::Migrate"
       }
     },
+    "SampleMigrationsMigrationFunctionsMyMigratorGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations"
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole"
+        ],
+        "PackageType": "Zip",
+        "Handler": "Sample::Sample.Migrations.MigrationFunctions_MyMigrator_Generated::MyMigrator"
+      }
+    },
     "Migrationmigration1": {
       "Type": "AWS::CloudFormation::CustomResource",
       "Metadata": {
@@ -191,23 +208,6 @@
           ]
         },
         "MigrationName": "migration1"
-      }
-    },
-    "SampleMigrationsMigrationFunctionsMyMigratorGenerated": {
-      "Type": "AWS::Serverless::Function",
-      "Metadata": {
-        "Tool": "Amazon.Lambda.Annotations"
-      },
-      "Properties": {
-        "Runtime": "dotnet6",
-        "CodeUri": ".",
-        "MemorySize": 256,
-        "Timeout": 30,
-        "Policies": [
-          "AWSLambdaBasicExecutionRole"
-        ],
-        "PackageType": "Zip",
-        "Handler": "Sample::Sample.Migrations.MigrationFunctions_MyMigrator_Generated::MyMigrator"
       }
     }
   },
