@@ -7,4 +7,5 @@ public interface IMigrationModel
     public string MigrationId { get; }
     public TypeModel MigrationFunction { get; }
     public string MigrationMethod { get; }
+    string DependsOn { get; }
 }
