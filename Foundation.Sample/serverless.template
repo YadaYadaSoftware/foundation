@@ -173,12 +173,11 @@
         "Handler": "Sample::Foundation.Sample.Functions_Migrate_Generated::Migrate"
       }
     },
-    "Migration1": {
+    "Migrationmigration1": {
       "Type": "AWS::CloudFormation::CustomResource",
       "Metadata": {
         "FoundationGeneratorsGenerator": {
-          "Version": "1.0.0.0",
-          "MigrationType": "Sample.Migrations.Migration1"
+          "Version": "1.0.0.0"
         }
       },
       "Properties": {
@@ -187,44 +186,11 @@
         },
         "ServiceToken": {
           "Fn::GetAtt": [
-            "FoundationSampleFunctionsMigrateGenerated",
+            "SampleMigrationsMigrationFunctions",
             "Arn"
           ]
         },
-        "MigrationName": "migration1",
-        "SqlBucket": {
-          "Ref": "MySqlBucket"
-        },
-        "Branch": {
-          "Ref": "BranchParm"
-        }
-      }
-    },
-    "MigrationJobDiscriminator": {
-      "Type": "AWS::CloudFormation::CustomResource",
-      "Metadata": {
-        "FoundationGeneratorsGenerator": {
-          "Version": "1.0.0.0",
-          "MigrationType": "BubbleBoy.Data.Migrations.MigrationJobDiscriminator"
-        }
-      },
-      "Properties": {
-        "StackName": {
-          "Ref": "AWS::StackName"
-        },
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "FoundationSampleFunctionsMigrateGenerated",
-            "Arn"
-          ]
-        },
-        "MigrationName": "20220513195220_MigrationJobDiscriminator",
-        "SqlBucket": {
-          "Ref": "MySqlBucket"
-        },
-        "Branch": {
-          "Ref": "BranchParm"
-        }
+        "MigrationName": "migration1"
       }
     }
   },
