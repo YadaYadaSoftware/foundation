@@ -11,6 +11,7 @@ namespace Foundation.Annotations
         public string DependsOn { get; set; }
         public string SqlScriptBucket { get; set; }
         // ATTRIBUTE:  ADD HERE
+        public string Branch { get; set; }
 
     }
 }

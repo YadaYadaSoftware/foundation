@@ -8,6 +8,7 @@ public class MigrationFunctionAttributeModel : IMigrationFunctionAttributeModel
     public string DependsOn { get; set; }
     public string SqlScriptBucket { get; set; }
     public TypeModel MigrationFunction { get; set; }
+    public string Branch { get; set; }
 
     // ATTRIBUTE:  ADD HERE
 }

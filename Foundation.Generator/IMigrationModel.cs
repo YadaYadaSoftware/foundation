@@ -11,5 +11,6 @@ public interface IMigrationModel
     string SqlScriptsBucket { get; }
 
     // ATTRIBUTE:  ADD HERE
+    string Branch { get; }
 
 }

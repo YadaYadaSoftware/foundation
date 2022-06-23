@@ -23,6 +23,6 @@ public class MigrationModelBuilder
 
         // ATTRIBUTE:  ADD HERE
 
-        return new MigrationModel(migrationId, attribute.Data.MigrationFunction, attribute.Data.MigrationMethod, attribute.Data.DependsOn, attribute.Data.SqlScriptBucket);
+        return new MigrationModel(migrationId, attribute.Data.MigrationFunction, attribute.Data.MigrationMethod, attribute.Data.DependsOn, attribute.Data.SqlScriptBucket, attribute.Data.Branch);
     }
 }

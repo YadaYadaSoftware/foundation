@@ -27,6 +27,10 @@ public class MigrationFunctionAttributeBuilder
             {
                 data.SqlScriptBucket = sqlScriptBucket;
             }
+            else if (pair.Key == nameof(data.Branch) && pair.Value.Value is string branch)
+            {
+                data.Branch = branch;
+            }
             // ATTRIBUTE:  ADD HERE
             else
             {

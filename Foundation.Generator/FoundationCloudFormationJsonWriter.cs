@@ -99,33 +99,17 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
             jsonWriter.RemoveToken(sqlBucketBucketPath);
         }
 
+        var branchPath = $"{propertiesPath}.Branch";
+        if (!string.IsNullOrEmpty(migrationModel.SqlScriptsBucket))
+        {
+            jsonWriter.SetToken(branchPath, GetValueOrRef(migrationModel.Branch));
+        }
+        else
+        {
+            jsonWriter.RemoveToken(branchPath);
+        }
 
         // ATTRIBUTE:  ADD HERE
-        //jsonWriter.SetToken($"{propertiesPath}.SqlBucket", GetValueOrRef(migrationModel.SqlBucket));
-        //jsonWriter.SetToken($"{propertiesPath}.Branch", GetValueOrRef(migrationModel.Branch));
-
-
-        /*
-      "Properties": {
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "ApplyMigration",
-            "Arn"
-          ]
-        },
-        "StackName": {
-          "Ref": "AWS::StackName"
-        },
-        "MigrationName": "20220513195220_MigrationJobDiscriminator",
-        "SqlBucket": {
-          "Ref": "PipelineBucket"
-        },
-        "Branch": {
-          "Ref": "Branch"
-        }
-      }
-      */
-
         return resourceName;
 
     }

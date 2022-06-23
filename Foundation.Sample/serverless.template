@@ -207,8 +207,7 @@
             "Arn"
           ]
         },
-        "MigrationName": "migration1",
-        "SqlBucket": null
+        "MigrationName": "migration1"
       }
     },
     "Migration20220513195220_MigrationJobDiscriminator": {
@@ -248,9 +247,11 @@
             "Arn"
           ]
         },
-        "MigrationName": "20220513195220_MigrationJobDiscriminator",
-        "SqlBucket": null
-      }
+        "MigrationName": "20220513195220_MigrationJobDiscriminator"
+      },
+      "DependsOn": [
+        "Restore"
+      ]
     }
   },
   "Outputs": {
