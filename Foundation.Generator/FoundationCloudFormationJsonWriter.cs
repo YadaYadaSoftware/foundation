@@ -89,7 +89,16 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         var functionResource = migrationModel.MigrationFunction.FullName.Replace(".", string.Empty) + migrationModel.MigrationMethod + "Generated";
         jsonWriter.SetToken($"{propertiesPath}.ServiceToken", new JObject(new JProperty("Fn::GetAtt", new JArray(functionResource, "Arn"))));
         jsonWriter.SetToken($"{propertiesPath}.MigrationName", migrationModel.MigrationId);
-        jsonWriter.SetToken($"{propertiesPath}.SqlBucket", GetValueOrRef(migrationModel.SqlScriptsBucket));
+        var sqlBucketBucketPath = $"{propertiesPath}.SqlBucket";
+        if (!string.IsNullOrEmpty(migrationModel.SqlScriptsBucket))
+        {
+            jsonWriter.SetToken(sqlBucketBucketPath, GetValueOrRef(migrationModel.SqlScriptsBucket));
+        }
+        else
+        {
+            jsonWriter.RemoveToken(sqlBucketBucketPath);
+        }
+
 
         // ATTRIBUTE:  ADD HERE
         //jsonWriter.SetToken($"{propertiesPath}.SqlBucket", GetValueOrRef(migrationModel.SqlBucket));
