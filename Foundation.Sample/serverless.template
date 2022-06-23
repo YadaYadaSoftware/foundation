@@ -207,7 +207,8 @@
             "Arn"
           ]
         },
-        "MigrationName": "migration1"
+        "MigrationName": "migration1",
+        "SqlBucket": null
       }
     },
     "Migration20220513195220_MigrationJobDiscriminator": {
@@ -228,6 +229,27 @@
           ]
         },
         "MigrationName": "20220513195220_MigrationJobDiscriminator"
+      }
+    },
+    "Migration20220513195220MigrationJobDiscriminator": {
+      "Type": "AWS::CloudFormation::CustomResource",
+      "Metadata": {
+        "FoundationGeneratorsGenerator": {
+          "Version": "1.0.0.0"
+        }
+      },
+      "Properties": {
+        "StackName": {
+          "Ref": "AWS::StackName"
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SampleMigrationsMigrationFunctionsMyMigratorGenerated",
+            "Arn"
+          ]
+        },
+        "MigrationName": "20220513195220_MigrationJobDiscriminator",
+        "SqlBucket": null
       }
     }
   },

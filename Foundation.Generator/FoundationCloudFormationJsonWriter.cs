@@ -135,7 +135,7 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
 
     private JToken GetValueOrRef(string value)
     {
-        if (!value.StartsWith("@"))
+        if (string.IsNullOrEmpty(value) || !value.StartsWith("@"))
             return value;
 
         var refNode = new JObject();
