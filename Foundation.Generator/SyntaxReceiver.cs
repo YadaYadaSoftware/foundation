@@ -18,7 +18,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
                 // Get the symbol being declared by the class, and keep it if its annotated
                 ITypeSymbol classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) as ITypeSymbol;
 
-                if (classSymbol.GetAttributes().Any(data => data.AttributeClass.Name == "MigrationFunction2Attribute"))
+                if (classSymbol.GetAttributes().Any(data => data.AttributeClass.Name == "MigrationFunctionAttribute"))
                 {
                     this.MigrationClasses.Add((classSymbol, classDeclarationSyntax));
                 }
