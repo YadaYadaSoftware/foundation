@@ -3,11 +3,11 @@ using Microsoft.CodeAnalysis;
 
 namespace Foundation.Generators;
 
-public class MigrationFunctionAttributeBuilder2
+public class MigrationFunctionAttributeBuilder
 {
-    public static IMigrationFunction2AttributeModel Build(AttributeData att, GeneratorExecutionContext generatorExecutionContext)
+    public static IMigrationFunctionAttributeModel Build(AttributeData att, GeneratorExecutionContext generatorExecutionContext)
     {
-        var data = new MigrationFunction2AttributeModel();
+        var data = new MigrationFunctionAttributeModel();
 
         foreach (var pair in att.NamedArguments)
         {

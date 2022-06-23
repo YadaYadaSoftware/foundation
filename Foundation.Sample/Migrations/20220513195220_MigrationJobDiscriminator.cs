@@ -11,7 +11,7 @@ using Sample.Migrations;
 namespace BubbleBoy.Data.Migrations
 {
 
-    [MigrationFunction2(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator))]
+    [MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator))]
     public partial class MigrationJobDiscriminator : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

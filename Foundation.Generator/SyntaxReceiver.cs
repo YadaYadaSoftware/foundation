@@ -7,7 +7,7 @@ namespace Foundation.Generators;
 
 public class SyntaxReceiver : ISyntaxContextReceiver
 {
-    public List<(ITypeSymbol classSymbol, ClassDeclarationSyntax classDeclarationSyntax)> MigrationClasses2 { get; } = new();
+    public List<(ITypeSymbol classSymbol, ClassDeclarationSyntax classDeclarationSyntax)> MigrationClasses { get; } = new();
 
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
     {
@@ -20,7 +20,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 
                 if (classSymbol.GetAttributes().Any(data => data.AttributeClass.Name == "MigrationFunction2Attribute"))
                 {
-                    this.MigrationClasses2.Add((classSymbol, classDeclarationSyntax));
+                    this.MigrationClasses.Add((classSymbol, classDeclarationSyntax));
                 }
             }
         }

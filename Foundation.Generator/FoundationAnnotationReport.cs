@@ -6,5 +6,5 @@ namespace Foundation.Generators;
 
 public class FoundationAnnotationReport : AnnotationReport
 {
-    public List<IMigrationModel2> Migrations2 { get; set; } = new();
+    public List<IMigrationModel> Migrations { get; set; } = new();
 }

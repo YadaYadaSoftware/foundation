@@ -55,7 +55,7 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
     private List<string> ProcessMigrations(FoundationAnnotationReport foundationAnnotationReport, IJsonWriter jsonWriter)
     {
         var processedMigrations = new List<string>();
-        foreach (var migrationModel in foundationAnnotationReport.Migrations2)
+        foreach (var migrationModel in foundationAnnotationReport.Migrations)
         {
             string migrationResourceName = ProcessMigration(migrationModel, jsonWriter);
             processedMigrations.Add(migrationResourceName);
@@ -64,7 +64,7 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         return processedMigrations;
     }
 
-    private string ProcessMigration(IMigrationModel2 migrationModel, IJsonWriter jsonWriter)
+    private string ProcessMigration(IMigrationModel migrationModel, IJsonWriter jsonWriter)
     {
         var resourceName = $"Migration{migrationModel.MigrationId}";
         var customResourcePath = $"Resources.{resourceName}";

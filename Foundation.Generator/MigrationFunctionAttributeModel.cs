@@ -2,7 +2,7 @@
 
 namespace Foundation.Generators;
 
-public class MigrationFunction2AttributeModel : IMigrationFunction2AttributeModel
+public class MigrationFunctionAttributeModel : IMigrationFunctionAttributeModel
 {
     public string MigrationMethod { get; set; }
     public TypeModel MigrationFunction { get; set; }

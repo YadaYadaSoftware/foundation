@@ -43,13 +43,13 @@ namespace Foundation.Generators
                     return;
                 }
 
-                if (!receiver.MigrationClasses2.Any()) return;
+                if (!receiver.MigrationClasses.Any()) return;
 
 
                 var semanticModelProvider = new FoundationSemanticModelProvider(context);
 
                 var templateFinder = new CloudFormationTemplateFinder(_fileManager, _directoryManager);
-                var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationClasses2.First().classDeclarationSyntax.SyntaxTree.FilePath);
+                var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationClasses.First().classDeclarationSyntax.SyntaxTree.FilePath);
 
                 var annotationReport = new FoundationAnnotationReport
                 {
@@ -57,10 +57,10 @@ namespace Foundation.Generators
                     ProjectRootDirectory = projectRootDirectory
                 };
 
-                foreach (var typeSymbol in receiver.MigrationClasses2)
+                foreach (var typeSymbol in receiver.MigrationClasses)
                 {
-                    IMigrationModel2 migrationModel2 = MigrationModelBuilder2.Build(typeSymbol.classSymbol, context);
-                    annotationReport.Migrations2.Add(migrationModel2);
+                    IMigrationModel migrationModel = MigrationModelBuilder.Build(typeSymbol.classSymbol, context);
+                    annotationReport.Migrations.Add(migrationModel);
                 }
 
                 var cloudFormationJsonWriter = new FoundationCloudFormationJsonWriter(_fileManager, _directoryManager, _jsonWriter, diagnosticReporter);
