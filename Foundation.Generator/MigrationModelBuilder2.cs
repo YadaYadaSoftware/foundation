@@ -25,12 +25,7 @@ public class MigrationModelBuilder2
 
         string migrationId = migrationAttribute.ConstructorArguments.FirstOrDefault().Value!.ToString();
 
-
-
-        
-
-
-        return new MigrationModel2(migrationId, attribute.Data.MigrationFunction);
+        return new MigrationModel2(migrationId, attribute.Data.MigrationFunction, attribute.Data.MigrationMethod);
     }
 }
 
@@ -60,12 +55,14 @@ public class MigrationFunction2AttributeBuilder
 
 public interface IMigrationFunction2AttributeModel
 {
-    public TypeModel MigrationFunction { get; set; }
+    TypeModel MigrationFunction { get; set; }
+    string MigrationMethod { get; set; }
 
 }
 
 public class MigrationFunction2AttributeModel : IMigrationFunction2AttributeModel
 {
+    public string MigrationMethod { get; set; }
     public TypeModel MigrationFunction { get; set; }
 }
 
@@ -78,8 +75,6 @@ public class MigrationFunctionAttributeBuilder2
 {
     public static IMigrationFunction2AttributeModel Build(AttributeData att, GeneratorExecutionContext generatorExecutionContext)
     {
-        AttributeModel model = null;
-
         var data = new MigrationFunction2AttributeModel();
 
         foreach (var pair in att.NamedArguments)
@@ -87,6 +82,13 @@ public class MigrationFunctionAttributeBuilder2
             if (pair.Key == nameof(data.MigrationFunction) && pair.Value.Value is INamedTypeSymbol migrationFunctionType)
             {
                 data.MigrationFunction = TypeModelBuilder.Build(migrationFunctionType, generatorExecutionContext);
+            } else if (pair.Key == nameof(data.MigrationMethod) && pair.Value.Value is string migrationMethod)
+            {
+                data.MigrationMethod = migrationMethod;
+            }
+            else
+            {
+                throw new NotSupportedException();
             }
         }
 

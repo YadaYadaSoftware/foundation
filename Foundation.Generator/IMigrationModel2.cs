@@ -5,5 +5,6 @@ namespace Foundation.Generators;
 public interface IMigrationModel2
 {
     public string MigrationId { get; }
-    public TypeModel DataMigrationFunction { get; }
+    public TypeModel MigrationFunction { get; }
+    public string MigrationMethod { get; }
 }

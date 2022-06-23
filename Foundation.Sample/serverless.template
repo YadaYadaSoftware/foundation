@@ -186,11 +186,28 @@
         },
         "ServiceToken": {
           "Fn::GetAtt": [
-            "SampleMigrationsMigrationFunctions",
+            "SampleMigrationsMigrationFunctionsMyMigratorGenerated",
             "Arn"
           ]
         },
         "MigrationName": "migration1"
+      }
+    },
+    "SampleMigrationsMigrationFunctionsMyMigratorGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations"
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole"
+        ],
+        "PackageType": "Zip",
+        "Handler": "Sample::Sample.Migrations.MigrationFunctions_MyMigrator_Generated::MyMigrator"
       }
     }
   },

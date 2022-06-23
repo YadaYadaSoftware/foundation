@@ -14,5 +14,7 @@ namespace Foundation.Annotations
     public class MigrationFunction2Attribute : Attribute
     {
         public Type MigrationFunction { get; set; }
+
+        public string MigrationMethod { get; set; }
     }
 }
