@@ -23,6 +23,11 @@ public class MigrationFunctionAttributeBuilder
             {
                 data.DependsOn = dependsOn;
             }
+            else if (pair.Key == nameof(data.SqlScriptBucket) && pair.Value.Value is string sqlScriptBucket)
+            {
+                data.SqlScriptBucket = sqlScriptBucket;
+            }
+            // ATTRIBUTE:  ADD HERE
             else
             {
                 throw new NotSupportedException();

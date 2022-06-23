@@ -21,6 +21,8 @@ public class MigrationModelBuilder
 
         string migrationId = migrationAttribute.ConstructorArguments.FirstOrDefault().Value!.ToString();
 
-        return new MigrationModel(migrationId, attribute.Data.MigrationFunction, attribute.Data.MigrationMethod, attribute.Data.DependsOn);
+        // ATTRIBUTE:  ADD HERE
+
+        return new MigrationModel(migrationId, attribute.Data.MigrationFunction, attribute.Data.MigrationMethod, attribute.Data.DependsOn, attribute.Data.SqlScriptBucket);
     }
 }

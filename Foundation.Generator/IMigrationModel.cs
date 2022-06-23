@@ -8,4 +8,8 @@ public interface IMigrationModel
     public TypeModel MigrationFunction { get; }
     public string MigrationMethod { get; }
     string DependsOn { get; }
+    string SqlScriptsBucket { get; }
+
+    // ATTRIBUTE:  ADD HERE
+
 }
