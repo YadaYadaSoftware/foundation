@@ -8,8 +8,14 @@
 		<None Include="bin\$(Configuration)\netstandard2.0\Foundation.Annotations.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
 		<None Include="..\Foundation.Generator\bin\$(Configuration)\netstandard2.0\Foundation.Generators.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
 		<None Include="..\Foundation.Generator\bin\$(Configuration)\netstandard2.0\Newtonsoft.Json.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
-		<None Include="bin\$(Configuration)\netstandard2.0\*.pdb" Pack="true" PackagePath="analyzers/dotnet/cs" />
-		<None Include="..\Foundation.Generator\bin\$(Configuration)\netstandard2.0\*.pdb" Pack="true" PackagePath="analyzers/dotnet/cs" />
 	</ItemGroup>
+
+
+	<ItemGroup Condition="'$(Configuration)' != 'Release'">
+		<None Include="..\Foundation.Generator\bin\$(Configuration)\netstandard2.0\*.pdb" Pack="true" PackagePath="analyzers/dotnet/cs" />
+		<None Include="bin\$(Configuration)\netstandard2.0\*.pdb" Pack="true" PackagePath="analyzers/dotnet/cs" />
+	</ItemGroup>
+
+
 
 </Project>
