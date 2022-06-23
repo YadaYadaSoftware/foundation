@@ -8,5 +8,9 @@ namespace Foundation.Annotations
         public Type MigrationFunction { get; set; }
 
         public string MigrationMethod { get; set; }
+        public string DependsOn { get; set; }
+        public string SqlScriptBucket { get; set; }
+        // ATTRIBUTE:  ADD HERE
+
     }
 }
