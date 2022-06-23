@@ -43,11 +43,6 @@ namespace Foundation.Generators
                     return;
                 }
 
-                if (receiver.MigrationFunction is null)
-                {
-                    return;
-                }
-
                 if (!receiver.MigrationClasses.Any())
                 {
                     return;
@@ -61,7 +56,7 @@ namespace Foundation.Generators
                 IMethodSymbol lambdaMethodSymbol = semanticModelProvider.GetMethodSemanticModel(receiver.MigrationFunction);
                 var migrationLambdaFunctionModel = FoundationLambdaFunctionModelBuilder.Build(lambdaMethodSymbol, null, context);
                 var templateFinder = new CloudFormationTemplateFinder(_fileManager, _directoryManager);
-                var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationFunction.SyntaxTree.FilePath);
+                var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationClasses2.First().classDeclarationSyntax.SyntaxTree.FilePath);
 
                 var annotationReport = new FoundationAnnotationReport
                 {
@@ -81,7 +76,7 @@ namespace Foundation.Generators
 
                 foreach (var typeSymbol in receiver.MigrationClasses2)
                 {
-                    IMigrationModel2 migrationModel2 = MigrationModelBuilder2.Build(typeSymbol, context);
+                    IMigrationModel2 migrationModel2 = MigrationModelBuilder2.Build(typeSymbol.classSymbol, context);
                     annotationReport.Migrations2.Add(migrationModel2);
                 }
 
