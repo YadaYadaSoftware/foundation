@@ -250,7 +250,8 @@
         "MigrationName": "20220513195220_MigrationJobDiscriminator"
       },
       "DependsOn": [
-        "Restore"
+        "Restore",
+        "Migration20220513195220MigrationJobDiscriminator"
       ]
     }
   },

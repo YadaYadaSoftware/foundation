@@ -55,16 +55,19 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
     private List<string> ProcessMigrations(FoundationAnnotationReport foundationAnnotationReport, IJsonWriter jsonWriter)
     {
         var processedMigrations = new List<string>();
-        foreach (var migrationModel in foundationAnnotationReport.Migrations)
+        var migrationsToProcess = foundationAnnotationReport.Migrations.ToList();
+        migrationsToProcess.Sort(new MigrationSorter());
+        string lastMigration = string.Empty;
+        foreach (var migrationModel in migrationsToProcess)
         {
-            string migrationResourceName = ProcessMigration(migrationModel, jsonWriter);
-            processedMigrations.Add(migrationResourceName);
+            lastMigration = ProcessMigration(migrationModel, jsonWriter, lastMigration);
+            processedMigrations.Add(lastMigration);
         }
 
         return processedMigrations;
     }
 
-    private string ProcessMigration(IMigrationModel migrationModel, IJsonWriter jsonWriter)
+    private string ProcessMigration(IMigrationModel migrationModel, IJsonWriter jsonWriter, string lastMigration)
     {
         var resourceName = $"Migration{migrationModel.MigrationId}".Replace("_", string.Empty);
         var customResourcePath = $"Resources.{resourceName}";
@@ -80,6 +83,12 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         {
             var dependsOnPath = $"{customResourcePath}.DependsOn";
             object[] dependsOnValues = migrationModel.DependsOn.Split(',');
+            if (!string.IsNullOrEmpty(lastMigration))
+            {
+                var redoDependsOn = new List<object>(dependsOnValues);
+                redoDependsOn.Add(lastMigration);
+                dependsOnValues = redoDependsOn.ToArray();
+            }
             var dependsOnArray = new JArray(dependsOnValues);
             jsonWriter.SetToken(dependsOnPath,dependsOnArray);
         }
@@ -137,4 +146,15 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
     }
 
 
+}
+
+internal class MigrationSorter : IComparer<IMigrationModel>
+{
+    public int Compare(IMigrationModel x, IMigrationModel y)
+    {
+        if (ReferenceEquals(x, y)) return 0;
+        if (ReferenceEquals(null, y)) return 1;
+        if (ReferenceEquals(null, x)) return -1;
+        return string.Compare(x.MigrationId, y.MigrationId, StringComparison.Ordinal);
+    }
 }
