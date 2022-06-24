@@ -20,7 +20,10 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 
                 if (classSymbol.GetAttributes().Any(data => data.AttributeClass.Name == "MigrationFunctionAttribute"))
                 {
-                    this.MigrationClasses.Add((classSymbol, classDeclarationSyntax));
+                    if (!this.MigrationClasses.Any(_ => _.classSymbol.ToDisplayString() != classSymbol.ToDisplayString()))
+                    {
+                        this.MigrationClasses.Add((classSymbol, classDeclarationSyntax));
+                    }
                 }
             }
         }

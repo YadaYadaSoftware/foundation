@@ -212,6 +212,9 @@
     },
     "Migration20220513195220_MigrationJobDiscriminator": {
       "Type": "AWS::CloudFormation::CustomResource",
+      "DependsOn": [
+        "Restore"
+      ],
       "Metadata": {
         "FoundationGeneratorsGenerator": {
           "Version": "1.0.0.0"
