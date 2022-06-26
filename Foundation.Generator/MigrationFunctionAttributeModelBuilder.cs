@@ -1,6 +1,8 @@
-﻿using Amazon.Lambda.Annotations.SourceGenerator.Models;
+﻿using System.Diagnostics;
+using Amazon.Lambda.Annotations.SourceGenerator.Models;
 using Foundation.Annotations;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Foundation.Generators;
 
@@ -25,5 +27,49 @@ public class MigrationFunctionAttributeModelBuilder
         }
 
         return model;
+    }
+
+    public static AttributeModel2<IMigrationFunctionAttributeModel> Build(AttributeSyntax receiverMigrationFunctionAttribute, GeneratorExecutionContext context)
+    {
+
+        SemanticModel semanticModel = context.Compilation.GetSemanticModel(receiverMigrationFunctionAttribute.SyntaxTree);
+
+        foreach (var attributeArgumentSyntax in receiverMigrationFunctionAttribute.ArgumentList.Arguments)
+        {
+            switch (attributeArgumentSyntax.NameEquals.Name.Identifier.ValueText)
+            {
+                case nameof(MigrationFunctionAttribute.MigrationFunction):
+
+
+                    Debug.WriteLine(attributeArgumentSyntax.Expression);
+                    // ^^^ outputs 'typeof(MigrationFunctions)'
+
+                    TypeInfo t = semanticModel.GetTypeInfo(attributeArgumentSyntax.Expression);
+                    Debug.WriteLine(t.Type.ToDisplayString());
+                    // ^^^ outputs 'System.Type'
+
+                    var typeOfExpression = (TypeOfExpressionSyntax)attributeArgumentSyntax.Expression;
+                    var typeSyntax = typeOfExpression.Type;
+                    var type = semanticModel.GetTypeInfo(typeSyntax);
+                    Debug.WriteLine(type.Type.ToDisplayString());
+
+
+
+
+
+                    /// HOW DO I GET THE TYPE HERE, which should be "MigrationFunctions", not "System.Type"???
+                    break;
+                case nameof(MigrationFunctionAttribute.Branch):
+
+                    var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
+                    Debug.WriteLine(value.Value);
+                    // ^^^ outputs '@Branch just fine
+                    break;
+
+            }
+        }
+        
+        return null;
+
     }
 }

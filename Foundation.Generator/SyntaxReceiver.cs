@@ -13,18 +13,10 @@ public class SyntaxReceiver : ISyntaxContextReceiver
     {
         try
         {
-            if (context.Node is ClassDeclarationSyntax classDeclarationSyntax && classDeclarationSyntax.AttributeLists.Count > 0)
+            if (context.Node is AttributeSyntax attributeSyntax
+                && context.SemanticModel.GetTypeInfo(attributeSyntax).Type.ToDisplayString().Contains("MigrationFunctionAttribute"))
             {
-                // Get the symbol being declared by the class, and keep it if its annotated
-                ITypeSymbol classSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) as ITypeSymbol;
-
-                if (classSymbol.GetAttributes().Any(data => data.AttributeClass.Name == "MigrationFunctionAttribute"))
-                {
-                    if (this.MigrationClasses.All(_ => _.classSymbol.ToDisplayString() != classSymbol.ToDisplayString()))
-                    {
-                        this.MigrationClasses.Add((classSymbol, classDeclarationSyntax));
-                    }
-                }
+                this.MigrationFunctionAttribute = attributeSyntax;
             }
         }
         catch (Exception e)
@@ -35,4 +27,5 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 
     }
 
+    public AttributeSyntax MigrationFunctionAttribute { get; set; }
 }

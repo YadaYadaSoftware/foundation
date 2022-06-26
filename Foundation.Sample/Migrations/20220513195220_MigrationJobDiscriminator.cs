@@ -8,10 +8,11 @@ using Sample.Migrations;
 
 #nullable disable
 
+[assembly: MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator), Branch = "@Branch", DependsOn = "Restore")]
+
 namespace BubbleBoy.Data.Migrations
 {
 
-    [MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator), Branch="@Branch", DependsOn = "Restore")]
     public partial class MigrationJobDiscriminator : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

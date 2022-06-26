@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using System.Diagnostics;
 using System.Text;
 using Amazon.Lambda.Annotations.SourceGenerator.Extensions;
+using Amazon.Lambda.Annotations.SourceGenerator.Models;
 using Amazon.Lambda.Annotations.SourceGenerator.Templates;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -35,6 +36,7 @@ namespace Foundation.Generators
 #endif
             var diagnosticReporter = new DiagnosticReporter(context);
 
+
             try
             {
                 // retrieve the populated receiver
@@ -42,6 +44,14 @@ namespace Foundation.Generators
                 {
                     return;
                 }
+
+
+                //SemanticModel x = context.Compilation.GetSemanticModel(receiver.MigrationFunctionAttribute.SyntaxTree);
+                //TypeInfo t = x.GetTypeInfo(receiver.MigrationFunctionAttribute);
+                //Debug.WriteLine(t.Type.ToDisplayString());
+                var model = MigrationFunctionAttributeModelBuilder.Build(receiver.MigrationFunctionAttribute, context);
+                //var z = TypeModelBuilder.Build(t, context);
+
 
                 if (!receiver.MigrationClasses.Any()) return;
 

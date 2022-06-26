@@ -2,7 +2,7 @@
 
 namespace Foundation.Annotations
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Assembly)]
     public class MigrationFunctionAttribute : Attribute
     {
         public Type MigrationFunction { get; set; }
