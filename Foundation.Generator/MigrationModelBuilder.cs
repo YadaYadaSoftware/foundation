@@ -1,28 +1,21 @@
 ﻿using Foundation.Annotations;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Foundation.Generators;
 
 public class MigrationModelBuilder
 {
-    public static IMigrationModel Build(ITypeSymbol typeSymbol, GeneratorExecutionContext generatorExecutionContext)
+    public static IMigrationModel Build(GeneratorExecutionContext generatorExecutionContext, ClassDeclarationSyntax typeSymbol, AttributeSyntax receiverMigrationFunctionAttribute)
     {
-        if (typeSymbol.GetAttributes().SingleOrDefault(_ => _.AttributeClass.Name == nameof(MigrationFunctionAttribute)) is not { } migrationFunction2Attribute)
-        {
-            throw new InvalidOperationException();
-        }
-        if (typeSymbol.GetAttributes().SingleOrDefault(_ => $"{_.AttributeClass.ContainingNamespace}.{_.AttributeClass.Name}" == "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute") is not { } migrationAttribute
-            || !migrationAttribute.ConstructorArguments.Any())
-        {
-            throw new InvalidOperationException();
-        }
+        throw new NotImplementedException();
+        //var semanticModelProvider = new SemanticModelProvider(generatorExecutionContext);
 
-        var attribute = MigrationFunctionAttributeModelBuilder.Build(typeSymbol.GetAttributes().Single(_ => _.AttributeClass.Name == nameof(MigrationFunctionAttribute)), generatorExecutionContext);
+        //var migrationAttribute = typeSymbol.AttributeLists
+        //string migrationId = migrationAttribute.ConstructorArguments.FirstOrDefault().Value!.ToString();
 
-        string migrationId = migrationAttribute.ConstructorArguments.FirstOrDefault().Value!.ToString();
+        //// ATTRIBUTE:  ADD HERE
 
-        // ATTRIBUTE:  ADD HERE
-
-        return new MigrationModel(migrationId, attribute.Data.MigrationFunction, attribute.Data.MigrationMethod, attribute.Data.DependsOn, attribute.Data.SqlScriptBucket, attribute.Data.Branch);
+        //return new MigrationModel(migrationId, migrationAttribute. .Data.MigrationFunction, attribute.Data.MigrationMethod, attribute.Data.DependsOn, attribute.Data.SqlScriptBucket, attribute.Data.Branch);
     }
 }

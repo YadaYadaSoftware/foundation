@@ -32,6 +32,7 @@ public class MigrationFunctionAttributeModelBuilder
     public static AttributeModel2<IMigrationFunctionAttributeModel> Build(AttributeSyntax receiverMigrationFunctionAttribute, GeneratorExecutionContext context)
     {
 
+        IMigrationFunctionAttributeModel model = new MigrationFunctionAttributeModel();
         SemanticModel semanticModel = context.Compilation.GetSemanticModel(receiverMigrationFunctionAttribute.SyntaxTree);
 
         foreach (var attributeArgumentSyntax in receiverMigrationFunctionAttribute.ArgumentList.Arguments)
@@ -55,7 +56,7 @@ public class MigrationFunctionAttributeModelBuilder
 
 
 
-
+                    model.MigrationFunction = TypeModelBuilder.Build(type.Type, context);
 
                     /// HOW DO I GET THE TYPE HERE, which should be "MigrationFunctions", not "System.Type"???
                     break;

@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Sample.Migrations
 {
     [Migration("migration1")]
-    [MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator))]
     public class Migration1 
     {
     }
