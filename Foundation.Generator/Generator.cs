@@ -8,6 +8,7 @@ using System.Text;
 using Amazon.Lambda.Annotations.SourceGenerator.Extensions;
 using Amazon.Lambda.Annotations.SourceGenerator.Models;
 using Amazon.Lambda.Annotations.SourceGenerator.Templates;
+using Foundation.Annotations;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
@@ -45,13 +46,12 @@ namespace Foundation.Generators
                     return;
                 }
 
+                if (receiver.MigrationFunctionAttribute is not { })
+                {
+                    throw new NotSupportedException($"No [assembly: {nameof(MigrationFunctionAttribute)}] found.");
+                }
 
-                //SemanticModel x = context.Compilation.GetSemanticModel(receiver.MigrationFunctionAttribute.SyntaxTree);
-                //TypeInfo t = x.GetTypeInfo(receiver.MigrationFunctionAttribute);
-                //Debug.WriteLine(t.Type.ToDisplayString());
                 var model = MigrationFunctionAttributeModelBuilder.Build(receiver.MigrationFunctionAttribute, context);
-                //var z = TypeModelBuilder.Build(t, context);
-
 
                 if (!receiver.MigrationAttributes.Any()) return;
 
@@ -73,21 +73,10 @@ namespace Foundation.Generators
                     annotationReport.Migrations.Add(MigrationModelBuilder.Build(context,migrationClass, receiver.MigrationFunctionAttribute, migrationFunctionModel) );
                 }
 
-
-
-                //    foreach (var migrationClass in receiver.MigrationAttributes)
-                //{
-                //    var sm = context.Compilation.GetSemanticModel(migrationClass.SyntaxTree, true);
-                //    var declaredSymbol =  sm.GetDeclaredSymbol(migrationClass);
-                //    var migrationAttribute = declaredSymbol.GetAttributes().Single(_ => _.AttributeClass.Name == "MigrationAttribute");
-                //    Debug.WriteLine(migrationAttribute.ConstructorArguments.First().Value.ToString());
-                    
-                //    //IMigrationModel migrationModel = MigrationModelBuilder.Build(context, migrationClass, receiver.MigrationFunctionAttribute);
-                //    //annotationReport.Migrations.Add(migrationModel);
-                //}
-
                 var cloudFormationJsonWriter = new FoundationCloudFormationJsonWriter(_fileManager, _directoryManager, _jsonWriter, diagnosticReporter);
+
                 cloudFormationJsonWriter.ApplyReport(annotationReport);
+
             }
             catch (Exception e)
             {
