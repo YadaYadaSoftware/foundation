@@ -24,9 +24,6 @@ namespace Foundation.Generators
         
         public void Initialize(GeneratorInitializationContext context)
         {
-#if DEBUG
-            Debugger.Launch();
-#endif
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
 
