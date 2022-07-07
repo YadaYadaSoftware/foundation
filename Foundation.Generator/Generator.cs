@@ -53,10 +53,12 @@ namespace Foundation.Generators
                 //var z = TypeModelBuilder.Build(t, context);
 
 
-                if (!receiver.MigrationClasses.Any()) return;
+                if (!receiver.MigrationAttributes.Any()) return;
 
                 var templateFinder = new CloudFormationTemplateFinder(_fileManager, _directoryManager);
-                var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationClasses.First().SyntaxTree.FilePath);
+                var projectRootDirectory = templateFinder.DetermineProjectRootDirectory(receiver.MigrationFunctionAttribute.SyntaxTree.FilePath);
+
+                var migrationFunctionModel = MigrationFunctionAttributeModelBuilder.Build(receiver.MigrationFunctionAttribute, context);
 
                 var annotationReport = new FoundationAnnotationReport
                 {
@@ -64,18 +66,25 @@ namespace Foundation.Generators
                     ProjectRootDirectory = projectRootDirectory
                 };
 
-                
 
-                foreach (var migrationClass in receiver.MigrationClasses)
+                foreach (var migrationClass in receiver.MigrationAttributes)
                 {
-                    var sm = context.Compilation.GetSemanticModel(migrationClass.SyntaxTree, true);
-                    var declaredSymbol =  sm.GetDeclaredSymbol(migrationClass);
-                    var migrationAttribute = declaredSymbol.GetAttributes().Single(_ => _.AttributeClass.Name == "MigrationAttribute");
-                    Debug.WriteLine(migrationAttribute.ConstructorArguments.First().Value.ToString());
-                    
-                    IMigrationModel migrationModel = MigrationModelBuilder.Build(context, migrationClass, receiver.MigrationFunctionAttribute);
-                    annotationReport.Migrations.Add(migrationModel);
+                    var migrationId = migrationClass.ConstructorArguments.Single().Value.ToString();
+                    annotationReport.Migrations.Add(MigrationModelBuilder.Build(context,migrationClass, receiver.MigrationFunctionAttribute, migrationFunctionModel) );
                 }
+
+
+
+                //    foreach (var migrationClass in receiver.MigrationAttributes)
+                //{
+                //    var sm = context.Compilation.GetSemanticModel(migrationClass.SyntaxTree, true);
+                //    var declaredSymbol =  sm.GetDeclaredSymbol(migrationClass);
+                //    var migrationAttribute = declaredSymbol.GetAttributes().Single(_ => _.AttributeClass.Name == "MigrationAttribute");
+                //    Debug.WriteLine(migrationAttribute.ConstructorArguments.First().Value.ToString());
+                    
+                //    //IMigrationModel migrationModel = MigrationModelBuilder.Build(context, migrationClass, receiver.MigrationFunctionAttribute);
+                //    //annotationReport.Migrations.Add(migrationModel);
+                //}
 
                 var cloudFormationJsonWriter = new FoundationCloudFormationJsonWriter(_fileManager, _directoryManager, _jsonWriter, diagnosticReporter);
                 cloudFormationJsonWriter.ApplyReport(annotationReport);

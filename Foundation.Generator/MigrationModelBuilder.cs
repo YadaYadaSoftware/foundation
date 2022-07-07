@@ -6,16 +6,10 @@ namespace Foundation.Generators;
 
 public class MigrationModelBuilder
 {
-    public static IMigrationModel Build(GeneratorExecutionContext generatorExecutionContext, ClassDeclarationSyntax typeSymbol, AttributeSyntax receiverMigrationFunctionAttribute)
+    public static IMigrationModel Build(GeneratorExecutionContext generatorExecutionContext, AttributeData migrationAttributeData, AttributeSyntax receiverMigrationFunctionAttribute,
+        IMigrationFunctionAttributeModel migrationFunctionModel)
     {
-        throw new NotImplementedException();
-        //var semanticModelProvider = new SemanticModelProvider(generatorExecutionContext);
-
-        //var migrationAttribute = typeSymbol.AttributeLists
-        //string migrationId = migrationAttribute.ConstructorArguments.FirstOrDefault().Value!.ToString();
-
-        //// ATTRIBUTE:  ADD HERE
-
-        //return new MigrationModel(migrationId, migrationAttribute. .Data.MigrationFunction, attribute.Data.MigrationMethod, attribute.Data.DependsOn, attribute.Data.SqlScriptBucket, attribute.Data.Branch);
+        var migrationId = migrationAttributeData.ConstructorArguments.SingleOrDefault().Value.ToString();
+        return new MigrationModel(migrationId, migrationFunctionModel.MigrationFunction, migrationFunctionModel.MigrationMethod, migrationFunctionModel.DependsOn, migrationFunctionModel.SqlScriptBucket, migrationFunctionModel.Branch);
     }
 }
