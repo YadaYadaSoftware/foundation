@@ -210,7 +210,14 @@
             "Arn"
           ]
         },
-        "MigrationName": "20220513195220_MigrationJobDiscriminator"
+        "MigrationName": "20220513195220_MigrationJobDiscriminator",
+        "Branch": {
+          "Ref": "Branch"
+        },
+        "MigrationsAssembly": "X",
+        "MigrationsAssemblyPath": {
+          "Ref": "X"
+        }
       }
     },
     "Migrationmigration1": {
@@ -234,7 +241,14 @@
             "Arn"
           ]
         },
-        "MigrationName": "migration1"
+        "MigrationName": "migration1",
+        "Branch": {
+          "Ref": "Branch"
+        },
+        "MigrationsAssembly": "X",
+        "MigrationsAssemblyPath": {
+          "Ref": "X"
+        }
       }
     }
   },
