@@ -10,8 +10,10 @@ public class MigrationModel : IMigrationModel
     public string DependsOn { get; }
     public string SqlScriptsBucket { get; }
     public string Branch { get; }
+    public string MigrationsAssembly { get; set; }
+    public string MigrationsAssemblyPath { get; set; }
 
-    public MigrationModel(string migrationId, TypeModel dataMigrationFunction, string migrationMethod, string dependsOn, string sqlScriptsBucket, string branch)
+    public MigrationModel(string migrationId, TypeModel dataMigrationFunction, string migrationMethod, string dependsOn, string sqlScriptsBucket, string branch, string migrationAssembly, string migrationsAssemblyPath)
     {
         if (string.IsNullOrEmpty(migrationMethod)) throw new ArgumentException("Value cannot be null or empty.", nameof(migrationMethod));
         if (string.IsNullOrEmpty(migrationId)) throw new ArgumentException("Value cannot be null or empty.", nameof(migrationId));
@@ -22,5 +24,7 @@ public class MigrationModel : IMigrationModel
         SqlScriptsBucket = sqlScriptsBucket;
         Branch = branch;
         // ATTRIBUTE:  ADD HERE
+        MigrationsAssembly = migrationAssembly;
+        MigrationsAssemblyPath = migrationsAssemblyPath;
     }
 }

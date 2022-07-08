@@ -10,6 +10,6 @@ public class MigrationModelBuilder
         IMigrationFunctionAttributeModel migrationFunctionModel)
     {
         var migrationId = migrationAttributeData.ConstructorArguments.SingleOrDefault().Value.ToString();
-        return new MigrationModel(migrationId, migrationFunctionModel.MigrationFunction, migrationFunctionModel.MigrationMethod, migrationFunctionModel.DependsOn, migrationFunctionModel.SqlScriptBucket, migrationFunctionModel.Branch);
+        return new MigrationModel(migrationId, migrationFunctionModel.MigrationFunction, migrationFunctionModel.MigrationMethod, migrationFunctionModel.DependsOn, migrationFunctionModel.SqlScriptBucket, migrationFunctionModel.Branch, migrationFunctionModel.MigrationsAssembly, migrationFunctionModel.MigrationsAssemblyPath);
     }
 }

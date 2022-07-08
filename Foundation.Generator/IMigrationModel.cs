@@ -12,5 +12,7 @@ public interface IMigrationModel
 
     // ATTRIBUTE:  ADD HERE
     string Branch { get; }
+    public string MigrationsAssembly { get; set; }
+    public string MigrationsAssemblyPath { get; set; }
 
 }

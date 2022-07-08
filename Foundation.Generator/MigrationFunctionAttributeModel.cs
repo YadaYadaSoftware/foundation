@@ -11,4 +11,6 @@ public class MigrationFunctionAttributeModel : IMigrationFunctionAttributeModel
     public string Branch { get; set; }
 
     // ATTRIBUTE:  ADD HERE
+    public string MigrationsAssembly { get; set; }
+    public string MigrationsAssemblyPath { get; set; }
 }

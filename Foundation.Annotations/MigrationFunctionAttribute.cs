@@ -13,5 +13,8 @@ namespace Foundation.Annotations
         // ATTRIBUTE:  ADD HERE
         public string Branch { get; set; }
 
+        public string MigrationsAssembly { get; set; }
+        public string MigrationsAssemblyPath { get; set; }
+
     }
 }

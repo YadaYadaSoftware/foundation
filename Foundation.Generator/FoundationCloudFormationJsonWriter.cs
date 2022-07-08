@@ -109,7 +109,7 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         }
 
         var branchPath = $"{propertiesPath}.Branch";
-        if (!string.IsNullOrEmpty(migrationModel.SqlScriptsBucket))
+        if (!string.IsNullOrEmpty(migrationModel.Branch))
         {
             jsonWriter.SetToken(branchPath, GetValueOrRef(migrationModel.Branch));
         }
@@ -118,6 +118,25 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
             jsonWriter.RemoveToken(branchPath);
         }
 
+        var migrationsAssemblyPath = $"{propertiesPath}.MigrationsAssembly";
+        if (!string.IsNullOrEmpty(migrationModel.MigrationsAssembly))
+        {
+            jsonWriter.SetToken(migrationsAssemblyPath, GetValueOrRef(migrationModel.MigrationsAssembly));
+        }
+        else
+        {
+            jsonWriter.RemoveToken(migrationsAssemblyPath);
+        }
+
+        var migrationsAssemblyPathPath = $"{propertiesPath}.MigrationsAssemblyPath";
+        if (!string.IsNullOrEmpty(migrationModel.MigrationsAssemblyPath))
+        {
+            jsonWriter.SetToken(migrationsAssemblyPathPath, GetValueOrRef(migrationModel.MigrationsAssemblyPath));
+        }
+        else
+        {
+            jsonWriter.RemoveToken(migrationsAssemblyPathPath);
+        }
         // ATTRIBUTE:  ADD HERE
         return resourceName;
 
