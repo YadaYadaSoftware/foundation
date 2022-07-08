@@ -39,6 +39,11 @@ public class SyntaxReceiver : ISyntaxContextReceiver
             if (displayString.Contains("MigrationFunctionAttribute"))
             {
                 this.MigrationFunctionAttribute = attributeSyntax;
+                foreach (var compilationReference in context.SemanticModel.Compilation.References)
+                {
+                    Debug.WriteLine(compilationReference.Display);
+                }
+
                 var types = context.SemanticModel.Compilation.SourceModule.ReferencedAssemblySymbols.SelectMany(a =>
                 {
                     try
