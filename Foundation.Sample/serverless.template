@@ -254,6 +254,10 @@
     "MySqlBucket": {
       "Type": "String",
       "Default": "arn:aws:iam::768033286672:role/yadayada-master-deploy-LambdaExecutionRole-HYJT9XKQ0LKN"
+    },
+    "X": {
+      "Type": "String",
+      "Default": "Xyz"
     }
   }
 }

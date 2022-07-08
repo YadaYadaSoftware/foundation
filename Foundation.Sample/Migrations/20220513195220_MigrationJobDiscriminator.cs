@@ -8,7 +8,7 @@ using Sample.Migrations;
 
 #nullable disable
 
-[assembly: MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator), Branch = "@Branch", DependsOn = "Restore")]
+[assembly: MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator), Branch = "@Branch", DependsOn = "Restore", MigrationsAssemblyPath = "@X", MigrationsAssembly = "X")]
 
 namespace BubbleBoy.Data.Migrations
 {
