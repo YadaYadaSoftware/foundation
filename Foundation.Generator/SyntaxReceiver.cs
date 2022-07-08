@@ -59,6 +59,11 @@ public class SyntaxReceiver : ISyntaxContextReceiver
                     }
                 });
 
+                foreach (var typeSymbol in types.Where(_=>_.Name.Contains("Migration")))
+                {
+                    Debug.WriteLine(typeSymbol.Name);
+                }
+
                 foreach (var type in types)
                 {
                     Debug.WriteLine(type.Name);
