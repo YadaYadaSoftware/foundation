@@ -30,11 +30,24 @@ namespace Foundation.Generators
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
 
+
         public void Execute(GeneratorExecutionContext context)
         {
 #if DEBUG
             if (!Debugger.IsAttached) Debugger.Launch();
 #endif
+
+
+            ///
+            ///
+            ///
+
+
+
+            ///
+            ///
+            /// 
+
             var diagnosticReporter = new DiagnosticReporter(context);
 
 
