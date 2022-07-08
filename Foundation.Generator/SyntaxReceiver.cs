@@ -55,6 +55,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
                     }
                     catch
                     {
+                        if (a.Name.Contains("Migrations")) Debugger.Break();
                         Debug.WriteLine(a.Name);
                         return Enumerable.Empty<ITypeSymbol>();
                     }
