@@ -4,31 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<None Include="bin\$(Configuration)\netstandard2.0\Foundation.Annotations.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
 		<None Include="..\Foundation.Generator\bin\$(Configuration)\netstandard2.0\Foundation.Generators.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
-		<None Remove="..\Foundation.Generator\bin\Debug\netstandard2.0\Foundation.Generators.dll" />
-		<None Remove="..\Foundation.Generator\bin\Debug\netstandard2.0\Newtonsoft.Json.dll" />
-		<None Remove="bin\Debug\netstandard2.0\Foundation.Annotations.dll" />
 		<None Include="..\Foundation.Generator\bin\$(Configuration)\netstandard2.0\Newtonsoft.Json.dll" Pack="true" PackagePath="analyzers/dotnet/cs" />
 	</ItemGroup>
 
 
 	<ItemGroup Condition="'$(Configuration)' != 'Release'">
 		<None Include="..\Foundation.Generator\bin\$(Configuration)\netstandard2.0\*.pdb" Pack="true" PackagePath="analyzers/dotnet/cs" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-	  <None Remove="..\Foundation.Generator\bin\Debug\netstandard2.0\Foundation.Annotations.pdb" />
-	  <None Remove="..\Foundation.Generator\bin\Debug\netstandard2.0\Foundation.Generators.pdb" />
-	  <None Remove="..\Foundation.Generator\bin\Debug\netstandard2.0\Newtonsoft.Json.dll" />
+		<None Include="bin\$(Configuration)\netstandard2.0\*.pdb" Pack="true" PackagePath="analyzers/dotnet/cs" />
 	</ItemGroup>
 
 
