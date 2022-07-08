@@ -55,6 +55,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 
                 foreach (var type in types)
                 {
+                    Debug.WriteLine(type.Name);
                     if (type.HasAttribute(context, "Microsoft.EntityFrameworkCore.Migrations.MigrationAttribute"))
                     {
                         Debug.WriteLine(type.ToString());
