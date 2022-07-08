@@ -25,7 +25,7 @@ namespace Foundation.Generators
         public void Initialize(GeneratorInitializationContext context)
         {
 #if DEBUG
-            Debugger.Launch();
+            //Debugger.Launch();
 #endif
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
@@ -33,7 +33,7 @@ namespace Foundation.Generators
         public void Execute(GeneratorExecutionContext context)
         {
 #if DEBUG
-            Debugger.Launch();
+            //Debugger.Launch();
 #endif
             var diagnosticReporter = new DiagnosticReporter(context);
 
@@ -48,7 +48,7 @@ namespace Foundation.Generators
 
                 if (receiver.MigrationFunctionAttribute is not { })
                 {
-                    throw new NotSupportedException($"No [assembly: {nameof(MigrationFunctionAttribute)}] found.");
+                    return;
                 }
 
                 var model = MigrationFunctionAttributeModelBuilder.Build(receiver.MigrationFunctionAttribute, context);

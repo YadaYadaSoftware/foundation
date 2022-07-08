@@ -15,7 +15,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
     {
 #if DEBUG
-        Debugger.Launch();
+        //Debugger.Launch();
 #endif
         if (context.Node is AttributeSyntax attributeSyntax)
         {
@@ -26,10 +26,6 @@ public class SyntaxReceiver : ISyntaxContextReceiver
             {
                 this.MigrationFunctionAttribute = attributeSyntax;
             }
-            //else if (displayString.Contains("MigrationAttribute"))
-            //{
-            //    this.MigrationAttributes.Add(attributeSyntaxX);
-            //}
         }
 
         //if (context.Node is AttributeSyntax attributeSyntax
