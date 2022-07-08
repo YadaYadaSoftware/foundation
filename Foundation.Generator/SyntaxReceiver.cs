@@ -46,9 +46,10 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 
                 var types = context.SemanticModel.Compilation.SourceModule.ReferencedAssemblySymbols.SelectMany(a =>
                 {
+                    Debug.WriteLine($"{nameof(a)}.{nameof(a.Name)}={a.Name}");
                     try
                     {
-                        var main = a.Identity.Name.Split('.').Aggregate(a.GlobalNamespace, (s, c) => s.GetNamespaceMembers().Single(m => m.Name.Equals(c)));
+                        INamespaceSymbol? main = a.Identity.Name.Split('.').Aggregate(a.GlobalNamespace, (s, c) => s.GetNamespaceMembers().Single(m => m.Name.Equals(c)));
 
                         return GetAllTypes(main);
                     }
