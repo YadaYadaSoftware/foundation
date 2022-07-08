@@ -15,7 +15,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
     {
 #if DEBUG
-        Debugger.Launch();
+        if (!Debugger.IsAttached) Debugger.Launch();
 #endif
         if (context.Node is AttributeSyntax attributeSyntax)
         {
