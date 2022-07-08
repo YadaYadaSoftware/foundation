@@ -55,6 +55,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
                     }
                     catch
                     {
+                        Debug.WriteLine(a.Name);
                         return Enumerable.Empty<ITypeSymbol>();
                     }
                 });
