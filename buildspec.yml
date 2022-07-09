@@ -30,12 +30,13 @@ phases:
       # name: version
     commands:
       - NORMALIZED_BRANCH=${Branch/\//\-}
-      - printenv
+      - dotnet tool install -g amazon.lambda.tools
       - TOKEN=`aws codeartifact get-authorization-token  --domain $CODEARTIFACT_DOMAIN --query authorizationToken --output text`
       - LIB_ENDPOINT=`aws codeartifact get-repository-endpoint --domain $CODEARTIFACT_DOMAIN --repository $CODEARTIFACT_REPOSITORY --format nuget --output text`
       - LIB_ENDPOINT="${LIB_ENDPOINT}v3/index.json"
       - dotnet nuget add source --name $CODEARTIFACT_REPOSITORY --username aws --password $TOKEN --store-password-in-clear-text $LIB_ENDPOINT
       - export PATH="$PATH:/root/.dotnet/tools"
+      - printenv
   #pre_build:
     #commands:
       # - command
@@ -47,7 +48,7 @@ phases:
       - dotnet pack -c $CONFIGURATION Foundation.Annotations
       - |
         if [ -d "Foundation.Functions" ]; then
-          echo "I should package"
+          dotnet lambda package-ci Foundation.Functions --s3-bucket $BUCKET --template Foundation.Functions/serverless.template --output-template Foundation.Functions/serverless.template
         fi
   post_build:
     commands:
