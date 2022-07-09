@@ -11,6 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Annotations", "F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8A8B343A-3E5D-4C4D-AF39-DA6B138D90E4}"
 	ProjectSection(SolutionItems) = preProject
+		buildspec.yml = buildspec.yml
 		Foundation.Annotations.nuspec = Foundation.Annotations.nuspec
 	EndProjectSection
 EndProject
