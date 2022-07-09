@@ -26,10 +26,21 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
     {
+        var semanticModelCompilation = context.SemanticModel.Compilation;
+        var compilationSourceModule = semanticModelCompilation.SourceModule;
+        
+
+
+        foreach (var assemblySymbol in compilationSourceModule.ReferencedAssemblySymbols)
+        {
+            // do something with the reference
+            
+        }
 #if DEBUG
         if (!Debugger.IsAttached) Debugger.Launch();
 #endif
 
+        
         
         if (context.Node is AttributeSyntax attributeSyntax)
         {
@@ -39,12 +50,12 @@ public class SyntaxReceiver : ISyntaxContextReceiver
             if (displayString.Contains("MigrationFunctionAttribute"))
             {
                 this.MigrationFunctionAttribute = attributeSyntax;
-                foreach (var compilationReference in context.SemanticModel.Compilation.References)
+                foreach (var compilationReference in semanticModelCompilation.References)
                 {
                     Debug.WriteLine(compilationReference.Display);
                 }
 
-                var types = context.SemanticModel.Compilation.SourceModule.ReferencedAssemblySymbols.SelectMany(a =>
+                var types = compilationSourceModule.ReferencedAssemblySymbols.SelectMany(a =>
                 {
                     Debug.WriteLine($"{nameof(a)}.{nameof(a.Name)}={a.Name}");
                     try

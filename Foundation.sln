@@ -14,7 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Foundation.Annotations.nuspec = Foundation.Annotations.nuspec
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Migrations", "Sample.Migrations\Sample.Migrations.csproj", "{B0D6C56F-C969-4DBE-BE12-85A698EE48D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Migrations", "Sample.Migrations\Sample.Migrations.csproj", "{B0D6C56F-C969-4DBE-BE12-85A698EE48D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Functions", "Foundation.Functions\Foundation.Functions.csproj", "{0F79DD26-82F8-4C0F-B341-E89F0E218183}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Functions.Tests", "Foundation.Functions.Tests\Foundation.Functions.Tests.csproj", "{2CAC4D49-3CE2-4214-827B-6DD16528D7D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +42,14 @@ Global
 		{B0D6C56F-C969-4DBE-BE12-85A698EE48D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0D6C56F-C969-4DBE-BE12-85A698EE48D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0D6C56F-C969-4DBE-BE12-85A698EE48D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F79DD26-82F8-4C0F-B341-E89F0E218183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F79DD26-82F8-4C0F-B341-E89F0E218183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F79DD26-82F8-4C0F-B341-E89F0E218183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F79DD26-82F8-4C0F-B341-E89F0E218183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CAC4D49-3CE2-4214-827B-6DD16528D7D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CAC4D49-3CE2-4214-827B-6DD16528D7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CAC4D49-3CE2-4214-827B-6DD16528D7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CAC4D49-3CE2-4214-827B-6DD16528D7D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
