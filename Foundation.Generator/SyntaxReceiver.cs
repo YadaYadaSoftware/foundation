@@ -17,10 +17,9 @@ public class SyntaxReceiver : ISyntaxContextReceiver
     {
         foreach (var namespaceOrTypeSymbol in root.GetMembers())
         {
-            //if (namespaceOrTypeSymbol is INamespaceSymbol @namespace) foreach (var nested in GetAllTypes(@namespace)) yield return nested;
+            if (namespaceOrTypeSymbol is INamespaceSymbol @namespace) foreach (var nested in GetAllTypes(@namespace)) yield return nested;
 
-            //else 
-            if (namespaceOrTypeSymbol is ITypeSymbol type) yield return type;
+            else if (namespaceOrTypeSymbol is ITypeSymbol type) yield return type;
         }
     }
 
