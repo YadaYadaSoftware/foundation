@@ -94,10 +94,49 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         }
 
 
+        jsonWriter.SetToken($"{propertiesPath}.StackName", new JObject(new JProperty("Ref","AWS::StackName")));
         var functionResource = migrationModel.MigrationFunction.FullName.Replace(".", string.Empty) + migrationModel.MigrationMethod + "Generated";
         jsonWriter.SetToken($"{propertiesPath}.ServiceToken", new JObject(new JProperty("Fn::GetAtt", new JArray(functionResource, "Arn"))));
         jsonWriter.SetToken($"{propertiesPath}.MigrationName", migrationModel.MigrationId);
+        var sqlBucketBucketPath = $"{propertiesPath}.SqlBucket";
+        if (!string.IsNullOrEmpty(migrationModel.SqlScriptsBucket))
+        {
+            jsonWriter.SetToken(sqlBucketBucketPath, GetValueOrRef(migrationModel.SqlScriptsBucket));
+        }
+        else
+        {
+            jsonWriter.RemoveToken(sqlBucketBucketPath);
+        }
 
+        var branchPath = $"{propertiesPath}.Branch";
+        if (!string.IsNullOrEmpty(migrationModel.Branch))
+        {
+            jsonWriter.SetToken(branchPath, GetValueOrRef(migrationModel.Branch));
+        }
+        else
+        {
+            jsonWriter.RemoveToken(branchPath);
+        }
+
+        var migrationsAssemblyPath = $"{propertiesPath}.MigrationsAssembly";
+        if (!string.IsNullOrEmpty(migrationModel.MigrationsAssembly))
+        {
+            jsonWriter.SetToken(migrationsAssemblyPath, GetValueOrRef(migrationModel.MigrationsAssembly));
+        }
+        else
+        {
+            jsonWriter.RemoveToken(migrationsAssemblyPath);
+        }
+
+        var migrationsAssemblyPathPath = $"{propertiesPath}.MigrationsAssemblyPath";
+        if (!string.IsNullOrEmpty(migrationModel.MigrationsAssemblyPath))
+        {
+            jsonWriter.SetToken(migrationsAssemblyPathPath, GetValueOrRef(migrationModel.MigrationsAssemblyPath));
+        }
+        else
+        {
+            jsonWriter.RemoveToken(migrationsAssemblyPathPath);
+        }
         // ATTRIBUTE:  ADD HERE
         return resourceName;
 

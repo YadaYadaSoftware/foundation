@@ -60,16 +60,40 @@ public class MigrationFunctionAttributeModelBuilder
 
                     /// HOW DO I GET THE TYPE HERE, which should be "MigrationFunctions", not "System.Type"???
                     break;
+                case nameof(MigrationFunctionAttribute.Branch):
+                {
+                    var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
+                    model.Branch = value.Value.ToString();
+                    break;
+                }
                 case nameof(MigrationFunctionAttribute.MigrationMethod):
                 {
                     var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
                     model.MigrationMethod = value.Value.ToString();
                     break;
                 }
+                case nameof(MigrationFunctionAttribute.SqlScriptBucket):
+                {
+                    var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
+                    model.SqlScriptBucket = value.Value.ToString();
+                    break;
+                }
                 case nameof(MigrationFunctionAttribute.DependsOn):
                 {
                     var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
                     model.DependsOn = value.Value.ToString();
+                    break;
+                }
+                case nameof(MigrationFunctionAttribute.MigrationsAssembly):
+                {
+                    var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
+                    model.MigrationsAssembly = value.Value.ToString();
+                    break;
+                }
+                case nameof(MigrationFunctionAttribute.MigrationsAssemblyPath):
+                {
+                    var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
+                    model.MigrationsAssemblyPath = value.Value.ToString();
                     break;
                 }
                 default: 
