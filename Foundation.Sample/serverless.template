@@ -27,10 +27,7 @@
         "Branch": {
           "Ref": "Branch"
         },
-        "MigrationsAssembly": "X",
-        "MigrationsAssemblyPath": {
-          "Ref": "X"
-        }
+        "MigrationsAssembly": "X"
       }
     },
     "Migration20220513195220MigrationJobDiscriminator": {
