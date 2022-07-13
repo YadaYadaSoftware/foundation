@@ -37,7 +37,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
             
         }
 #if DEBUG
-        if (!Debugger.IsAttached) Debugger.Launch();
+        //if (!Debugger.IsAttached) Debugger.Launch();
 #endif
 
         

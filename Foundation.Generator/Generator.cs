@@ -25,7 +25,7 @@ namespace Foundation.Generators
         public void Initialize(GeneratorInitializationContext context)
         {
 #if DEBUG
-            if(!Debugger.IsAttached) Debugger.Launch();
+            //if(!Debugger.IsAttached) Debugger.Launch();
 #endif
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
@@ -34,7 +34,7 @@ namespace Foundation.Generators
         public void Execute(GeneratorExecutionContext context)
         {
 #if DEBUG
-            if (!Debugger.IsAttached) Debugger.Launch();
+            //if (!Debugger.IsAttached) Debugger.Launch();
 #endif
 
 

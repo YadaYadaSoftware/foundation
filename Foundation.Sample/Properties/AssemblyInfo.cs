@@ -3,7 +3,7 @@ using Amazon.Lambda.Core;
 using Foundation.Annotations;
 using Sample.Properties;
 
-[assembly: MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator), Branch = "@Branch", DependsOn = "Restore", MigrationsAssemblyPath = "@X", MigrationsAssembly = "X")]
+[assembly: MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator),DependsOn = "Restore" )]
 namespace Sample.Properties
 {
     public class MigrationFunctions
