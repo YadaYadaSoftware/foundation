@@ -46,10 +46,7 @@ phases:
       - VERSION="0.5.1-preview-$CODEBUILD_BUILD_NUMBER-$NORMALIZED_BRANCH"
       - dotnet build -c $CONFIGURATION 
       - dotnet pack -c $CONFIGURATION Foundation.Annotations
-      - |
-        if [ -d "Foundation.Functions" ]; then
-          dotnet lambda package-ci Foundation.Functions --s3-bucket $BUCKET --template Foundation.Functions/serverless.template --output-template Foundation.Functions/serverless.template
-        fi
+      - dotnet lambda package-ci Foundation.Functions --s3-bucket $BUCKET --template Foundation.Functions/serverless.template --output-template Foundation.Functions/serverless.template
   post_build:
     commands:
       - dotnet nuget push **/*.nupkg --source $LIB_ENDPOINT
