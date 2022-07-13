@@ -17,9 +17,10 @@ public class SyntaxReceiver : ISyntaxContextReceiver
     {
         foreach (var namespaceOrTypeSymbol in root.GetMembers())
         {
-            if (namespaceOrTypeSymbol is INamespaceSymbol @namespace) foreach (var nested in GetAllTypes(@namespace)) yield return nested;
+            //if (namespaceOrTypeSymbol is INamespaceSymbol @namespace) foreach (var nested in GetAllTypes(@namespace)) yield return nested;
 
-            else if (namespaceOrTypeSymbol is ITypeSymbol type) yield return type;
+            //else 
+            if (namespaceOrTypeSymbol is ITypeSymbol type) yield return type;
         }
     }
 
@@ -28,14 +29,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
     {
         var semanticModelCompilation = context.SemanticModel.Compilation;
         var compilationSourceModule = semanticModelCompilation.SourceModule;
-        
 
-
-        foreach (var assemblySymbol in compilationSourceModule.ReferencedAssemblySymbols)
-        {
-            // do something with the reference
-            
-        }
 #if DEBUG
         //if (!Debugger.IsAttached) Debugger.Launch();
 #endif
@@ -71,11 +65,6 @@ public class SyntaxReceiver : ISyntaxContextReceiver
                         return Enumerable.Empty<ITypeSymbol>();
                     }
                 });
-
-                foreach (var typeSymbol in types.Where(_=>_.Name.Contains("Migration")))
-                {
-                    Debug.WriteLine(typeSymbol.Name);
-                }
 
                 foreach (var type in types)
                 {

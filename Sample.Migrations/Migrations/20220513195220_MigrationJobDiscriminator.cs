@@ -6,7 +6,7 @@ using Sample.Migrations;
 #nullable disable
 
 
-namespace BubbleBoy.Data.Migrations
+namespace Sample.Migrations
 {
 
     public partial class MigrationJobDiscriminator : Migration

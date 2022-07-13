@@ -3,63 +3,6 @@
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "An AWS Serverless Application.",
   "Resources": {
-    "Migrationmigration1": {
-      "Type": "AWS::CloudFormation::CustomResource",
-      "Metadata": {
-        "FoundationGeneratorsGenerator": {
-          "Version": "1.0.0.0"
-        }
-      },
-      "DependsOn": [
-        "Restore"
-      ],
-      "Properties": {
-        "StackName": {
-          "Ref": "AWS::StackName"
-        },
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "SamplePropertiesMigrationFunctionsMyMigratorGenerated",
-            "Arn"
-          ]
-        },
-        "MigrationName": "migration1",
-        "Branch": {
-          "Ref": "Branch"
-        },
-        "MigrationsAssembly": "X"
-      }
-    },
-    "Migration20220513195220MigrationJobDiscriminator": {
-      "Type": "AWS::CloudFormation::CustomResource",
-      "Metadata": {
-        "FoundationGeneratorsGenerator": {
-          "Version": "1.0.0.0"
-        }
-      },
-      "DependsOn": [
-        "Restore"
-      ],
-      "Properties": {
-        "StackName": {
-          "Ref": "AWS::StackName"
-        },
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "SampleMigrationsMigrationFunctionsMyMigratorGenerated",
-            "Arn"
-          ]
-        },
-        "MigrationName": "20220513195220_MigrationJobDiscriminator",
-        "Branch": {
-          "Ref": "Branch"
-        },
-        "MigrationsAssembly": "X",
-        "MigrationsAssemblyPath": {
-          "Ref": "X"
-        }
-      }
-    },
     "SamplePropertiesMigrationFunctionsMyMigratorGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
@@ -242,6 +185,47 @@
         ],
         "PackageType": "Zip",
         "Handler": "Sample::Foundation.Sample.Functions_Migrate_Generated::Migrate"
+      }
+    },
+    "Migrationmigration1": {
+      "Type": "AWS::CloudFormation::CustomResource",
+      "Metadata": {
+        "FoundationGeneratorsGenerator": {
+          "Version": "1.0.0.0"
+        }
+      },
+      "DependsOn": [
+        "Restore",
+        "Migration20220513195220MigrationJobDiscriminator"
+      ],
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SamplePropertiesMigrationFunctionsMyMigratorGenerated",
+            "Arn"
+          ]
+        },
+        "MigrationName": "migration1"
+      }
+    },
+    "Migration20220513195220MigrationJobDiscriminator": {
+      "Type": "AWS::CloudFormation::CustomResource",
+      "Metadata": {
+        "FoundationGeneratorsGenerator": {
+          "Version": "1.0.0.0"
+        }
+      },
+      "DependsOn": [
+        "Restore"
+      ],
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SamplePropertiesMigrationFunctionsMyMigratorGenerated",
+            "Arn"
+          ]
+        },
+        "MigrationName": "20220513195220_MigrationJobDiscriminator"
       }
     }
   },
