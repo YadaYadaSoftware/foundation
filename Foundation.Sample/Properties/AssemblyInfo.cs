@@ -1,9 +1,10 @@
 ﻿using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Core;
 using Foundation.Annotations;
+using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Sample.Properties;
 
-[assembly: MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator),DependsOn = "Restore" )]
+[assembly: MigrationFunction(MigrationFunction = typeof(MigrationFunctions), MigrationMethod = nameof(MigrationFunctions.MyMigrator),DependsOn = "Restore", MigrationsAssemblyPath =  "@MigrationsAssemblyPath" )]
 namespace Sample.Properties
 {
     public class MigrationFunctions

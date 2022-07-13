@@ -10,5 +10,6 @@ namespace Foundation.Annotations
         public string MigrationMethod { get; set; }
         public string DependsOn { get; set; }
         // ATTRIBUTE:  ADD HERE
+        public string MigrationsAssemblyPath { get; set; }
     }
 }

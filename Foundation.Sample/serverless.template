@@ -205,7 +205,10 @@
             "Arn"
           ]
         },
-        "MigrationName": "migration1"
+        "MigrationName": "migration1",
+        "MigrationsAssemblyPath": {
+          "Ref": "MigrationsAssemblyPath"
+        }
       }
     },
     "Migration20220513195220MigrationJobDiscriminator": {
@@ -225,7 +228,10 @@
             "Arn"
           ]
         },
-        "MigrationName": "20220513195220_MigrationJobDiscriminator"
+        "MigrationName": "20220513195220_MigrationJobDiscriminator",
+        "MigrationsAssemblyPath": {
+          "Ref": "MigrationsAssemblyPath"
+        }
       }
     }
   },
@@ -249,6 +255,9 @@
     "X": {
       "Type": "String",
       "Default": "Xyz"
+    },
+    "MigrationsAssemblyPath": {
+      "Type": "String"
     }
   }
 }

@@ -31,6 +31,10 @@ public class MigrationFunctionAttributeBuilder
             {
                 data.Branch = branch;
             }
+            else if (pair.Key == nameof(data.MigrationsAssemblyPath) && pair.Value.Value is string migrationsAssemblyPath)
+            {
+                data.MigrationsAssemblyPath = migrationsAssemblyPath;
+            }
             // ATTRIBUTE:  ADD HERE
             else
             {

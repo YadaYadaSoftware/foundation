@@ -72,6 +72,12 @@ public class MigrationFunctionAttributeModelBuilder
                     model.DependsOn = value.Value.ToString();
                     break;
                 }
+                case nameof(MigrationFunctionAttribute.MigrationsAssemblyPath):
+                {
+                    var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
+                    model.MigrationsAssemblyPath = value.Value.ToString();
+                    break;
+                }
                 default: 
                     throw new ArgumentException(attributeArgumentSyntax.NameEquals.Name.Identifier.ValueText);
 
