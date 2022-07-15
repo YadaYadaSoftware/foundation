@@ -57,13 +57,13 @@ phases:
         #files:
             #- '**/*.trx'
         #base-directory: $CODEBUILD_SRC_DIR/TestResults
-#artifacts:
-  #files:
-    # - location
+artifacts:
+  files:
+    - Foundation.Functions/serverless.template
     # - location
   #name: $(date +%Y-%m-%d)
-  #discard-paths: yes
-  #base-directory: location
+  discard-paths: yes
+  base-directory: $CODEBUILD_SRC_DIR
 #cache:
   #paths:
     # - paths
