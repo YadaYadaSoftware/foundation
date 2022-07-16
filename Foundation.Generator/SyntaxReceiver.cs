@@ -30,7 +30,7 @@ public class SyntaxReceiver : ISyntaxContextReceiver
         var compilationSourceModule = semanticModelCompilation.SourceModule;
 
 #if DEBUG
-        if (!Debugger.IsAttached) Debugger.Launch();
+        //if (!Debugger.IsAttached) Debugger.Launch();
 #endif
 
         
