@@ -107,6 +107,8 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         {
             jsonWriter.RemoveToken(migrationsAssemblyPathPath);
         }
+
+        jsonWriter.SetToken($"{propertiesPath}.StackName", new JObject(new JProperty("Ref", "AWS::StackName")));
         // ATTRIBUTE:  ADD HERE
         return resourceName;
 
