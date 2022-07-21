@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using YadaYada.Bisque.Annotations;
 using YadaYada.Library.Extensions;
+using InvalidOperationException = Amazon.CloudFormation.Model.InvalidOperationException;
 
 namespace Data.Serverless.Migrate;
 
@@ -187,7 +188,7 @@ public class MigrationFunctions
 
                 process.WaitForExit(totalMilliseconds);
 
-                _logger.LogInformation("{0}={1}", nameof(process.ExitCode), process.ExitCode);
+                if (process.ExitCode != 1) throw new InvalidOperationException($"{nameof(process.ExitCode)}!=1 ({process.ExitCode})");
 
             }
         }
