@@ -37,9 +37,10 @@ public class MigrationFunctionAttributeModelBuilder
 
         foreach (var attributeArgumentSyntax in receiverMigrationFunctionAttribute.ArgumentList.Arguments)
         {
-            switch (attributeArgumentSyntax.NameEquals.Name.Identifier.ValueText)
+            var name = attributeArgumentSyntax.NameColon.Name.ToString().ToUpperInvariant();
+            switch (name)
             {
-                case nameof(MigrationFunctionAttribute.MigrationFunction):
+                case "MIGRATIONFUNCTION":
 
 
                     Debug.WriteLine(attributeArgumentSyntax.Expression);
@@ -60,22 +61,28 @@ public class MigrationFunctionAttributeModelBuilder
 
                     /// HOW DO I GET THE TYPE HERE, which should be "MigrationFunctions", not "System.Type"???
                     break;
-                case nameof(MigrationFunctionAttribute.MigrationMethod):
+                case "MIGRATIONMETHOD":
                 {
                     var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
                     model.MigrationMethod = value.Value.ToString();
                     break;
                 }
-                case nameof(MigrationFunctionAttribute.DependsOn):
+                case "DEPENDSON":
                 {
                     var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
                     model.DependsOn = value.Value.ToString();
                     break;
                 }
-                case nameof(MigrationFunctionAttribute.MigrationsAssemblyPath):
+                case "MIGRATIONSASSEMBLYPATH":
                 {
                     var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
                     model.MigrationsAssemblyPath = value.Value.ToString();
+                    break;
+                }
+                case "MIGRATIONFUNCTIONARN":
+                {
+                    var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
+                    model.MigrationsFunctionArn = value.Value.ToString();
                     break;
                 }
                 default: 

@@ -4,6 +4,7 @@ using Foundation.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using AttributeListSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.AttributeListSyntax;
 using AttributeSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.AttributeSyntax;
 
 namespace Foundation.Generators;
@@ -32,16 +33,56 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 #if DEBUG
         //if (!Debugger.IsAttached) Debugger.Launch();
 #endif
+        //if (context.Node.ToFullString().Contains("MigrationFunctionAttribute"))
+        //{
+            Debug.WriteLine(context.Node.ToFullString());
+        //}
 
-        
-        
+        if (context.Node.ToFullString().StartsWith("assembly"))
+        {
+        }
+        if (context.Node is AttributeArgumentListSyntax z)
+        {
+            foreach (var attributeArgumentSyntax in z.Arguments)
+            {
+                Debug.WriteLine(attributeArgumentSyntax.Parent.ToFullString());
+            }
+
+        }
+        if (context.Node is AttributeArgumentSyntax zz)
+        {
+            Debug.WriteLine(zz.NameEquals?.ToFullString());
+
+        }
+        if (context.Node is AttributeListSyntax zzz)
+        {
+            foreach (var zzzAttribute in zzz.Attributes)
+            {
+                Debug.WriteLine(zzzAttribute.Name.ToFullString());
+            }
+
+        }
+        if (context.Node is AttributeTargetSpecifierSyntax zzzz)
+        {
+            
+            Debug.WriteLine(zzzz.Identifier.Value.ToString());
+
+        }
+
         if (context.Node is AttributeSyntax attributeSyntax)
         {
-            Debug.WriteLine($"{nameof(attributeSyntax)}:{attributeSyntax.ToString()}");
-
             var displayString = context.SemanticModel.GetTypeInfo(attributeSyntax).Type.ToDisplayString();
             if (displayString.Contains("MigrationFunctionAttribute"))
             {
+                //SymbolInfo x = context.SemanticModel.GetSymbolInfo(context.Node.Parent);
+                foreach (var attributeArgumentSyntax in attributeSyntax.ArgumentList.Arguments)
+                {
+                    //Debug.WriteLine(attributeArgumentSyntax.NameEquals.Name.ToString());
+                    Debug.WriteLine(attributeArgumentSyntax.NameColon.Name.ToString());
+                }
+                //var z = x.Symbol.GetAttributeData(context, "Foundation.Annotations.MigrationFunctionAttribute");
+
+
                 this.MigrationFunctionAttribute = attributeSyntax;
                 foreach (var compilationReference in semanticModelCompilation.References)
                 {
