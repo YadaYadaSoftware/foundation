@@ -5,10 +5,10 @@ using Amazon.Lambda.Core;
 using Amazon.S3.Transfer;
 using JetBrains.Annotations;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Mono.Unix;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using YadaYada.Bisque.Annotations;
 using YadaYada.Library.Extensions;
 
@@ -17,16 +17,14 @@ namespace Data.Serverless.Migrate;
 public class MigrationFunctions
 {
     private readonly ITransferUtility _transferUtility;
-    private readonly DbContext _dbContext;
     private readonly ILogger _logger;
     private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
 
-    public MigrationFunctions([NotNull] [ItemNotNull] IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, [NotNull] ILoggerProvider loggerProvider, ITransferUtility transferUtility, DbContext dbContext)
+    public MigrationFunctions([NotNull] [ItemNotNull] IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, [NotNull] ILoggerProvider loggerProvider, ITransferUtility transferUtility)
     {
         if (sqlConnectionStringBuildOptions == null) throw new ArgumentNullException(nameof(sqlConnectionStringBuildOptions));
         if (loggerProvider == null) throw new ArgumentNullException(nameof(loggerProvider));
         _transferUtility = transferUtility ?? throw new ArgumentNullException(nameof(transferUtility));
-        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _logger = loggerProvider.CreateLogger(this.GetType().FullName);
         _sqlConnectionStringBuilder = sqlConnectionStringBuildOptions.Value;
     }
@@ -57,8 +55,10 @@ public class MigrationFunctions
                     if (string.IsNullOrEmpty(request.MigrationName)) throw new ArgumentNullException(nameof(request.MigrationName));
                     if (string.IsNullOrEmpty(request.MigrationsAssemblyPath)) throw new ArgumentNullException(nameof(request.MigrationsAssemblyPath));
                     if (string.IsNullOrEmpty(request.StackName)) throw new ArgumentNullException(nameof(request.StackName));
+                    
                     try
                     {
+                        _sqlConnectionStringBuilder.InitialCatalog = request.InitialCatalog;
                         switch (request.RequestType)
                         {
                             case CloudFormationRequest.RequestTypeEnum.Create:
@@ -94,6 +94,9 @@ public class MigrationFunctions
                                             return await CloudFormationResponse.CompleteCloudFormationResponse(CloudFormationResponse.StatusEnum.Success, request, lambdaContext);
                                         }
 
+                                        var dbContextOptionsBuilder = new DbContextOptionsBuilder();
+                                        dbContextOptionsBuilder.UseSqlServer(_sqlConnectionStringBuilder.ConnectionString);
+                                        var _dbContext = new DbContext(dbContextOptionsBuilder.Options);
                                         var applied = await _dbContext.Database.GetAppliedMigrationsAsync();
                                         var appliedEnumerated = applied as string[] ?? applied.ToArray();
                                         using (_logger.AddScope(nameof(applied), string.Join(',', appliedEnumerated)))

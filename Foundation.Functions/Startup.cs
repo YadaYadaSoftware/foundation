@@ -24,22 +24,20 @@ namespace Foundation.Functions
         public void ConfigureServices(IServiceCollection services)
         {
             var builder = new ConfigurationBuilder();
-            var environmentName = Environment.GetEnvironmentVariable("Hosting:Environment");
-            var host = Environment.GetEnvironmentVariable("Host");
 
             builder.AddJsonFile("appsettings.json", true, false)
-                .AddJsonFile($"appsettings.{environmentName}.json", true)
                 .AddSystemsManager("/db.deploy2the.cloud");
 
             var configurationRoot = builder.Build();
 
             services.Configure<SqlConnectionStringBuilder>(configurationRoot.GetSection(nameof(SqlConnectionStringBuilder)))
                 .AddLogging(builder => builder.AddLoggerYadaYada(configurationRoot, nameof(LambdaLoggerOptions)))
-                .AddEntityFrameworkSqlServer()
-                .AddEntityConfigurations()
+                //.AddEntityFrameworkSqlServer()
+                //.AddEntityConfigurations()
                 .AddAWSService<Amazon.S3.IAmazonS3>()
                 .AddSingleton<ITransferUtility, TransferUtility>()
-                .AddDbContext<DbContext, DbContext>((provider, optionsBuilder) => optionsBuilder.UseSqlServer(provider.GetRequiredService<IOptions<SqlConnectionStringBuilder>>().Value.ConnectionString));
+                //.AddDbContext<DbContext, DbContext>((provider, optionsBuilder) => optionsBuilder.UseSqlServer(provider.GetRequiredService<IOptions<SqlConnectionStringBuilder>>().Value.ConnectionString))
+                ;
         }
     }
 }
