@@ -20,7 +20,7 @@
         }
       },
       "Architectures": [
-        "arm64"
+        "x86_64"
       ]
     }
   },

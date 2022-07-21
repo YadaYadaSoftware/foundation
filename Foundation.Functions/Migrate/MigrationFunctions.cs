@@ -49,6 +49,8 @@ public class MigrationFunctions
             {
                 using (_logger.AddScope(nameof(request.RequestType), request.RequestType))
                 using (_logger.AddScope(nameof(request.MigrationName), request.MigrationName))
+                using (_logger.AddScope(nameof(request.InitialCatalog), request.InitialCatalog))
+                using (_logger.AddScope(nameof(request.StackName), request.StackName))
                 using (_logger.AddScope(nameof(migrationsBundle), migrationsBundle.FullName))
                 {
                     if (string.IsNullOrEmpty(request.InitialCatalog)) throw new ArgumentNullException(nameof(request.InitialCatalog));
