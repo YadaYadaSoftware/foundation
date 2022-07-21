@@ -30,8 +30,8 @@ public class MigrationInfoRequest : CloudFormationRequest<MigrationInfoPropertie
     [JsonIgnore]
     public string InitialCatalog
     {
-        get => ResourceProperties.StackName;
-        set => ResourceProperties.StackName = value;
+        get => ResourceProperties.InitialCatalog;
+        set => ResourceProperties.InitialCatalog = value;
     }
 
 }
