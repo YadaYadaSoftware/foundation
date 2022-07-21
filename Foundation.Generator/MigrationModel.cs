@@ -14,13 +14,17 @@ public class MigrationModel : IMigrationModel
 
     public MigrationModel(string migrationId, TypeModel dataMigrationFunction, string migrationMethod, string dependsOn, string migrationsAssemblyPath, string migrationsFunctionArn)
     {
-        if (string.IsNullOrEmpty(migrationMethod) && string.IsNullOrEmpty(migrationsFunctionArn))
+        if (string.IsNullOrEmpty(migrationsFunctionArn))
         {
-            throw new InvalidOperationException($"Must specify {nameof(MigrationFunctionAttribute.MigrationFunctionArn)} or {nameof(MigrationFunctionAttribute.MigrationMethod)}");
+            if (string.IsNullOrEmpty(migrationMethod) || dataMigrationFunction == default)
+            {
+                throw new InvalidOperationException($"Must specify {nameof(MigrationFunctionAttribute.MigrationFunctionArn)} or ( {nameof(MigrationFunctionAttribute.MigrationMethod)} and {nameof(MigrationFunctionAttribute.MigrationFunction)}");
+
+            }
         }
         if (string.IsNullOrEmpty(migrationId)) throw new ArgumentException("Value cannot be null or empty.", nameof(migrationId));
         MigrationId = migrationId;
-        MigrationFunction = dataMigrationFunction ?? throw new ArgumentNullException(nameof(dataMigrationFunction));
+        MigrationFunction = dataMigrationFunction; 
         MigrationMethod = migrationMethod;
         DependsOn = dependsOn;
         // ATTRIBUTE:  ADD HERE
