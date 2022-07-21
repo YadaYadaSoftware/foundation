@@ -11,10 +11,10 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Mono.Unix;
 using YadaYada.Bisque.Annotations;
-using YadaYada.Library.Extensions;
 
 namespace Data.Serverless.Migrate;
 

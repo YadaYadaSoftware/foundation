@@ -24,13 +24,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
     <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" />
-	  <PackageReference Include="YadaYadaSoftware.Extensions" Version="2021.201.93" />
 	  <PackageReference Include="YadaYadaSoftware.Logging" />
-    <PackageReference Include="YadaYadaSoftware.Microsoft.EntityFrameworkCore.Extensions" />
+	  <PackageReference Include="YadaYadaSoftware.Microsoft.EntityFrameworkCore.Extensions" />
+    <PackageReference Include="YadaYadaSoftware.Amazon.CloudFormation.Extensions" />
 
   </ItemGroup>
 	<ItemGroup Condition="'$(NoProjectReferences)' != 'true'">
     <ProjectReference Include="..\..\Logging\YadaYadaSoftware.Logging\YadaYadaSoftware.Logging.csproj" />
-    <ProjectReference Include="..\..\YadaYadaSoftware.Microsoft.EntityFrameworkCore.Extensions\Microsoft.EntityFrameworkCore.Extensions\YadaYada.Microsoft.EntityFrameworkCore.Extensions.csproj" />
   </ItemGroup>
 </Project>
