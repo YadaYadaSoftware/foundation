@@ -44,9 +44,9 @@ phases:
   build:
     commands:
       - VERSION="0.5.1-preview-$CODEBUILD_BUILD_NUMBER-$NORMALIZED_BRANCH"
-      - dotnet build -c $CONFIGURATION 
-      - dotnet pack -c $CONFIGURATION Foundation.Annotations
-      - dotnet lambda package-ci Foundation.Functions --s3-bucket $BUCKET --template Foundation.Functions/serverless.template --output-template Foundation.Functions/serverless.template
+      - dotnet build -c $CONFIGURATION -p:NoProjectReferences=true
+      - dotnet pack -c $CONFIGURATION Foundation.Annotations -p:NoProjectReferences=true
+      - dotnet lambda package-ci Foundation.Functions --s3-bucket $BUCKET --template Foundation.Functions/serverless.template --output-template Foundation.Functions/serverless.template --msbuild-parameters NoProjectReferences=true
   post_build:
     commands:
       - dotnet nuget push **/*.nupkg --source $LIB_ENDPOINT
