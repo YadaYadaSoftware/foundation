@@ -11,4 +11,5 @@ public interface IMigrationModel
 
     // ATTRIBUTE:  ADD HERE
     public string MigrationsAssemblyPath { get; set; }
+    public string MigrationsFunctionArn { get; set; }
 }

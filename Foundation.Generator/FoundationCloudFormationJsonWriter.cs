@@ -94,8 +94,16 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         }
 
 
-        var functionResource = migrationModel.MigrationFunction.FullName.Replace(".", string.Empty) + migrationModel.MigrationMethod + "Generated";
-        jsonWriter.SetToken($"{propertiesPath}.ServiceToken", new JObject(new JProperty("Fn::GetAtt", new JArray(functionResource, "Arn"))));
+        if (!string.IsNullOrEmpty(migrationModel.MigrationMethod))
+        {
+            var functionResource = migrationModel.MigrationFunction.FullName.Replace(".", string.Empty) + migrationModel.MigrationMethod + "Generated";
+            jsonWriter.SetToken($"{propertiesPath}.ServiceToken", new JObject(new JProperty("Fn::GetAtt", new JArray(functionResource, "Arn"))));
+        }
+        else
+        {
+            jsonWriter.SetToken($"{propertiesPath}.ServiceToken", migrationModel.MigrationsFunctionArn);
+
+        }
         jsonWriter.SetToken($"{propertiesPath}.MigrationName", migrationModel.MigrationId);
 
         var migrationsAssemblyPathPath = $"{propertiesPath}.MigrationsAssemblyPath";

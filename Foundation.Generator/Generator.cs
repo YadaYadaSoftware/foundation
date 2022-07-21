@@ -83,7 +83,7 @@ namespace Foundation.Generators
                 foreach (var migrationClass in receiver.MigrationAttributes)
                 {
                     var migrationId = migrationClass.ConstructorArguments.Single().Value.ToString();
-                    annotationReport.Migrations.Add(MigrationModelBuilder.Build(context,migrationClass, receiver.MigrationFunctionAttribute, migrationFunctionModel) );
+                    annotationReport.Migrations.Add(MigrationModelBuilder.Build(migrationClass, migrationFunctionModel) );
                 }
 
                 var cloudFormationJsonWriter = new FoundationCloudFormationJsonWriter(_fileManager, _directoryManager, _jsonWriter, diagnosticReporter);

@@ -23,17 +23,13 @@ public class MigrationFunctionAttributeBuilder
             {
                 data.DependsOn = dependsOn;
             }
-            else if (pair.Key == nameof(data.SqlScriptBucket) && pair.Value.Value is string sqlScriptBucket)
-            {
-                data.SqlScriptBucket = sqlScriptBucket;
-            }
-            else if (pair.Key == nameof(data.Branch) && pair.Value.Value is string branch)
-            {
-                data.Branch = branch;
-            }
             else if (pair.Key == nameof(data.MigrationsAssemblyPath) && pair.Value.Value is string migrationsAssemblyPath)
             {
                 data.MigrationsAssemblyPath = migrationsAssemblyPath;
+            }
+            else if (pair.Key == nameof(data.MigrationsFunctionArn) && pair.Value.Value is string arn)
+            {
+                data.MigrationsFunctionArn = arn;
             }
             // ATTRIBUTE:  ADD HERE
             else
