@@ -24,9 +24,15 @@
         },
         "PackageType": "Zip",
         "Handler": "Foundation.Functions::Data.Serverless.Migrate.MigrationFunctions_ApplyMigration_Generated::ApplyMigration",
-        "AutoPublishAlias":"live"
+        "AutoPublishAlias": "live"
       }
     }
   },
-  "Outputs":{"DataServerlessMigrateMigrationFunctionsApplyMigrationGeneratedVersion":{"Value":{"Ref":"DataServerlessMigrateMigrationFunctionsApplyMigrationGenerated.Version"}}}
+  "Outputs": {
+    "DataServerlessMigrateMigrationFunctionsApplyMigrationGeneratedVersion": {
+      "Value": {
+        "Ref": "DataServerlessMigrateMigrationFunctionsApplyMigrationGenerated.Version"
+      }
+    }
+  }
 }
