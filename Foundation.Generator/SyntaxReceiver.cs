@@ -33,41 +33,6 @@ public class SyntaxReceiver : ISyntaxContextReceiver
 #if DEBUG
         //if (!Debugger.IsAttached) Debugger.Launch();
 #endif
-        //if (context.Node.ToFullString().Contains("MigrationFunctionAttribute"))
-        //{
-            Debug.WriteLine(context.Node.ToFullString());
-        //}
-
-        if (context.Node.ToFullString().StartsWith("assembly"))
-        {
-        }
-        if (context.Node is AttributeArgumentListSyntax z)
-        {
-            foreach (var attributeArgumentSyntax in z.Arguments)
-            {
-                Debug.WriteLine(attributeArgumentSyntax.Parent.ToFullString());
-            }
-
-        }
-        if (context.Node is AttributeArgumentSyntax zz)
-        {
-            Debug.WriteLine(zz.NameEquals?.ToFullString());
-
-        }
-        if (context.Node is AttributeListSyntax zzz)
-        {
-            foreach (var zzzAttribute in zzz.Attributes)
-            {
-                Debug.WriteLine(zzzAttribute.Name.ToFullString());
-            }
-
-        }
-        if (context.Node is AttributeTargetSpecifierSyntax zzzz)
-        {
-            
-            Debug.WriteLine(zzzz.Identifier.Value.ToString());
-
-        }
 
         if (context.Node is AttributeSyntax attributeSyntax)
         {
