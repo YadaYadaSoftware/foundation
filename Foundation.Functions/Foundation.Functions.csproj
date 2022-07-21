@@ -24,7 +24,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
     <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" />
-	  <PackageReference Include="YadaYadaSoftware.Logging" />
+	  <PackageReference Include="YadaYadaSoftware.Logging" Version="2022.202.17" />
 	  <PackageReference Include="YadaYadaSoftware.Microsoft.EntityFrameworkCore.Extensions" />
     <PackageReference Include="YadaYadaSoftware.Amazon.CloudFormation.Extensions" />
 
