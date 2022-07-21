@@ -130,7 +130,11 @@ public class MigrationFunctions
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                using (_logger.AddScope(nameof(_sqlConnectionStringBuilder),_sqlConnectionStringBuilder.ConnectionString))
+                {
+                    _logger.LogError(e, e.Message);
+
+                }                
                 return await CloudFormationResponse.CompleteCloudFormationResponse(CloudFormationResponse.StatusEnum.Failed, request, lambdaContext, e.Message);
             }
 

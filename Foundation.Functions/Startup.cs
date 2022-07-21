@@ -35,7 +35,6 @@ namespace Foundation.Functions
 
             services.Configure<SqlConnectionStringBuilder>(configurationRoot.GetSection(nameof(SqlConnectionStringBuilder)))
                 .AddLogging(builder => builder.AddLoggerYadaYada(configurationRoot, nameof(LambdaLoggerOptions)))
-                //.AddAutoPartsContext()
                 .AddEntityFrameworkSqlServer()
                 .AddEntityConfigurations()
                 .AddAWSService<Amazon.S3.IAmazonS3>()
