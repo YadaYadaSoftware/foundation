@@ -2,7 +2,12 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "An AWS Serverless Application.",
-  "Parameters":{"LambdaExecutionRole":{"Type":"String","Default":"arn:aws:iam::768033286672:role/yadayada-master-deploy-LambdaExecutionRole-HYJT9XKQ0LKN"}},
+  "Parameters": {
+    "LambdaExecutionRole": {
+      "Type": "String",
+      "Default": "arn:aws:iam::768033286672:role/yadayada-master-deploy-LambdaExecutionRole-HYJT9XKQ0LKN"
+    }
+  },
   "Resources": {
     "FoundationFunctionsFunctionsDefaultGenerated": {
       "Type": "AWS::Serverless::Function",

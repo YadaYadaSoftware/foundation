@@ -1,6 +1,8 @@
 using Amazon.S3.Transfer;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 
 namespace Foundation.Functions
@@ -34,7 +36,8 @@ namespace Foundation.Functions
                 .AddEntityFrameworkSqlServer()
                 .AddEntityConfigurations()
                 .AddAWSService<Amazon.S3.IAmazonS3>()
-                .AddSingleton<ITransferUtility, TransferUtility>();
+                .AddSingleton<ITransferUtility, TransferUtility>()
+                .AddDbContext<DbContext, DbContext>((provider, optionsBuilder) => optionsBuilder.UseSqlServer(provider.GetRequiredService<IOptions<SqlConnectionStringBuilder>>().Value.ConnectionString));
         }
     }
 }
