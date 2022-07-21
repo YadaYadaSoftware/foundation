@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
@@ -12,9 +12,22 @@
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Amazon.Extensions.Configuration.SystemsManager" Version="4.0.0" />
     <PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
     <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.4.1" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.0" />
     <PackageReference Include="Amazon.Lambda.Annotations" Version="0.5.1-preview-185-annotations-enchilada" />
+    <PackageReference Include="AWSSDK.CloudFormation" Version="3.7.11.6" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.9.28" />
+    <PackageReference Include="Bisque.Annotations" Version="2022.190.365" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
+    <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" />
+    <PackageReference Include="YadaYadaSoftware.Extensions" Version="2021.201.93" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Logging\YadaYadaSoftware.Logging\YadaYadaSoftware.Logging.csproj" />
+    <ProjectReference Include="..\..\Microsoft.EntityFrameworkCore.Extensions\Microsoft.EntityFrameworkCore.Extensions\Microsoft.EntityFrameworkCore.Extensions.csproj" />
   </ItemGroup>
 </Project>

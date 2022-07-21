@@ -207,6 +207,9 @@
         "MigrationName": "20220513195220_MigrationJobDiscriminator",
         "MigrationsAssemblyPath": {
           "Ref": "MigrationsAssemblyPath"
+        },
+        "StackName": {
+          "Ref": "AWS::StackName"
         }
       }
     },
@@ -231,6 +234,9 @@
         "MigrationName": "migration1",
         "MigrationsAssemblyPath": {
           "Ref": "MigrationsAssemblyPath"
+        },
+        "StackName": {
+          "Ref": "AWS::StackName"
         }
       }
     }

@@ -1,4 +1,7 @@
+using Amazon.S3.Transfer;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Foundation.Functions
 {
@@ -15,21 +18,23 @@ namespace Foundation.Functions
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            //// Example of creating the IConfiguration object and
-            //// adding it to the dependency injection container.
-            //var builder = new ConfigurationBuilder()
-            //                    .AddJsonFile("appsettings.json", true);
+            var builder = new ConfigurationBuilder();
+            var environmentName = Environment.GetEnvironmentVariable("Hosting:Environment");
+            var host = Environment.GetEnvironmentVariable("Host");
 
-            //// Add AWS Systems Manager as a potential provider for the configuration. This is 
-            //// available with the Amazon.Extensions.Configuration.SystemsManager NuGet package.
-            //builder.AddSystemsManager("/app/settings");
+            builder.AddJsonFile("appsettings.json", true, false)
+                .AddJsonFile($"appsettings.{environmentName}.json", true)
+                .AddSystemsManager("/db.deploy2the.cloud");
 
-            //var configuration = builder.Build();
-            //services.AddSingleton<IConfiguration>(configuration);
+            var configurationRoot = builder.Build();
 
-            //// Example of using the AWSSDK.Extensions.NETCore.Setup NuGet package to add
-            //// the Amazon S3 service client to the dependency injection container.
-            //services.AddAWSService<Amazon.S3.IAmazonS3>();
+            services.Configure<SqlConnectionStringBuilder>(configurationRoot.GetSection(nameof(SqlConnectionStringBuilder)))
+                .AddLogging(builder => builder.AddLoggerYadaYada(configurationRoot, nameof(LambdaLoggerOptions)))
+                //.AddAutoPartsContext()
+                .AddEntityFrameworkSqlServer()
+                .AddEntityConfigurations()
+                .AddAWSService<Amazon.S3.IAmazonS3>()
+                .AddSingleton<ITransferUtility, TransferUtility>();
         }
     }
 }
