@@ -184,11 +184,14 @@ public class MigrationFunctions
                 var totalMilliseconds = (int)lambdaContext.RemainingTime.Subtract(TimeSpan.FromSeconds(5)).TotalMilliseconds;
 
                 process.OutputDataReceived += (sender, args) => { _logger.LogInformation(args.Data); };
-                process.ErrorDataReceived += (sender, args) => { _logger.LogInformation(args.Data); };
+                process.ErrorDataReceived += (sender, args) => { _logger.LogError(args.Data); };
 
                 process.WaitForExit(totalMilliseconds);
 
-                if (process.ExitCode != 1) throw new InvalidOperationException($"{nameof(process.ExitCode)}!=1 ({process.ExitCode})");
+                if (process.ExitCode != 0)
+                {
+                    throw new InvalidOperationException($"{nameof(process.ExitCode)}!=0 ({process.ExitCode})");
+                }
 
             }
         }
