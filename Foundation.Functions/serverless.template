@@ -23,8 +23,10 @@
           "Ref": "LambdaExecutionRole"
         },
         "PackageType": "Zip",
-        "Handler": "Foundation.Functions::Data.Serverless.Migrate.MigrationFunctions_ApplyMigration_Generated::ApplyMigration"
+        "Handler": "Foundation.Functions::Data.Serverless.Migrate.MigrationFunctions_ApplyMigration_Generated::ApplyMigration",
+        "AutoPublishAlias":"live"
       }
     }
-  }
+  },
+  "Outputs":{"DataServerlessMigrateMigrationFunctionsApplyMigrationGeneratedVersion":{"Value":{"Ref":"DataServerlessMigrateMigrationFunctionsApplyMigrationGenerated.Version"}}}
 }
