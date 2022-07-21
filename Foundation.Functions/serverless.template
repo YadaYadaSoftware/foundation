@@ -2,10 +2,40 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "An AWS Serverless Application.",
+  "Globals": {
+    "Function": {
+      "Runtime": "dotnet6",
+      "VpcConfig": {
+        "SecurityGroupIds": {
+          "Ref": "LambdaSecurityGroup"
+        },
+        "SubnetIds": {
+          "Ref": "LambdaSubnets"
+        }
+      },
+      "Environment": {
+        "Variables": {
+          "LAMBDA_NET_SERIALIZER_DEBUG": true,
+          "AWS_LAMBDA_HANDLER_LOG_FORMAT": "Unformatted"
+        }
+      },
+      "Architectures": [
+        "arm64"
+      ]
+    }
+  },
   "Parameters": {
     "LambdaExecutionRole": {
       "Type": "String",
       "Default": "arn:aws:iam::768033286672:role/yadayada-master-deploy-LambdaExecutionRole-HYJT9XKQ0LKN"
+    },
+    "LambdaSecurityGroup": {
+      "Type": "List<AWS::EC2::SecurityGroup::Id>",
+      "Default": "sg-0b1a5d75f91c0852f"
+    },
+    "LambdaSubnets": {
+      "Type": "List<AWS::EC2::Subnet::Id>",
+      "Default": "subnet-0bb0331e2ba1719c3,subnet-07c52b3593179dd10"
     }
   },
   "Resources": {
