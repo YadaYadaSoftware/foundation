@@ -11,4 +11,5 @@ public class MigrationFunctionAttributeModel : IMigrationFunctionAttributeModel
     // ATTRIBUTE:  ADD HERE
     public string MigrationsAssemblyPath { get; set; }
     public string MigrationsFunctionArn { get; set; }
+    public string InitialCatalog { get; set; }
 }

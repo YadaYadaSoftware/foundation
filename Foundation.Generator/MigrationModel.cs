@@ -11,8 +11,9 @@ public class MigrationModel : IMigrationModel
     public string DependsOn { get; }
     public string MigrationsAssemblyPath { get; set; }
     public string MigrationsFunctionArn { get; set; }
+    public string InitialCatalog { get; set; }
 
-    public MigrationModel(string migrationId, TypeModel dataMigrationFunction, string migrationMethod, string dependsOn, string migrationsAssemblyPath, string migrationsFunctionArn)
+    public MigrationModel(string migrationId, TypeModel dataMigrationFunction, string migrationMethod, string dependsOn, string migrationsAssemblyPath, string migrationsFunctionArn, string initialCatalog)
     {
         if (string.IsNullOrEmpty(migrationsFunctionArn))
         {
@@ -30,5 +31,6 @@ public class MigrationModel : IMigrationModel
         // ATTRIBUTE:  ADD HERE
         MigrationsAssemblyPath = migrationsAssemblyPath;
         MigrationsFunctionArn = migrationsFunctionArn;
+        InitialCatalog = initialCatalog;
     }
 }

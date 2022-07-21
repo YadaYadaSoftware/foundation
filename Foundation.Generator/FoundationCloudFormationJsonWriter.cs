@@ -117,6 +117,7 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         }
 
         jsonWriter.SetToken($"{propertiesPath}.StackName", new JObject(new JProperty("Ref", "AWS::StackName")));
+        jsonWriter.SetToken($"{propertiesPath}.InitialCatalog", GetValueOrRef(migrationModel.InitialCatalog));
         // ATTRIBUTE:  ADD HERE
         return resourceName;
 

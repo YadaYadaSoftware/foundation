@@ -43,6 +43,9 @@
         },
         "StackName": {
           "Ref": "AWS::StackName"
+        },
+        "InitialCatalog": {
+          "Ref": "Sample"
         }
       }
     },
@@ -70,6 +73,9 @@
         },
         "StackName": {
           "Ref": "AWS::StackName"
+        },
+        "InitialCatalog": {
+          "Ref": "Sample"
         }
       }
     }

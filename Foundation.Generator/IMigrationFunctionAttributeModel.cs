@@ -12,4 +12,7 @@ public interface IMigrationFunctionAttributeModel
     public string MigrationsAssemblyPath { get; set; }
 
     public string MigrationsFunctionArn { get; set; }
+
+    public string InitialCatalog { get; set; }
+
 }

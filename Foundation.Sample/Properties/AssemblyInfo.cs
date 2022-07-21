@@ -4,7 +4,7 @@ using Foundation.Annotations;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Sample.Properties;
 
-[assembly: MigrationFunction(migrationFunction: typeof(MigrationFunctions), migrationMethod: nameof(MigrationFunctions.MyMigrator), dependsOn: "Restore", migrationsAssemblyPath: "@MigrationsAssemblyPath" )]
+[assembly: MigrationFunction(migrationFunction: typeof(MigrationFunctions), migrationMethod: nameof(MigrationFunctions.MyMigrator), dependsOn: "Restore", migrationsAssemblyPath: "@MigrationsAssemblyPath", initialCatalog: "@Sample" )]
 namespace Sample.Properties
 {
     public class MigrationFunctions

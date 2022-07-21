@@ -85,6 +85,12 @@ public class MigrationFunctionAttributeModelBuilder
                     model.MigrationsFunctionArn = value.Value.ToString();
                     break;
                 }
+                case "INITIALCATALOG":
+                {
+                    var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
+                    model.InitialCatalog = value.Value.ToString();
+                    break;
+                }
                 default: 
                     throw new ArgumentException(attributeArgumentSyntax.NameEquals.Name.Identifier.ValueText);
 

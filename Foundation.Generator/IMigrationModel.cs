@@ -1,4 +1,5 @@
 ﻿using Amazon.Lambda.Annotations.SourceGenerator.Models;
+using Newtonsoft.Json.Linq;
 
 namespace Foundation.Generators;
 
@@ -12,4 +13,5 @@ public interface IMigrationModel
     // ATTRIBUTE:  ADD HERE
     public string MigrationsAssemblyPath { get; set; }
     public string MigrationsFunctionArn { get; set; }
+    public string InitialCatalog { get; set; }
 }
