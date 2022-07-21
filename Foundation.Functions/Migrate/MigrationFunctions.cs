@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Security.Claims;
-using System.Text.Json;
-using Amazon.CloudFormation;
+﻿using Amazon.CloudFormation;
 using Amazon.CloudFormation.Model;
 using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Core;
@@ -9,11 +6,9 @@ using Amazon.S3.Transfer;
 using JetBrains.Annotations;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Mono.Unix;
+using System.Diagnostics;
 using YadaYada.Bisque.Annotations;
 using YadaYada.Library.Extensions;
 
@@ -28,8 +23,10 @@ public class MigrationFunctions
 
     public MigrationFunctions([NotNull] [ItemNotNull] IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, [NotNull] ILoggerProvider loggerProvider, ITransferUtility transferUtility, DbContext dbContext)
     {
-        _transferUtility = transferUtility;
-        _dbContext = dbContext;
+        if (sqlConnectionStringBuildOptions == null) throw new ArgumentNullException(nameof(sqlConnectionStringBuildOptions));
+        if (loggerProvider == null) throw new ArgumentNullException(nameof(loggerProvider));
+        _transferUtility = transferUtility ?? throw new ArgumentNullException(nameof(transferUtility));
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _logger = loggerProvider.CreateLogger(this.GetType().FullName);
         _sqlConnectionStringBuilder = sqlConnectionStringBuildOptions.Value;
     }
