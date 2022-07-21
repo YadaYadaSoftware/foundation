@@ -28,6 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Logging\YadaYadaSoftware.Logging\YadaYadaSoftware.Logging.csproj" />
-    <ProjectReference Include="..\..\Microsoft.EntityFrameworkCore.Extensions\Microsoft.EntityFrameworkCore.Extensions\Microsoft.EntityFrameworkCore.Extensions.csproj" />
+    <ProjectReference Include="..\..\YadaYadaSoftware.Microsoft.EntityFrameworkCore.Extensions\Microsoft.EntityFrameworkCore.Extensions\Microsoft.EntityFrameworkCore.Extensions.csproj" />
   </ItemGroup>
 </Project>
