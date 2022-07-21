@@ -184,6 +184,8 @@ public class MigrationFunctions
 
                 process.WaitForExit(totalMilliseconds);
 
+                _logger.LogInformation("{0}={1}", nameof(process.ExitCode), process.ExitCode);
+
             }
         }
     }
