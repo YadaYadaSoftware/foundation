@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.Lambda.Annotations.SourceGenerator" Version="0.5.1-preview-171-annotations-eventbridgerule" />
+    <PackageReference Include="Amazon.Lambda.Annotations.SourceGenerator" Version="0.52.28-annotations-enchilada" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.2.0" PrivateAssets="all" />
@@ -37,7 +37,7 @@
 	</Target>
 
 	<ItemGroup>
-    <ProjectReference Include="..\Foundation.Annotations\Foundation.Annotations.csproj" OutputItemType="Analyzer"  />
+    <ProjectReference Include="..\Foundation.Annotations\Foundation.Annotations.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
 
 </Project>
