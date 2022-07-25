@@ -16,7 +16,7 @@
     <PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
     <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.4.1" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.0" />
-    <PackageReference Include="Amazon.Lambda.Annotations" Version="0.5.1-preview-171-annotations-eventbridgerule" />
+    <PackageReference Include="Amazon.Lambda.Annotations" Version="0.52.24-annotations-enchilada" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.6" />
   </ItemGroup>
   <ItemGroup>
