@@ -17,6 +17,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+    - name: Setup GitHub Nuget
+      run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.PAT }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/hounddog22030/index.json"
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
