@@ -1,18 +1,25 @@
 name: .NET
+env:
+  BUCKET: yadayada-master-deploy-codepipelinebucket-18vmytr5wzbha
 
 on:
   push:
     branches: [ "master", "feature/assembly"  ]
   pull_request:
     branches: [ "master" ]
-
+permissions:
+      id-token: write
+      contents: read
+      packages: write
 jobs:
-  build:
-
+  publish-nuget:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.ROLE }}
+        aws-region: us-east-1
     - name: Set Version
       run: echo "V=2022.$(date +%j).${{ github.run_number }}" >> $GITHUB_ENV
     - name: Echo Version
@@ -26,10 +33,74 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration Release
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --configuration Release
     - name: Pack
-      run: dotnet pack --no-build --verbosity normal -p:PackageVersion=$V
+      run: dotnet pack --no-build --verbosity normal -p:PackageVersion=$V --configuration Release
     - name: Publish Package To GitHub
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+  publish-template:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.ROLE }}
+        aws-region: us-east-1
+    - name: Set Version
+      run: echo "V=2022.$(date +%j).${{ github.run_number }}" >> $GITHUB_ENV
+    - name: Echo Version
+      run: echo $V
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Setup GitHub Nuget
+      run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.PAT }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/hounddog22030/index.json"
+    - name: Install -g amazon.lambda.tools
+      run: dotnet tool install -g amazon.lambda.tools
+    - name: Make Template
+      run: dotnet lambda package-ci Foundation.Functions --s3-bucket $BUCKET --s3-prefix Foundation/ --template Foundation.Functions/serverless.template --output-template Foundation.Functions/serverless.template --msbuild-parameters -p:NoProjectReferences=true --region us-east-1
+    - uses: actions/upload-artifact@v3.1.0
+      with:
+        name: foundation-template
+        path: Foundation.Functions/serverless.template
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: publish-template
+    steps:
+    - name: Download Foundation Template
+      uses: actions/download-artifact@v3.0.0
+      with:
+        name: foundation-template
+        path: Foundation.Functions/
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.ROLE }}
+        aws-region: us-east-1
+    - uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+      with:
+        # The name of the CloudFormation stack
+        name: foundation
+        # The path or URL to the CloudFormation template
+        template: Foundation.Functions/serverless.template
+        # The comma-delimited list of stack template capabilities to acknowledge. Defaults to 'CAPABILITY_IAM'
+        capabilities: "CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND"
+        # The parameters to override in the stack inputs. The list is comma-delimited, with each entry formatted as <ParameterName>=<ParameterValue>.
+        #parameter-overrides: # optional
+        # If the CloudFormation change set is empty, do not fail. Defaults to '0' (will fail on empty change set)
+        #no-fail-on-empty-changeset: # optional, default is 0
+        # Disable rollback of the stack if stack creation fails. Defaults to '0' (will rollback if stack creation fails). This input is only used for stack creation, not for stack update
+        #disable-rollback: # optional, default is 0
+        # The amount of time that can pass before the stack status becomes CREATE_FAILED. This input is only used for stack creation, not for stack update
+        #timeout-in-minutes: # optional
+        # The comma-delimited list of Amazon SNS topic ARNs to publish stack related events
+        #notification-arns: # optional
+        # The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to create the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege. If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack
+        role-arn: ${{ secrets.ROLE }}
+        # Key-value pairs to associate with this stack. This input should be JSON-formatted, for example [ { "Key": "string", "Value": "string" } ]
+        #tags: # optional
+        # Whether to enable termination protection on the specified stack. Defaults to '0' (terminated protection will be disabled) This input is only used for stack creation, not for stack update
+        #termination-protection: # optional, default is 0
