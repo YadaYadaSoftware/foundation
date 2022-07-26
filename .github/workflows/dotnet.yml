@@ -69,7 +69,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: publish-template
     steps:
     - name: Download Foundation Template
       uses: actions/download-artifact@v3.0.0
