@@ -12,10 +12,8 @@ permissions:
       contents: read
       packages: write
 jobs:
-  build:
-
+  publish-nuget:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - uses: aws-actions/configure-aws-credentials@v1
@@ -42,6 +40,24 @@ jobs:
       run: dotnet pack --no-build --verbosity normal -p:PackageVersion=$V --configuration Release
     - name: Publish Package To GitHub
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+  publish-template:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.ROLE }}
+        aws-region: us-east-1
+    - name: Set Version
+      run: echo "V=2022.$(date +%j).${{ github.run_number }}" >> $GITHUB_ENV
+    - name: Echo Version
+      run: echo $V
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Setup GitHub Nuget
+      run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.PAT }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/hounddog22030/index.json"
     - name: Install -g amazon.lambda.tools
       run: dotnet tool install -g amazon.lambda.tools
     - name: Make Template
