@@ -41,7 +41,7 @@ jobs:
     - name: Install -g amazon.lambda.tools
       run: dotnet tool install -g amazon.lambda.tools
     - name: Make Template
-      run: dotnet lambda package-ci Foundation.Functions --s3-bucket $BUCKET --template Foundation.Functions/serverless.template --output-template Foundation.Functions/serverless.template --msbuild-parameters -p:NoProjectReferences=true --region us-east-1
+      run: dotnet lambda package-ci Foundation.Functions --s3-bucket $BUCKET --s3-prefix Foundation/ --template Foundation.Functions/serverless.template --output-template Foundation.Functions/serverless.template --msbuild-parameters -p:NoProjectReferences=true --region us-east-1
     - uses: actions/upload-artifact@v3.1.0
       with:
         name: foundation-template
