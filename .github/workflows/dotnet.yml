@@ -34,8 +34,9 @@ jobs:
     - name: Publish Package To GitHub
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
   deploy:
+    runs-on: ubuntu-latest
     steps:
      - uses: aws-actions/configure-aws-credentials@v1
-          with:
-            role-to-assume: ${{ secrets.ROLE }}
-            aws-region: us-east-1
+       with:
+         role-to-assume: ${{ secrets.ROLE }}
+         aws-region: us-east-1
