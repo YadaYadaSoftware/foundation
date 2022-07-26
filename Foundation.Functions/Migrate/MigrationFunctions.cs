@@ -231,18 +231,27 @@ public class MigrationFunctions
 
                         using (_logger.BeginScope("ExtractToDirectory"))
                         {
-                            System.IO.Compression.ZipFile.ExtractToDirectory(archiveFile.FullName, archiveDownloadDirectory.FullName);
-
-                            archiveFile.Delete();
-
-                            var fileToCopy = new FileInfo(Path.Combine(archiveDownloadDirectory.FullName, fileToRetrieve));
-                            ArgumentNullException.ThrowIfNull(fileToCopy, nameof(fileToCopy));
-                            ArgumentNullException.ThrowIfNull(fileToCopy.Directory, nameof(fileToCopy.Directory));
-
-                            if (!fileToCopy.Exists)
+                            FileInfo fileToCopy;
+                            try
                             {
-                                throw new FileNotFoundException("not found", fileToCopy.FullName);
+                                System.IO.Compression.ZipFile.ExtractToDirectory(archiveFile.FullName, archiveDownloadDirectory.FullName);
+                                archiveFile.Delete();
+
+                                fileToCopy = new FileInfo(Path.Combine(archiveDownloadDirectory.FullName, fileToRetrieve));
+                                ArgumentNullException.ThrowIfNull(fileToCopy, nameof(fileToCopy));
+                                ArgumentNullException.ThrowIfNull(fileToCopy.Directory, nameof(fileToCopy.Directory));
+
+                                if (!fileToCopy.Exists)
+                                {
+                                    throw new FileNotFoundException("not found", fileToCopy.FullName);
+                                }
                             }
+                            catch (Exception e)
+                            {
+                                _logger.LogWarning(e.ToString());
+                                fileToCopy = archiveFile;
+                            }
+
                             System.IO.File.Move(fileToCopy.FullName, finalFile.FullName);
 
                             _logger.LogInformation("ExtractedToDirectory");

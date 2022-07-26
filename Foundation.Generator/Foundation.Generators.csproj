@@ -8,6 +8,7 @@
 	  <IsRoslynComponent>true</IsRoslynComponent>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	  <IsPackable>false</IsPackable>
+	  <RepositoryUrl>https://github.com/hounddog22030/foundation.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
