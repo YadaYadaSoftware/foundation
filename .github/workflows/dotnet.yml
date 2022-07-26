@@ -38,6 +38,8 @@ jobs:
       run: dotnet pack --no-build --verbosity normal -p:PackageVersion=$V --configuration Release
     - name: Publish Package To GitHub
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+    - name: Install -g amazon.lambda.tools
+      run: dotnet tool install -g amazon.lambda.tools
     - name: Make Template
       run: dotnet lambda package-ci Foundation.Functions --s3-bucket $BUCKET --template Foundation.Functions/serverless.template --output-template Foundation.Functions/serverless.template --msbuild-parameters -p:NoProjectReferences=true
     - uses: actions/upload-artifact@v3.1.0
