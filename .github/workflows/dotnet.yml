@@ -33,3 +33,9 @@ jobs:
       run: dotnet pack --no-build --verbosity normal -p:PackageVersion=$V --configuration Release
     - name: Publish Package To GitHub
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+  deploy:
+    steps:
+     - uses: aws-actions/configure-aws-credentials@v1
+          with:
+            role-to-assume: ${{ secrets.ROLE }}
+            aws-region: us-east-1
