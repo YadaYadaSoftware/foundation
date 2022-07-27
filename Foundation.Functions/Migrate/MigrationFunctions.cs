@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using Mono.Unix;
 using System.Diagnostics;
+using Amazon.Lambda.S3Events;
 using Microsoft.EntityFrameworkCore;
 using YadaYada.Bisque.Annotations;
 using InvalidOperationException = Amazon.CloudFormation.Model.InvalidOperationException;
@@ -296,24 +297,16 @@ public class MigrationFunctions
         using (_logger.AddScope(nameof(requestMigrationsAssemblyPath), requestMigrationsAssemblyPath))
         using (_logger.AddScope(nameof(fileInfo), fileInfo.FullName))
         {
-            var bucketPath = requestMigrationsAssemblyPath.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Last();
-            var bucket = bucketPath.Split('/').First();
-            var key = string.Join("/", bucketPath.Split('/').Skip(1));
-            using (_logger.AddScope(nameof(bucketPath), bucketPath))
-            using (_logger.AddScope(nameof(bucket), bucket))
-            using (_logger.AddScope(nameof(key), key))
+            try
             {
-                try
-                {
-                    fileInfo.Directory!.Create();
-                    return _transferUtility.DownloadAsync(fileInfo.FullName, bucket, key);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, e.Message);
-                    throw;
-                }
-
+                fileInfo.Directory!.Create();
+                
+                return _transferUtility.DownloadAsync(fileInfo, requestMigrationsAssemblyPath);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                throw;
             }
         }
     }
