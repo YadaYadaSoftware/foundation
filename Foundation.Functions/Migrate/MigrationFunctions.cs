@@ -10,7 +10,6 @@ using Mono.Unix;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using YadaYada.Bisque.Annotations;
-using YadaYada.Library.Extensions;
 using InvalidOperationException = Amazon.CloudFormation.Model.InvalidOperationException;
 
 namespace Data.Serverless.Migrate;
