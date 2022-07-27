@@ -34,17 +34,18 @@ public class MigrationFunctions
     {
         using (_logger.AddMember())
         {
-            if (request.RequestType == CloudFormationRequest.RequestTypeEnum.Update)
-            {
-                return await CloudFormationResponse.CompleteCloudFormationResponse(CloudFormationResponse.StatusEnum.Success, request, lambdaContext);
-            }
-
-            FileInfo migrationsBundle = await this.GetFileFromDataArtifacts(request.MigrationsAssemblyPath, "efbundle-linux-x64");
-            ArgumentNullException.ThrowIfNull(migrationsBundle, nameof(migrationsBundle));
-            ArgumentNullException.ThrowIfNull(migrationsBundle.Directory, nameof(migrationsBundle.Directory));
 
             try
             {
+                if (request.RequestType == CloudFormationRequest.RequestTypeEnum.Update)
+                {
+                    return await CloudFormationResponse.CompleteCloudFormationResponse(CloudFormationResponse.StatusEnum.Success, request, lambdaContext);
+                }
+
+                FileInfo migrationsBundle = await this.GetFileFromDataArtifacts(request.MigrationsAssemblyPath, "efbundle-linux-x64");
+                ArgumentNullException.ThrowIfNull(migrationsBundle, nameof(migrationsBundle));
+                ArgumentNullException.ThrowIfNull(migrationsBundle.Directory, nameof(migrationsBundle.Directory));
+
                 using (_logger.AddScope(nameof(request.RequestType), request.RequestType))
                 using (_logger.AddScope(nameof(request.MigrationName), request.MigrationName))
                 using (_logger.AddScope(nameof(request.InitialCatalog), request.InitialCatalog))
