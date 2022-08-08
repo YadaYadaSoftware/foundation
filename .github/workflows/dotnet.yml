@@ -4,10 +4,7 @@ env:
 
 on:
   push:
-permissions:
-      id-token: write
-      contents: read
-      packages: write
+permissions: write-all
 jobs:
   publish-nuget:
     runs-on: ubuntu-latest
@@ -23,7 +20,7 @@ jobs:
       run: echo $V
     - uses: actions/setup-dotnet@v2
       env:
-        NUGET_AUTH_TOKEN: ${{secrets.PAT}}
+        NUGET_AUTH_TOKEN: ${{github.token}}
       with:
         dotnet-version: 6.0.x
         source-url: https://nuget.pkg.github.com/yadayadasoftware/index.json
