@@ -68,6 +68,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: publish-template
     steps:
+    - name: Normal Branch Name
+      run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
     - name: Download Foundation Template
       uses: actions/download-artifact@v3.0.0
       with:
@@ -80,7 +82,7 @@ jobs:
     - uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
       with:
         # The name of the CloudFormation stack
-        name: foundation-${GITHUB_REF##*/}
+        name: "foundation-${{ env.BRANCH_NAME }}"
         # The path or URL to the CloudFormation template
         template: Foundation.Functions/serverless.template
         # The comma-delimited list of stack template capabilities to acknowledge. Defaults to 'CAPABILITY_IAM'
