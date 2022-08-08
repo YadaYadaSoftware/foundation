@@ -36,7 +36,7 @@ jobs:
     - name: Pack
       run: dotnet pack --no-build --verbosity normal -p:PackageVersion=$V --configuration Release
     - name: Publish Package To GitHub
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+      run: dotnet nuget push **/*.nupkg
   publish-template:
     runs-on: ubuntu-latest
     steps:
@@ -80,7 +80,7 @@ jobs:
     - uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
       with:
         # The name of the CloudFormation stack
-        name: foundation-${{ github.ref }}
+        name: foundation-${GITHUB_REF##*/}
         # The path or URL to the CloudFormation template
         template: Foundation.Functions/serverless.template
         # The comma-delimited list of stack template capabilities to acknowledge. Defaults to 'CAPABILITY_IAM'
