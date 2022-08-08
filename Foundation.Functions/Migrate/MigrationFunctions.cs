@@ -43,6 +43,7 @@ public class MigrationFunctions
                     return await CloudFormationResponse.CompleteCloudFormationResponse(CloudFormationResponse.StatusEnum.Success, request, lambdaContext);
                 }
 
+                
                 FileInfo migrationsBundle = await this.GetFileFromDataArtifacts(request.MigrationsAssemblyPath, "efbundle-linux-x64");
                 ArgumentNullException.ThrowIfNull(migrationsBundle, nameof(migrationsBundle));
                 ArgumentNullException.ThrowIfNull(migrationsBundle.Directory, nameof(migrationsBundle.Directory));
@@ -185,7 +186,10 @@ public class MigrationFunctions
                 var totalMilliseconds = (int)lambdaContext.RemainingTime.Subtract(TimeSpan.FromSeconds(5)).TotalMilliseconds;
 
                 process.OutputDataReceived += (sender, args) => { _logger.LogInformation(args.Data); };
-                process.ErrorDataReceived += (sender, args) => { _logger.LogError(args.Data); };
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (args.Data != null) _logger.LogError(args.Data);
+                };
 
                 process.WaitForExit(totalMilliseconds);
 
