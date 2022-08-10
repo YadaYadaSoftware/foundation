@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	  <RepositoryUrl>https://github.com/hounddog22030/foundation.git</RepositoryUrl>
+	  <RepositoryUrl>https://github.com/yadayadasoftware/foundation.git</RepositoryUrl>
   </PropertyGroup>
 
 	<ItemGroup>
