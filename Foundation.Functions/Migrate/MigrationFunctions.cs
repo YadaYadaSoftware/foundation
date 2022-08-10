@@ -72,7 +72,7 @@ public class MigrationFunctions
                                     using var connection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
                                     using var command = connection.CreateCommand();
                                     command.CommandText = "SELECT COUNT(*) FROM [dbo].[__EFMigrationsHistory] WHERE [MigrationId] = @migrationId";
-                                    command.Parameters.AddWithValue("@migrationId", request.MigrationId);
+                                    command.Parameters.AddWithValue("@migrationId", request.MigrationName);
 
                                     await connection.OpenAsync();
 
