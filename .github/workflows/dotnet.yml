@@ -24,6 +24,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
         source-url: https://nuget.pkg.github.com/yadayadasoftware/index.json
+    - run: cat /home/runner/work/foundation/nuget.config
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
