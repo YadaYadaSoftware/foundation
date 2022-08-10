@@ -20,7 +20,7 @@ jobs:
       run: echo $V
     - uses: actions/setup-dotnet@v2
       env:
-        NUGET_AUTH_TOKEN: ${{github.token}}
+        NUGET_AUTH_TOKEN: ${{secrets.PAT}}
       with:
         dotnet-version: 6.0.x
         source-url: https://nuget.pkg.github.com/yadayadasoftware/index.json
