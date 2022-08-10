@@ -1,17 +1,17 @@
 ﻿using Amazon.CloudFormation;
-using Amazon.CloudFormation.Model;
 using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.S3Events;
 using Amazon.S3.Transfer;
 using JetBrains.Annotations;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Mono.Unix;
 using System.Diagnostics;
-using Amazon.Lambda.S3Events;
-using Microsoft.EntityFrameworkCore;
+using Amazon.CloudFormation.Model;
 using YadaYada.Bisque.Annotations;
-using InvalidOperationException = Amazon.CloudFormation.Model.InvalidOperationException;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace Data.Serverless.Migrate;
 
@@ -68,9 +68,31 @@ public class MigrationFunctions
 
                                 try
                                 {
-                                    RunEfBundle(lambdaContext, migrationsBundle, request.MigrationName);
 
-                                    _logger.LogInformation("Worked");
+                                    using var connection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+                                    using var command = connection.CreateCommand();
+                                    command.CommandText = "SELECT COUNT(*) FROM [dbo].[__EFMigrationsHistory] WHERE [MigrationId] = @migrationId";
+                                    command.Parameters.AddWithValue("@migrationId", request.MigrationId);
+
+                                    await connection.OpenAsync();
+
+                                    var count = await command.ExecuteScalarAsync();
+
+                                    ArgumentNullException.ThrowIfNull(count,nameof(count));
+
+                                    if (!int.TryParse(count.ToString(), out int countInt))
+                                    {
+                                        throw new InvalidOperationException();
+                                    }
+
+                                    if (countInt == 0)
+                                    {
+                                        RunEfBundle(lambdaContext, migrationsBundle, request.MigrationName);
+
+                                        _logger.LogInformation("Worked");
+                                    }
+
+
 
                                     return await CloudFormationResponse.CompleteCloudFormationResponse(CloudFormationResponse.StatusEnum.Success, request, lambdaContext);
                                 }
