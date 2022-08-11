@@ -13,8 +13,7 @@ jobs:
     steps:
       - id: make-stack-name
         run: |
-          echo "ref=${GITHUB_REF##*/}"
-          echo "::set-output STACK_NAME=foundation-${GITHUB_REF##*/}"
+          echo "::set-output name=STACK_NAME::foundation-${GITHUB_REF##*/}"
 
   publish-nuget:
     runs-on: ubuntu-latest
@@ -76,7 +75,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: [publish-template,set-stack-name]
     steps:
-    - run: echo "needs.set-stack-name.outputs.stack-name=${{ needs.set-stack-name.outputs.stack-name }}"
+    - run: |
+        echo "needs.set-stack-name.outputs.stack-name=${{ needs.set-stack-name.outputs.stack-name }}"
+        echo       ${{ needs.globals.outputs.host }}
+
     - name: Normal Branch Name
       run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
     - name: Download Foundation Template
