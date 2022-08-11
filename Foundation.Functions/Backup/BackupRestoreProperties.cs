@@ -11,4 +11,5 @@ public class BackupRestoreProperties : IBackupRestoreDatabaseInfo
     public CloudVariant DropDatabase { get; set; }
 
     public CloudVariant BackupDatabase { get; set; }
+    public string DatabaseName { get; set; }
 }

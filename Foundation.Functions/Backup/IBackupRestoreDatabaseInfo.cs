@@ -9,4 +9,6 @@ internal interface IBackupRestoreDatabaseInfo
     CloudVariant DropDatabase { get; set; }
     CloudVariant BackupDatabase { get; set; }
 
+    string DatabaseName { get; set; }
+
 }

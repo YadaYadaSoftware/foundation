@@ -23,4 +23,7 @@ public class RestoreDatabaseCustomResource : CustomResource, IBackupRestoreDatab
 
     [JsonProperty(PropertyName = "Properties." + nameof(BackupDatabase))]
     public CloudVariant BackupDatabase { get; set; }
+
+    [JsonProperty(PropertyName = "Properties." + nameof(DatabaseName))]
+    public string DatabaseName { get; set; }
 }
