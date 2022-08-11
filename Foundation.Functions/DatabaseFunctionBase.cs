@@ -151,6 +151,7 @@ public abstract class DatabaseFunctionBase
 
     protected async Task CreateDatabaseAsync(BackupRestoreDatabaseInfo info, ILambdaContext context)
     {
+        SqlConnectionStringBuilder.InitialCatalog = info.DatabaseName;
         LambdaLogger.Log($"{nameof(CreateDatabaseAsync)}:{nameof(SqlConnectionStringBuilder.ConnectionString)}={SqlConnectionStringBuilder.ConnectionString}");
         await using (var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString))
         {
@@ -169,7 +170,6 @@ public abstract class DatabaseFunctionBase
             }
         }
 
-        var oldInitialCatalogValue = SqlConnectionStringBuilder.InitialCatalog;
 
         // remove the catalog so we can connect to the server directly
         SqlConnectionStringBuilder.InitialCatalog = string.Empty;
@@ -191,12 +191,12 @@ public abstract class DatabaseFunctionBase
 
             restoreCommand.CommandText = "msdb.dbo.rds_restore_database";
             restoreCommand.CommandType = CommandType.StoredProcedure;
-            restoreCommand.Parameters.Add("restore_db_name", SqlDbType.VarChar).Value = oldInitialCatalogValue;
+            restoreCommand.Parameters.Add("restore_db_name", SqlDbType.VarChar).Value = info.DatabaseName;
             restoreCommand.Parameters.Add("s3_arn_to_restore_from", SqlDbType.VarChar).Value = $"{info.BackupBucket}/{info.FromBackupFile}.bak";
             restoreCommand.ExecuteNonQuery();
 
 
-            var taskId = GetTaskId(sqlConnection, oldInitialCatalogValue);
+            var taskId = GetTaskId(sqlConnection, info.DatabaseName);
 
             do
             {
@@ -210,7 +210,7 @@ public abstract class DatabaseFunctionBase
             } while (true);
 
         }
-        SqlConnectionStringBuilder.InitialCatalog = oldInitialCatalogValue;
+        SqlConnectionStringBuilder.InitialCatalog = info.DatabaseName;
 
         do
         {
