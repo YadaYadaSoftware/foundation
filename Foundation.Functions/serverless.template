@@ -71,7 +71,8 @@
           "Ref": "LambdaExecutionRole"
         },
         "PackageType": "Zip",
-        "Handler": "Foundation.Functions::Data.Serverless.Restore.RestoreFunctions_RestoreDatabase_Generated::RestoreDatabase"
+        "Handler": "Foundation.Functions::Data.Serverless.Restore.RestoreFunctions_RestoreDatabase_Generated::RestoreDatabase",
+        "AutoPublishAlias": "live"
       }
     }
   },
