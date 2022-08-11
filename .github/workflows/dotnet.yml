@@ -72,9 +72,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: 
-      - publish-template
-      - set-stack-name
+    needs: [publish-template,set-stack-name]
     steps:
     - run: echo "needs.set-stack-name.outputs.stack-name=${{ needs.set-stack-name.outputs.stack-name }}"
     - name: Normal Branch Name
