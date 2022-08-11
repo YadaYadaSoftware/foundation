@@ -76,6 +76,7 @@ jobs:
       - publish-template
       - set-stack-name
     steps:
+    - run: echo "needs.set-stack-name.outputs.stack-name=${{ needs.set-stack-name.outputs.stack-name }}"
     - name: Normal Branch Name
       run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
     - name: Download Foundation Template
@@ -91,7 +92,7 @@ jobs:
     - uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
       with:
         # The name of the CloudFormation stack
-        name: ${{ needs.set-stack-name.outputs.stack-name}}
+        name: ${{ needs.set-stack-name.outputs.stack-name }}
         # The path or URL to the CloudFormation template
         template: Foundation.Functions/serverless.template
         # The comma-delimited list of stack template capabilities to acknowledge. Defaults to 'CAPABILITY_IAM'
