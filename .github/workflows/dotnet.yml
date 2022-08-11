@@ -9,12 +9,12 @@ jobs:
   set-stack-name:
     runs-on: ubuntu-latest
     outputs:
-        stack-name: ${{ steps.make-stack-name.outputs.stack-name }}
+        stack-name: ${{ steps.make-stack-name.outputs.STACK_NAME }}
     steps:
       - id: make-stack-name
         run: |
           echo "ref=${GITHUB_REF##*/}"
-          echo "::set-output stack-name=foundation-${GITHUB_REF##*/}"
+          echo "::set-output STACK_NAME=foundation-${GITHUB_REF##*/}"
 
   publish-nuget:
     runs-on: ubuntu-latest
