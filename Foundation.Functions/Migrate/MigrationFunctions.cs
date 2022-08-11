@@ -30,7 +30,7 @@ public class MigrationFunctions
         _sqlConnectionStringBuilder = sqlConnectionStringBuildOptions.Value;
     }
 
-    [LambdaFunction(MemorySize = 10240, Role = "@LambdaExecutionRole", Timeout = 900, PackageType = LambdaPackageType.Zip)]
+    [LambdaFunction(MemorySize = 2048, Role = "@LambdaExecutionRole", Timeout = 900)]
     public async Task<CloudFormationResponse> ApplyMigration(MigrationInfoRequest request, ILambdaContext lambdaContext)
     {
         using (_logger.AddMember())

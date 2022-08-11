@@ -47,7 +47,7 @@
       "Properties": {
         "Runtime": "dotnet6",
         "CodeUri": ".",
-        "MemorySize": 10240,
+        "MemorySize": 2048,
         "Timeout": 900,
         "Role": {
           "Ref": "LambdaExecutionRole"
@@ -65,7 +65,7 @@
       "Properties": {
         "Runtime": "dotnet6",
         "CodeUri": ".",
-        "MemorySize": 10240,
+        "MemorySize": 2048,
         "Timeout": 900,
         "Role": {
           "Ref": "LambdaExecutionRole"

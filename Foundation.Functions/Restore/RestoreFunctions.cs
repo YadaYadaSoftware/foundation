@@ -18,7 +18,7 @@ public class RestoreFunctions : DatabaseFunctionBase
     {
     }
 
-    [LambdaFunction(Role = "@LambdaExecutionRole", Timeout = 900, MemorySize = 10240)]
+    [LambdaFunction(Role = "@LambdaExecutionRole", Timeout = 900, MemorySize = 2048)]
     public async Task<CloudFormationResponse> RestoreDatabase(BackupRestoreDatabaseInfo info, ILambdaContext context)
     {
         try
