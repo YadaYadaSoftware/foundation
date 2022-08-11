@@ -13,7 +13,13 @@ jobs:
     steps:
       - id: make-stack-name
         run: |
-          echo "::set-output name=STACK_NAME::foundation-${GITHUB_REF##*/}"
+          BRANCH=${GITHUB_REF##*/}
+          if [ "$BRANCH" -ne "master"]; then
+            echo "::set-output name=STACK_NAME::foundation-${GITHUB_REF##*/}"
+          else
+            echo "::set-output name=STACK_NAME::foundation"
+          fi
+
 
   publish-nuget:
     runs-on: ubuntu-latest
