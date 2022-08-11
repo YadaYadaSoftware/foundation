@@ -76,14 +76,14 @@
     }
   },
   "Outputs": {
-    "DataServerlessMigrateMigrationFunctionsApplyMigrationGeneratedVersion": {
-      "Value": {
-        "Ref": "DataServerlessMigrateMigrationFunctionsApplyMigrationGenerated.Version"
-      }
-    },
-    "DataServerlessMigrateMigrationFunctionsApplyMigrationGeneratedAlias": {
+    "MigrationFunctionAlias": {
       "Value": {
         "Ref": "DataServerlessMigrateMigrationFunctionsApplyMigrationGeneratedAliaslive"
+      }
+    },
+    "RestoreFunnctionAlias": {
+      "Value": {
+        "Ref": "DataServerlessRestoreRestoreFunctionsRestoreDatabaseGeneratedAliaslive"
       }
     }
   }
