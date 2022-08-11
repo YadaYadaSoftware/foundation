@@ -13,17 +13,14 @@ public class RestoreDatabaseCustomResource : CustomResource, IBackupRestoreDatab
     }
 
     [JsonProperty(PropertyName = "Properties." + nameof(BackupBucket))]
-    public string BackupBucket { get; set; }
+    public CloudVariant BackupBucket { get; set; }
 
     [JsonProperty(PropertyName = "Properties." + nameof(FromBackupFile))]
-    public string FromBackupFile { get; set; }
+    public CloudVariant FromBackupFile { get; set; }
 
     [JsonProperty(PropertyName = "Properties." + nameof(DropDatabase))]
-    public bool DropDatabase { get; set; }
+    public CloudVariant DropDatabase { get; set; }
 
     [JsonProperty(PropertyName = "Properties." + nameof(BackupDatabase))]
-    public bool BackupDatabase { get; set; }
-
-    [JsonProperty(PropertyName = "Properties." + nameof(DatabaseName))]
-    public string DatabaseName { get; set; }
+    public CloudVariant BackupDatabase { get; set; }
 }

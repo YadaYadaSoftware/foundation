@@ -169,7 +169,7 @@ public abstract class DatabaseFunctionBase
             }
         }
 
-        //var oldInitialCatalogValue = SqlConnectionStringBuilder.InitialCatalog;
+        var oldInitialCatalogValue = SqlConnectionStringBuilder.InitialCatalog;
 
         // remove the catalog so we can connect to the server directly
         SqlConnectionStringBuilder.InitialCatalog = string.Empty;
@@ -191,12 +191,12 @@ public abstract class DatabaseFunctionBase
 
             restoreCommand.CommandText = "msdb.dbo.rds_restore_database";
             restoreCommand.CommandType = CommandType.StoredProcedure;
-            restoreCommand.Parameters.Add("restore_db_name", SqlDbType.VarChar).Value = info.DatabaseName;
+            restoreCommand.Parameters.Add("restore_db_name", SqlDbType.VarChar).Value = oldInitialCatalogValue;
             restoreCommand.Parameters.Add("s3_arn_to_restore_from", SqlDbType.VarChar).Value = $"{info.BackupBucket}/{info.FromBackupFile}.bak";
             restoreCommand.ExecuteNonQuery();
 
 
-            var taskId = GetTaskId(sqlConnection, info.DatabaseName);
+            var taskId = GetTaskId(sqlConnection, oldInitialCatalogValue);
 
             do
             {
@@ -210,7 +210,7 @@ public abstract class DatabaseFunctionBase
             } while (true);
 
         }
-        SqlConnectionStringBuilder.InitialCatalog = info.DatabaseName;
+        SqlConnectionStringBuilder.InitialCatalog = oldInitialCatalogValue;
 
         do
         {
