@@ -84,8 +84,6 @@ public class RestoreFunctions : DatabaseFunctionBase
             return;
         }
 
-        var oldInitialCatalog = SqlConnectionStringBuilder.InitialCatalog;
-
         try
         {
             SqlConnectionStringBuilder.InitialCatalog = string.Empty;
@@ -96,7 +94,7 @@ public class RestoreFunctions : DatabaseFunctionBase
 
             dropCommand.CommandText = "msdb.dbo.rds_drop_database";
             dropCommand.CommandType = CommandType.StoredProcedure;
-            dropCommand.Parameters.Add("db_name", SqlDbType.VarChar).Value = oldInitialCatalog;
+            dropCommand.Parameters.Add("db_name", SqlDbType.VarChar).Value = backupRestoreDatabaseInfo.DatabaseName;
             dropCommand.ExecuteNonQuery();
 
         }
@@ -104,10 +102,6 @@ public class RestoreFunctions : DatabaseFunctionBase
         {
             LambdaLogger.Log($"{this.GetType().FullName}.{nameof(DeleteDatabase)}:{SqlConnectionStringBuilder.ConnectionString}{ex}");
             throw;
-        }
-        finally
-        {
-            SqlConnectionStringBuilder.InitialCatalog = oldInitialCatalog;
         }
     }
 }
