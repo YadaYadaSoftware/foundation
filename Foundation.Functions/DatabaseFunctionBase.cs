@@ -155,20 +155,35 @@ public abstract class DatabaseFunctionBase
         LambdaLogger.Log($"{nameof(CreateDatabaseAsync)}:{nameof(SqlConnectionStringBuilder.ConnectionString)}={SqlConnectionStringBuilder.ConnectionString}");
         await using (var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString))
         {
+            await sqlConnection.OpenAsync();
 
-            var command = sqlConnection.CreateCommand();
-            command.CommandText = "SELECT COUNT(*) FROM [sys].[databases] WHERE [name] = @name";
-            command.Parameters.AddWithValue("@name", info.DatabaseName);
-
-            var scalarAsync = await command.ExecuteScalarAsync();
-
-            if (scalarAsync is not {} || !int.TryParse(scalarAsync.ToString(), out var count))
+            try
             {
-                throw new InvalidOperationException();
-            }
+                var command = sqlConnection.CreateCommand();
+                command.CommandText = "SELECT COUNT(*) FROM [sys].[databases] WHERE [name] = @name";
+                command.Parameters.AddWithValue("@name", info.DatabaseName);
 
-            if (count == 1) return;
+                var scalarAsync = await command.ExecuteScalarAsync();
+
+                if (scalarAsync is not { } || !int.TryParse(scalarAsync.ToString(), out var count))
+                {
+                    throw new InvalidOperationException();
+                }
+
+                if (count == 1) return;
+
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.ToString());
+                throw;
+            }
+            finally
+            {
+                await sqlConnection.CloseAsync();
+            }
         }
+
 
 
         // remove the catalog so we can connect to the server directly
@@ -177,9 +192,33 @@ public abstract class DatabaseFunctionBase
         await using (var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString))
         {
 
+
+            await sqlConnection.OpenAsync();
+
             try
             {
-                sqlConnection.Open();
+
+                await using var restoreCommand = sqlConnection.CreateCommand();
+
+                restoreCommand.CommandText = "msdb.dbo.rds_restore_database";
+                restoreCommand.CommandType = CommandType.StoredProcedure;
+                restoreCommand.Parameters.Add("restore_db_name", SqlDbType.VarChar).Value = info.DatabaseName;
+                restoreCommand.Parameters.Add("s3_arn_to_restore_from", SqlDbType.VarChar).Value = $"{info.BackupBucket}/{info.FromBackupFile}.bak";
+                restoreCommand.ExecuteNonQuery();
+
+
+                var taskId = GetTaskId(sqlConnection, info.DatabaseName);
+
+                do
+                {
+                    LambdaLogger.Log("Waiting for task to complete....");
+                    await Task.Delay(TimeSpan.FromSeconds(15));
+                    if (IsTaskComplete(sqlConnection, taskId))
+                    {
+                        LambdaLogger.Log("Restored...");
+                        break;
+                    }
+                } while (true);
 
             }
             catch (Exception e)
@@ -187,27 +226,10 @@ public abstract class DatabaseFunctionBase
                 LambdaLogger.Log($"{GetType().FullName}.{nameof(CreateDatabaseAsync)}:{nameof(SqlConnectionStringBuilder)}='{SqlConnectionStringBuilder.ConnectionString}':{e}");
                 throw;
             }
-            await using var restoreCommand = sqlConnection.CreateCommand();
-
-            restoreCommand.CommandText = "msdb.dbo.rds_restore_database";
-            restoreCommand.CommandType = CommandType.StoredProcedure;
-            restoreCommand.Parameters.Add("restore_db_name", SqlDbType.VarChar).Value = info.DatabaseName;
-            restoreCommand.Parameters.Add("s3_arn_to_restore_from", SqlDbType.VarChar).Value = $"{info.BackupBucket}/{info.FromBackupFile}.bak";
-            restoreCommand.ExecuteNonQuery();
-
-
-            var taskId = GetTaskId(sqlConnection, info.DatabaseName);
-
-            do
+            finally
             {
-                LambdaLogger.Log("Waiting for task to complete....");
-                await Task.Delay(TimeSpan.FromSeconds(15));
-                if (IsTaskComplete(sqlConnection, taskId))
-                {
-                    LambdaLogger.Log("Restored...");
-                    break;
-                }
-            } while (true);
+                await sqlConnection.CloseAsync();
+            }
 
         }
         SqlConnectionStringBuilder.InitialCatalog = info.DatabaseName;
@@ -218,7 +240,7 @@ public abstract class DatabaseFunctionBase
             try
             {
                 LambdaLogger.Log("Connecting...");
-                sqlConnection.Open();
+                await sqlConnection.OpenAsync();
                 LambdaLogger.Log("Connected.");
                 break;
             }
@@ -226,6 +248,10 @@ public abstract class DatabaseFunctionBase
             {
                 LambdaLogger.Log("Sleeping...");
                 await Task.Delay(TimeSpan.FromSeconds(5));
+            }
+            finally
+            {
+                await sqlConnection.CloseAsync();
             }
         } while (true);
     }
