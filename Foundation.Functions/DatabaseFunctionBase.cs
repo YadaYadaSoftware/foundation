@@ -151,7 +151,6 @@ public abstract class DatabaseFunctionBase
 
     protected async Task CreateDatabaseAsync(BackupRestoreDatabaseInfo info, ILambdaContext context)
     {
-        SqlConnectionStringBuilder.InitialCatalog = info.DatabaseName;
         LambdaLogger.Log($"{nameof(CreateDatabaseAsync)}:{nameof(SqlConnectionStringBuilder.ConnectionString)}={SqlConnectionStringBuilder.ConnectionString}");
         await using (var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString))
         {
@@ -184,10 +183,6 @@ public abstract class DatabaseFunctionBase
             }
         }
 
-
-
-        // remove the catalog so we can connect to the server directly
-        SqlConnectionStringBuilder.InitialCatalog = string.Empty;
 
         await using (var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString))
         {
@@ -232,6 +227,7 @@ public abstract class DatabaseFunctionBase
             }
 
         }
+
         SqlConnectionStringBuilder.InitialCatalog = info.DatabaseName;
 
         do
