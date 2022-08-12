@@ -156,18 +156,18 @@ public abstract class DatabaseFunctionBase
         await using (var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString))
         {
 
-            try
-            {
+            var command = sqlConnection.CreateCommand();
+            command.CommandText = "SELECT COUNT(*) FROM [sys].[databases] WHERE [name] = @name";
+            command.Parameters.AddWithValue("@name", info.DatabaseName);
 
-                sqlConnection.Open();
-                // already present - exit
-                return;
+            var scalarAsync = await command.ExecuteScalarAsync();
 
-            }
-            catch (Exception e)
+            if (scalarAsync is not {} || !int.TryParse(scalarAsync.ToString(), out var count))
             {
-                LambdaLogger.Log(e.ToString());
+                throw new InvalidOperationException();
             }
+
+            if (count == 1) return;
         }
 
 
