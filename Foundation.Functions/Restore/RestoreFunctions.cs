@@ -7,6 +7,7 @@ using Data.Serverless.Backup;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using YadaYada.Bisque.Annotations;
+using InvalidOperationException = System.InvalidOperationException;
 
 
 namespace Data.Serverless.Restore;
@@ -43,7 +44,14 @@ public class RestoreFunctions : DatabaseFunctionBase
                         return await CloudFormationResponse.CompleteCloudFormationResponse(CloudFormationResponse.StatusEnum.Success, info, context);
                     }
 
-                    if (info.BackupDatabase)
+                    bool backupDatabase;
+
+                    if (!bool.TryParse(info.BackupDatabase, out backupDatabase))
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    if (backupDatabase)
                     {
                         await this.BackupDatabaseAsync(info, context);
                     }
@@ -52,7 +60,14 @@ public class RestoreFunctions : DatabaseFunctionBase
                         LambdaLogger.Log($"{this.GetType().FullName}:  Not backing up {info.BackupDatabase} == false");
                     }
 
-                    if (info.DropDatabase)
+                    bool dropDatabase;
+
+                    if (!bool.TryParse(info.DropDatabase, out dropDatabase))
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    if (dropDatabase)
                     {
                         await this.DeleteDatabase(info, context);
                     }
@@ -77,7 +92,11 @@ public class RestoreFunctions : DatabaseFunctionBase
 
     private async Task DeleteDatabase(BackupRestoreDatabaseInfo backupRestoreDatabaseInfo, ILambdaContext context)
     {
-        bool dropDatabase = backupRestoreDatabaseInfo.DropDatabase;
+        bool dropDatabase;
+        if (!bool.TryParse(backupRestoreDatabaseInfo.DropDatabase, out dropDatabase))
+        {
+            throw new InvalidOperationException();
+        }
         if (!dropDatabase)
         {
             LambdaLogger.Log($"{this.GetType().FullName}:{nameof(dropDatabase)}={dropDatabase}");

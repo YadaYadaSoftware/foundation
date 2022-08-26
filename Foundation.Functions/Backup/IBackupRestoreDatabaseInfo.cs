@@ -6,8 +6,8 @@ internal interface IBackupRestoreDatabaseInfo
 {
     string BackupBucket { get; }
     string FromBackupFile { get; set; }
-    bool DropDatabase { get; set; }
-    bool BackupDatabase { get; set; }
+    string DropDatabase { get; set; }
+    string BackupDatabase { get; set; }
 
     string DatabaseName { get; set; }
 

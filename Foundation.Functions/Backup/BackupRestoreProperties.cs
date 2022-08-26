@@ -8,8 +8,8 @@ public class BackupRestoreProperties : IBackupRestoreDatabaseInfo
 
     public string FromBackupFile { get; set; }
 
-    public bool DropDatabase { get; set; }
+    public string DropDatabase { get; set; }
 
-    public bool BackupDatabase { get; set; }
+    public string BackupDatabase { get; set; }
     public string DatabaseName { get; set; }
 }

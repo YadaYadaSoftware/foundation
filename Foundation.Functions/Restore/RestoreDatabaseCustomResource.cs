@@ -19,10 +19,10 @@ public class RestoreDatabaseCustomResource : CustomResource, IBackupRestoreDatab
     public string FromBackupFile { get; set; }
 
     [JsonProperty(PropertyName = "Properties." + nameof(DropDatabase))]
-    public bool DropDatabase { get; set; }
+    public string DropDatabase { get; set; }
 
     [JsonProperty(PropertyName = "Properties." + nameof(BackupDatabase))]
-    public bool BackupDatabase { get; set; }
+    public string BackupDatabase { get; set; }
 
     [JsonProperty(PropertyName = "Properties." + nameof(DatabaseName))]
     public string DatabaseName { get; set; }
