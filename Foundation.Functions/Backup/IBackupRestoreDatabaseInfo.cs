@@ -4,10 +4,10 @@ namespace Data.Serverless.Backup;
 
 internal interface IBackupRestoreDatabaseInfo
 {
-    CloudVariant BackupBucket { get; }
-    CloudVariant FromBackupFile { get; set; }
-    CloudVariant DropDatabase { get; set; }
-    CloudVariant BackupDatabase { get; set; }
+    string BackupBucket { get; }
+    string FromBackupFile { get; set; }
+    bool DropDatabase { get; set; }
+    bool BackupDatabase { get; set; }
 
     string DatabaseName { get; set; }
 
