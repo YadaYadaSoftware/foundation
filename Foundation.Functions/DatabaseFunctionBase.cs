@@ -149,39 +149,45 @@ public abstract class DatabaseFunctionBase
 
     }
 
+    private async Task<bool> CheckDatabaseAlreadyExistsAsync(BackupRestoreDatabaseInfo info, ILambdaContext context)
+    {
+        await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
+        await sqlConnection.OpenAsync();
+
+        try
+        {
+            var command = sqlConnection.CreateCommand();
+            command.CommandText = "SELECT COUNT(*) FROM [sys].[databases] WHERE [name] = @name";
+            command.Parameters.AddWithValue("@name", info.DatabaseName);
+
+            var scalarAsync = await command.ExecuteScalarAsync();
+
+            if (scalarAsync is not { } || !int.TryParse(scalarAsync.ToString(), out var count))
+            {
+                throw new InvalidOperationException();
+            }
+
+            return count == 1;
+
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, e.ToString());
+            throw;
+        }
+        finally
+        {
+            await sqlConnection.CloseAsync();
+        }
+    }
+
     protected async Task CreateDatabaseAsync(BackupRestoreDatabaseInfo info, ILambdaContext context)
     {
         LambdaLogger.Log($"{nameof(CreateDatabaseAsync)}:{nameof(SqlConnectionStringBuilder.ConnectionString)}={SqlConnectionStringBuilder.ConnectionString}");
-        await using (var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString))
-        {
-            await sqlConnection.OpenAsync();
 
-            try
-            {
-                var command = sqlConnection.CreateCommand();
-                command.CommandText = "SELECT COUNT(*) FROM [sys].[databases] WHERE [name] = @name";
-                command.Parameters.AddWithValue("@name", info.DatabaseName);
+        if (await CheckDatabaseAlreadyExistsAsync(info, context)) return;
 
-                var scalarAsync = await command.ExecuteScalarAsync();
-
-                if (scalarAsync is not { } || !int.TryParse(scalarAsync.ToString(), out var count))
-                {
-                    throw new InvalidOperationException();
-                }
-
-                if (count == 1) return;
-
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, e.ToString());
-                throw;
-            }
-            finally
-            {
-                await sqlConnection.CloseAsync();
-            }
-        }
+        if (await RestoreFromWarmAsync(info, context)) return;
 
 
         await using (var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString))
@@ -250,5 +256,62 @@ public abstract class DatabaseFunctionBase
                 await sqlConnection.CloseAsync();
             }
         } while (true);
+    }
+
+    private async Task<bool> RestoreFromWarmAsync(BackupRestoreDatabaseInfo info, ILambdaContext context)
+    {
+        await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
+        await sqlConnection.OpenAsync();
+
+        try
+        {
+            var command = sqlConnection.CreateCommand();
+            command.CommandText = "SELECT COUNT(*) FROM [sys].[databases] WHERE [name] = @name";
+            command.Parameters.AddWithValue("@name", info.FromBackupFile);
+
+            var scalarAsync = await command.ExecuteScalarAsync();
+
+            if (scalarAsync is not { } || !int.TryParse(scalarAsync.ToString(), out var count))
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (count != 1) return false;
+
+            try
+            {
+
+                await using var renameCommand = sqlConnection.CreateCommand();
+
+                renameCommand.CommandText = "msdb.dbo.rds_modify_db_name";
+                renameCommand.CommandType = CommandType.StoredProcedure;
+                renameCommand.Parameters.Add("old_db_name'", SqlDbType.VarChar).Value = info.FromBackupFile;
+                renameCommand.Parameters.Add("new_db_name", SqlDbType.VarChar).Value = info.DatabaseName;
+                renameCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                LambdaLogger.Log($"{GetType().FullName}.{nameof(CreateDatabaseAsync)}:{nameof(SqlConnectionStringBuilder)}='{SqlConnectionStringBuilder.ConnectionString}':{e}");
+                throw;
+            }
+            finally
+            {
+                await sqlConnection.CloseAsync();
+            }
+
+
+            return true;
+
+            return false;
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, e.ToString());
+            throw;
+        }
+        finally
+        {
+            await sqlConnection.CloseAsync();
+        }
     }
 }
