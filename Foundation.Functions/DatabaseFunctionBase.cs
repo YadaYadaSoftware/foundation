@@ -285,8 +285,8 @@ public abstract class DatabaseFunctionBase
 
                 renameCommand.CommandText = "rdsadmin.dbo.rds_modify_db_name";
                 renameCommand.CommandType = CommandType.StoredProcedure;
-                renameCommand.Parameters.Add("old_db_name'", SqlDbType.VarChar).Value = info.FromBackupFile;
-                renameCommand.Parameters.Add("new_db_name", SqlDbType.VarChar).Value = info.DatabaseName;
+                renameCommand.Parameters.Add("@old_db_name", SqlDbType.VarChar).Value = info.FromBackupFile;
+                renameCommand.Parameters.Add("@new_db_name", SqlDbType.VarChar).Value = info.DatabaseName;
                 renameCommand.ExecuteNonQuery();
             }
             catch (Exception e)
