@@ -19,15 +19,15 @@
     <PackageReference Include="Amazon.Lambda.Annotations" Version="0.52.28-annotations-enchilada" />
     <PackageReference Include="AWSSDK.RDS" Version="3.7.15.7" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.9.28" />
-    <PackageReference Include="Bisque.Annotations" Version="2022.222.11" />
-    <PackageReference Include="Bisque.Aws" Version="2022.222.11" />
+    <PackageReference Include="Bisque.Annotations" Version="2022.223.14" />
+    <PackageReference Include="Bisque.Aws" Version="2022.223.14" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
     <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" />
-    <PackageReference Include="YadaYadaSoftware.Amazon.CloudFormation" Version="1.219.109" />
-    <PackageReference Include="YadaYadaSoftware.Amazon.Lambda.S3Events" Version="1.219.109" />
-    <PackageReference Include="YadaYadaSoftware.Microsoft.EntityFrameworkCore" Version="1.219.109" />
+    <PackageReference Include="YadaYadaSoftware.Amazon.CloudFormation" Version="1.233.112" />
+    <PackageReference Include="YadaYadaSoftware.Amazon.Lambda.S3Events" Version="1.233.112" />
+    <PackageReference Include="YadaYadaSoftware.Microsoft.EntityFrameworkCore" Version="1.233.112" />
 
   </ItemGroup>
 </Project>
