@@ -187,7 +187,14 @@ public abstract class DatabaseFunctionBase
 
         if (await CheckDatabaseAlreadyExistsAsync(info, context)) return;
 
-        if (await RestoreFromWarmAsync(info, context)) return;
+        var databaseToRestoreTo = info.DatabaseName;
+        bool waitForRestore = true;
+
+        if (await RestoreFromWarmAsync(info, context))
+        {
+            databaseToRestoreTo = info.FromBackupFile;
+            waitForRestore = false;
+        }
 
 
         await using (var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString))
@@ -203,17 +210,19 @@ public abstract class DatabaseFunctionBase
 
                 restoreCommand.CommandText = "msdb.dbo.rds_restore_database";
                 restoreCommand.CommandType = CommandType.StoredProcedure;
-                restoreCommand.Parameters.Add("restore_db_name", SqlDbType.VarChar).Value = info.DatabaseName;
+                restoreCommand.Parameters.Add("restore_db_name", SqlDbType.VarChar).Value = databaseToRestoreTo;
                 restoreCommand.Parameters.Add("s3_arn_to_restore_from", SqlDbType.VarChar).Value = $"{info.BackupBucket}/{info.FromBackupFile}.bak";
                 restoreCommand.ExecuteNonQuery();
 
+                if (!waitForRestore) return;
 
-                var taskId = GetTaskId(sqlConnection, info.DatabaseName);
+
+                var taskId = GetTaskId(sqlConnection, databaseToRestoreTo);
 
                 do
                 {
                     LambdaLogger.Log("Waiting for task to complete....");
-                    await Task.Delay(TimeSpan.FromSeconds(15));
+                    await Task.Delay(TimeSpan.FromSeconds(5));
                     if (IsTaskComplete(sqlConnection, taskId))
                     {
                         LambdaLogger.Log("Restored...");
@@ -234,28 +243,28 @@ public abstract class DatabaseFunctionBase
 
         }
 
-        SqlConnectionStringBuilder.InitialCatalog = info.DatabaseName;
+        //SqlConnectionStringBuilder.InitialCatalog = databaseToRestoreTo;
 
-        do
-        {
-            await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
-            try
-            {
-                LambdaLogger.Log("Connecting...");
-                await sqlConnection.OpenAsync();
-                LambdaLogger.Log("Connected.");
-                break;
-            }
-            catch
-            {
-                LambdaLogger.Log("Sleeping...");
-                await Task.Delay(TimeSpan.FromSeconds(5));
-            }
-            finally
-            {
-                await sqlConnection.CloseAsync();
-            }
-        } while (true);
+        //do
+        //{
+        //    await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
+        //    try
+        //    {
+        //        LambdaLogger.Log("Connecting...");
+        //        await sqlConnection.OpenAsync();
+        //        LambdaLogger.Log("Connected.");
+        //        break;
+        //    }
+        //    catch
+        //    {
+        //        LambdaLogger.Log("Sleeping...");
+        //        await Task.Delay(TimeSpan.FromSeconds(5));
+        //    }
+        //    finally
+        //    {
+        //        await sqlConnection.CloseAsync();
+        //    }
+        //} while (true);
     }
 
     private async Task<bool> RestoreFromWarmAsync(BackupRestoreDatabaseInfo info, ILambdaContext context)
