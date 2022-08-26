@@ -283,7 +283,7 @@ public abstract class DatabaseFunctionBase
 
                 await using var renameCommand = sqlConnection.CreateCommand();
 
-                renameCommand.CommandText = "msdb.dbo.rds_modify_db_name";
+                renameCommand.CommandText = "rdsadmin.dbo.rds_modify_db_name";
                 renameCommand.CommandType = CommandType.StoredProcedure;
                 renameCommand.Parameters.Add("old_db_name'", SqlDbType.VarChar).Value = info.FromBackupFile;
                 renameCommand.Parameters.Add("new_db_name", SqlDbType.VarChar).Value = info.DatabaseName;
