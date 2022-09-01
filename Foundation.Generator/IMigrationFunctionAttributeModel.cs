@@ -15,4 +15,6 @@ public interface IMigrationFunctionAttributeModel
 
     public string InitialCatalog { get; set; }
 
+    public string BackupBucket { get; set; }
+
 }

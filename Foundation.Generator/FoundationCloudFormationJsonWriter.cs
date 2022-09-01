@@ -102,7 +102,6 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         else
         {
             jsonWriter.SetToken($"{propertiesPath}.ServiceToken", migrationModel.MigrationsFunctionArn);
-
         }
         jsonWriter.SetToken($"{propertiesPath}.MigrationName", migrationModel.MigrationId);
 
@@ -118,6 +117,7 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
 
         jsonWriter.SetToken($"{propertiesPath}.StackName", new JObject(new JProperty("Ref", "AWS::StackName")));
         jsonWriter.SetToken($"{propertiesPath}.InitialCatalog", GetValueOrRef(migrationModel.InitialCatalog));
+        jsonWriter.SetToken($"{propertiesPath}.BackupBucket", GetValueOrRef(migrationModel.BackupBucket));
         // ATTRIBUTE:  ADD HERE
         return resourceName;
 

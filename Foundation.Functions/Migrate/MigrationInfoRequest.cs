@@ -34,4 +34,10 @@ public class MigrationInfoRequest : CloudFormationRequest<MigrationInfoPropertie
         set => ResourceProperties.InitialCatalog = value;
     }
 
+    public string BackupBucket
+    {
+        get => ResourceProperties.BackupBucket;
+        set => ResourceProperties.BackupBucket = value;
+    }
+
 }

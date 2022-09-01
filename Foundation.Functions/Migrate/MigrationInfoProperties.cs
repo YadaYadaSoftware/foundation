@@ -6,4 +6,5 @@ public class MigrationInfoProperties : IMigrationInfo
     public string MigrationsAssemblyPath { get; set; }
     public string StackName { get; set; }
     public string InitialCatalog { get; set; }
+    public string BackupBucket { get; set; }
 }

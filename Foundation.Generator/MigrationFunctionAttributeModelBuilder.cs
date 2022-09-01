@@ -91,6 +91,12 @@ public class MigrationFunctionAttributeModelBuilder
                     model.InitialCatalog = value.Value.ToString();
                     break;
                 }
+                case "BACKUPBUCKET":
+                {
+                    var value = semanticModel.GetConstantValue(attributeArgumentSyntax.Expression);
+                    model.BackupBucket = value.Value.ToString();
+                    break;
+                }
                 default: 
                     throw new ArgumentException(attributeArgumentSyntax.NameEquals.Name.Identifier.ValueText);
 

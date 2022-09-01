@@ -12,8 +12,9 @@ public class MigrationModel : IMigrationModel
     public string MigrationsAssemblyPath { get; set; }
     public string MigrationsFunctionArn { get; set; }
     public string InitialCatalog { get; set; }
+    public string BackupBucket { get; set; }
 
-    public MigrationModel(string migrationId, TypeModel dataMigrationFunction, string migrationMethod, string dependsOn, string migrationsAssemblyPath, string migrationsFunctionArn, string initialCatalog)
+    public MigrationModel(string migrationId, TypeModel dataMigrationFunction, string migrationMethod, string dependsOn, string migrationsAssemblyPath, string migrationsFunctionArn, string initialCatalog, string backupBucket)
     {
         if (string.IsNullOrEmpty(migrationsFunctionArn))
         {
@@ -25,12 +26,13 @@ public class MigrationModel : IMigrationModel
         }
         if (string.IsNullOrEmpty(migrationId)) throw new ArgumentException("Value cannot be null or empty.", nameof(migrationId));
         MigrationId = migrationId;
-        MigrationFunction = dataMigrationFunction; 
+        MigrationFunction = dataMigrationFunction;
         MigrationMethod = migrationMethod;
         DependsOn = dependsOn;
         // ATTRIBUTE:  ADD HERE
         MigrationsAssemblyPath = migrationsAssemblyPath;
         MigrationsFunctionArn = migrationsFunctionArn;
         InitialCatalog = initialCatalog;
+        BackupBucket = backupBucket;
     }
 }

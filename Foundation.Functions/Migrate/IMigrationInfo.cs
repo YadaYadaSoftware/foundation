@@ -6,4 +6,5 @@ public interface IMigrationInfo
     string MigrationsAssemblyPath { get; set; }
     string StackName { get; set; }
     string InitialCatalog { get; set; }
+    string BackupBucket { get; set; }
 }

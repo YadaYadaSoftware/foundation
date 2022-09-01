@@ -12,4 +12,5 @@ public class MigrationFunctionAttributeModel : IMigrationFunctionAttributeModel
     public string MigrationsAssemblyPath { get; set; }
     public string MigrationsFunctionArn { get; set; }
     public string InitialCatalog { get; set; }
+    public string BackupBucket { get; set; }
 }

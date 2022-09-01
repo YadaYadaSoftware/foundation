@@ -15,12 +15,13 @@ namespace Foundation.Annotations
             InitialCatalog = initialCatalog;
         }
 
-        public MigrationFunctionAttribute(string dependsOn, string migrationsAssemblyPath, string migrationFunctionArn, string initialCatalog)
+        public MigrationFunctionAttribute(string dependsOn, string migrationsAssemblyPath, string migrationFunctionArn, string initialCatalog, string backupBucket)
         {
             DependsOn = dependsOn;
             MigrationsAssemblyPath = migrationsAssemblyPath;
             MigrationFunctionArn = migrationFunctionArn;
             InitialCatalog = initialCatalog;
+            BackupBucket = backupBucket;
         }
 
         public Type MigrationFunction { get; }
@@ -32,5 +33,6 @@ namespace Foundation.Annotations
 
         public string MigrationFunctionArn { get; }
         public string InitialCatalog { get; }
+        public string BackupBucket { get; }
     }
 }
