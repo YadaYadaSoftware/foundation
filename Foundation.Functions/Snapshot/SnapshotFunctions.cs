@@ -1,5 +1,6 @@
 ﻿using Amazon.Lambda.Core;
 using Amazon.RDS.Model;
+using Foundation.Functions;
 using JetBrains.Annotations;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
@@ -9,7 +10,7 @@ namespace Data.Serverless.Snapshot
 {
     public class SnapshotFunctions : DatabaseFunctionBase
     {
-        public SnapshotFunctions([NotNull][ItemNotNull] IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, ILoggerProvider loggerProvider) : base(sqlConnectionStringBuildOptions, loggerProvider)
+        public SnapshotFunctions([NotNull][ItemNotNull] IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, ILoggerProvider loggerProvider, DatabaseBackupStatus databaseBackupStatus) : base(sqlConnectionStringBuildOptions, loggerProvider, databaseBackupStatus)
         {
         }
 

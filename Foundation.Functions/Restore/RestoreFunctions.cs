@@ -4,6 +4,7 @@ using Amazon.CloudFormation.Model;
 using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Core;
 using Data.Serverless.Backup;
+using Foundation.Functions;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using YadaYada.Bisque.Annotations;
@@ -15,7 +16,7 @@ namespace Data.Serverless.Restore;
 public class RestoreFunctions : DatabaseFunctionBase
 {
 
-    public RestoreFunctions(IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, ILoggerProvider loggerProvider) : base(sqlConnectionStringBuildOptions, loggerProvider)
+    public RestoreFunctions(IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, ILoggerProvider loggerProvider, DatabaseBackupStatus databaseBackupStatus) : base(sqlConnectionStringBuildOptions, loggerProvider, databaseBackupStatus)
     {
     }
 

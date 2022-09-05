@@ -3,6 +3,7 @@ using System.Text;
 using Amazon.Lambda.Core;
 using Amazon.RDS;
 using Data.Serverless.Backup;
+using Foundation.Functions;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using YadaYada.Bisque.Annotations;
@@ -11,8 +12,11 @@ namespace Data.Serverless;
 
 public abstract class DatabaseFunctionBase
 {
-    protected DatabaseFunctionBase(IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, ILoggerProvider loggerProvider)
+    private readonly DatabaseBackupStatus _databaseBackupStatus;
+
+    protected DatabaseFunctionBase(IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, ILoggerProvider loggerProvider, DatabaseBackupStatus databaseBackupStatus)
     {
+        _databaseBackupStatus = databaseBackupStatus;
         SqlConnectionStringBuilder = sqlConnectionStringBuildOptions.Value;
         Logger = loggerProvider.CreateLogger(GetType().FullName!);
     }
@@ -137,21 +141,28 @@ public abstract class DatabaseFunctionBase
             command.Parameters.Add("source_db_name", SqlDbType.VarChar).Value = SqlConnectionStringBuilder.InitialCatalog;
             command.Parameters.Add("s3_arn_to_backup_to", SqlDbType.VarChar).Value = $"{backupBucket}/{filename}.bak";
             command.Parameters.Add("overwrite_S3_backup_file", SqlDbType.TinyInt).Value = 1;
+
+            while (_databaseBackupStatus.IsBusy())
+            {
+                Logger.LogInformation("Waiting....");
+                await Task.Delay(TimeSpan.FromSeconds(15));
+            }
+
             command.ExecuteNonQuery();
 
-            var taskId = GetTaskId(sqlConnection, SqlConnectionStringBuilder.InitialCatalog);
+            //var taskId = GetTaskId(sqlConnection, SqlConnectionStringBuilder.InitialCatalog);
 
-            Logger.LogInformation("{0}={1}", nameof(taskId), taskId);
+            //Logger.LogInformation("{0}={1}", nameof(taskId), taskId);
 
-            do
-            {
-                if (IsTaskComplete(sqlConnection, taskId))
-                {
-                    break;
-                }
+            //do
+            //{
+            //    if (IsTaskComplete(sqlConnection, taskId))
+            //    {
+            //        break;
+            //    }
 
-                await Task.Delay(TimeSpan.FromSeconds(15));
-            } while (true);
+            //    await Task.Delay(TimeSpan.FromSeconds(15));
+            //} while (true);
         }
     }
 

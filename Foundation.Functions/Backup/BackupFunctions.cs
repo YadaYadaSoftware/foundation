@@ -1,4 +1,5 @@
 ﻿using Amazon.Lambda.Core;
+using Foundation.Functions;
 using JetBrains.Annotations;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
@@ -8,7 +9,7 @@ namespace Data.Serverless.Backup;
 
 public class BackupFunctions : DatabaseFunctionBase
 {
-    public BackupFunctions([NotNull][ItemNotNull] IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, ILoggerProvider loggerProvider) : base(sqlConnectionStringBuildOptions, loggerProvider)
+    public BackupFunctions([NotNull][ItemNotNull] IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, ILoggerProvider loggerProvider, DatabaseBackupStatus databaseBackupStatus) : base(sqlConnectionStringBuildOptions, loggerProvider, databaseBackupStatus)
     {
     }
 
