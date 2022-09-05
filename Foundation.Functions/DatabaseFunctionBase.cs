@@ -26,7 +26,7 @@ public abstract class DatabaseFunctionBase
 
     protected SqlConnectionStringBuilder SqlConnectionStringBuilder { get; }
 
-    protected static bool IsTaskComplete(SqlConnection sqlConnection, int task)
+    protected bool IsTaskComplete(SqlConnection sqlConnection, int task)
     {
         using var command = sqlConnection.CreateCommand();
         command.CommandText = "msdb.dbo.rds_task_status";
