@@ -46,7 +46,8 @@
         },
         "InitialCatalog": {
           "Ref": "Sample"
-        }
+        },
+        "BackupBucket": null
       }
     },
     "Migrationmigration1": {
@@ -76,7 +77,8 @@
         },
         "InitialCatalog": {
           "Ref": "Sample"
-        }
+        },
+        "BackupBucket": null
       }
     }
   },

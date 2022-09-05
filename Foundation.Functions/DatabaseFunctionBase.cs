@@ -110,7 +110,8 @@ public abstract class DatabaseFunctionBase
     {
         try
         {
-            await BackupDatabaseImplementationAsync(info.BackupBucket);
+            var datetime = DateTime.Now.ToString("u").Replace(':', '-').Replace('/', '-').Replace('+', '-').Replace('.', '-').Replace(' ', '-');
+            await BackupDatabaseImplementationAsync(info.BackupBucket,$"{SqlConnectionStringBuilder.InitialCatalog}{datetime}");
         }
         catch (Exception e)
         {
@@ -123,7 +124,7 @@ public abstract class DatabaseFunctionBase
 
     }
 
-    internal async Task BackupDatabaseImplementationAsync(string backupBucket)
+    internal async Task BackupDatabaseImplementationAsync(string backupBucket, string filename)
     {
         using (Logger.AddMember(nameof(BackupDatabaseImplementationAsync)))
         {
@@ -134,8 +135,7 @@ public abstract class DatabaseFunctionBase
             command.CommandText = "msdb.dbo.rds_backup_database";
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add("source_db_name", SqlDbType.VarChar).Value = SqlConnectionStringBuilder.InitialCatalog;
-            var datetime = DateTime.Now.ToString("u").Replace(':', '-').Replace('/', '-').Replace('+', '-').Replace('.', '-').Replace(' ', '-');
-            command.Parameters.Add("s3_arn_to_backup_to", SqlDbType.VarChar).Value = $"{backupBucket}/{SqlConnectionStringBuilder.InitialCatalog}{datetime}.bak";
+            command.Parameters.Add("s3_arn_to_backup_to", SqlDbType.VarChar).Value = $"{backupBucket}/{filename}.bak";
             command.Parameters.Add("overwrite_S3_backup_file", SqlDbType.TinyInt).Value = 1;
             command.ExecuteNonQuery();
 

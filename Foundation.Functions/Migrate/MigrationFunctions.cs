@@ -94,7 +94,7 @@ public class MigrationFunctions
 
                                         _logger.LogInformation("Worked");
 
-                                        await _backupFunctions.BackupDatabaseImplementationAsync(request.BackupBucket);
+                                        await _backupFunctions.BackupDatabaseImplementationAsync(request.BackupBucket, $"{request.InitialCatalog}-{request.MigrationName}");
                                     }
 
                                     return await CloudFormationResponse.CompleteCloudFormationResponse(CloudFormationResponse.StatusEnum.Success, request, lambdaContext);
