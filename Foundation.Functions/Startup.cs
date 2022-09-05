@@ -1,5 +1,6 @@
 using Amazon.Lambda.Core;
 using Amazon.S3.Transfer;
+using Data.Serverless.Backup;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,11 +33,9 @@ namespace Foundation.Functions
 
             services.Configure<SqlConnectionStringBuilder>(configurationRoot.GetSection(nameof(SqlConnectionStringBuilder)))
                 .AddLogging(loggingBuilder => loggingBuilder.AddLoggerYadaYada(configurationRoot, nameof(LambdaLoggerOptions)))
-                //.AddEntityFrameworkSqlServer()
-                //.AddEntityConfigurations()
                 .AddAWSService<Amazon.S3.IAmazonS3>()
                 .AddSingleton<ITransferUtility, TransferUtility>()
-                //.AddDbContext<DbContext, DbContext>((provider, optionsBuilder) => optionsBuilder.UseSqlServer(provider.GetRequiredService<IOptions<SqlConnectionStringBuilder>>().Value.ConnectionString))
+                .AddSingleton<BackupFunctions>()
                 ;
         }
     }

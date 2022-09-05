@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Mono.Unix;
 using System.Diagnostics;
 using Amazon.CloudFormation.Model;
+using Data.Serverless.Backup;
 using YadaYada.Bisque.Annotations;
 using InvalidOperationException = System.InvalidOperationException;
 
@@ -18,14 +19,16 @@ namespace Data.Serverless.Migrate;
 public class MigrationFunctions
 {
     private readonly ITransferUtility _transferUtility;
+    private readonly BackupFunctions _backupFunctions;
     private readonly ILogger _logger;
     private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
 
-    public MigrationFunctions([NotNull] [ItemNotNull] IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, [NotNull] ILoggerProvider loggerProvider, ITransferUtility transferUtility)
+    public MigrationFunctions([NotNull] [ItemNotNull] IOptions<SqlConnectionStringBuilder> sqlConnectionStringBuildOptions, [NotNull] ILoggerProvider loggerProvider, ITransferUtility transferUtility, BackupFunctions backupFunctions)
     {
         if (sqlConnectionStringBuildOptions == null) throw new ArgumentNullException(nameof(sqlConnectionStringBuildOptions));
         if (loggerProvider == null) throw new ArgumentNullException(nameof(loggerProvider));
         _transferUtility = transferUtility ?? throw new ArgumentNullException(nameof(transferUtility));
+        _backupFunctions = backupFunctions;
         _logger = loggerProvider.CreateLogger(this.GetType().FullName);
         _sqlConnectionStringBuilder = sqlConnectionStringBuildOptions.Value;
     }
@@ -90,9 +93,9 @@ public class MigrationFunctions
                                         RunEfBundle(lambdaContext, migrationsBundle, request.MigrationName);
 
                                         _logger.LogInformation("Worked");
+
+                                        await _backupFunctions.BackupDatabaseImplementationAsync(request.MigrationName);
                                     }
-
-
 
                                     return await CloudFormationResponse.CompleteCloudFormationResponse(CloudFormationResponse.StatusEnum.Success, request, lambdaContext);
                                 }
@@ -106,7 +109,7 @@ public class MigrationFunctions
                             case CloudFormationRequest.RequestTypeEnum.Delete:
                             {
                                 using var cloudFormationClient = new AmazonCloudFormationClient();
-                                var describeStacksAsync = await cloudFormationClient.DescribeStacksAsync(new DescribeStacksRequest() {StackName = request.StackName});
+                                var describeStacksAsync = await cloudFormationClient.DescribeStacksAsync(new DescribeStacksRequest{StackName = request.StackName});
                                 var stackStatus = describeStacksAsync.Stacks.Single().StackStatus;
                                 using (_logger.AddScope(nameof(stackStatus), stackStatus))
                                 {

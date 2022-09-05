@@ -115,28 +115,7 @@ public abstract class DatabaseFunctionBase
     {
         try
         {
-            await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
-            sqlConnection.Open();
-            await using var command = sqlConnection.CreateCommand();
-            command.CommandText = "msdb.dbo.rds_backup_database";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add("source_db_name", SqlDbType.VarChar).Value = SqlConnectionStringBuilder.InitialCatalog;
-            var datetime = DateTime.Now.ToString("u").Replace(':', '-').Replace('/', '-').Replace('+', '-').Replace('.', '-').Replace(' ', '-');
-            command.Parameters.Add("s3_arn_to_backup_to", SqlDbType.VarChar).Value = $"{info.BackupBucket}/{SqlConnectionStringBuilder.InitialCatalog}{datetime}.bak";
-            command.Parameters.Add("overwrite_S3_backup_file", SqlDbType.TinyInt).Value = 1;
-            command.ExecuteNonQuery();
-
-            var taskId = GetTaskId(sqlConnection, SqlConnectionStringBuilder.InitialCatalog);
-
-            do
-            {
-                if (IsTaskComplete(sqlConnection, taskId))
-                {
-                    break;
-                }
-                await Task.Delay(TimeSpan.FromSeconds(15));
-            } while (true);
-
+            await BackupDatabaseImplementationAsync(info.BackupBucket);
         }
         catch (Exception e)
         {
@@ -147,6 +126,32 @@ public abstract class DatabaseFunctionBase
 
 
 
+    }
+
+    internal async Task BackupDatabaseImplementationAsync(string backupBucket)
+    {
+        await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
+        sqlConnection.Open();
+        await using var command = sqlConnection.CreateCommand();
+        command.CommandText = "msdb.dbo.rds_backup_database";
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.Add("source_db_name", SqlDbType.VarChar).Value = SqlConnectionStringBuilder.InitialCatalog;
+        var datetime = DateTime.Now.ToString("u").Replace(':', '-').Replace('/', '-').Replace('+', '-').Replace('.', '-').Replace(' ', '-');
+        command.Parameters.Add("s3_arn_to_backup_to", SqlDbType.VarChar).Value = $"{backupBucket}/{SqlConnectionStringBuilder.InitialCatalog}{datetime}.bak";
+        command.Parameters.Add("overwrite_S3_backup_file", SqlDbType.TinyInt).Value = 1;
+        command.ExecuteNonQuery();
+
+        var taskId = GetTaskId(sqlConnection, SqlConnectionStringBuilder.InitialCatalog);
+
+        do
+        {
+            if (IsTaskComplete(sqlConnection, taskId))
+            {
+                break;
+            }
+
+            await Task.Delay(TimeSpan.FromSeconds(15));
+        } while (true);
     }
 
     private async Task<bool> CheckDatabaseAlreadyExistsAsync(BackupRestoreDatabaseInfo info, ILambdaContext context)
