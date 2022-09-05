@@ -36,6 +36,7 @@ namespace Foundation.Functions
                 .AddAWSService<Amazon.S3.IAmazonS3>()
                 .AddSingleton<ITransferUtility, TransferUtility>()
                 .AddSingleton<BackupFunctions>()
+                .AddSingleton<DatabaseBackupStatus>()
                 ;
         }
     }
