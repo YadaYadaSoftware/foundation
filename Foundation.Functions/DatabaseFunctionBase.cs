@@ -37,15 +37,11 @@ public abstract class DatabaseFunctionBase
         {
             if (reader.HasRows)
             {
-                var s = new StringBuilder();
-
-                for (int i = 0; i < reader.FieldCount; i++)
-                {
-                    s.AppendLine($"{i}={reader[i]}");
-                }
-                //LambdaLogger.Log(s.ToString());
 
                 var status = reader.GetString(5);
+
+                Logger.LogInformation("{0}={1}", nameof(status), status);
+
                 switch (status)
                 {
                     case "SUCCESS":
@@ -144,6 +140,8 @@ public abstract class DatabaseFunctionBase
             command.ExecuteNonQuery();
 
             var taskId = GetTaskId(sqlConnection, SqlConnectionStringBuilder.InitialCatalog);
+
+            Logger.LogInformation("{0}={1}", nameof(taskId), taskId);
 
             do
             {
