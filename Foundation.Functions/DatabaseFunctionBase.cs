@@ -28,38 +28,37 @@ public abstract class DatabaseFunctionBase
 
     protected static bool IsTaskComplete(SqlConnection sqlConnection, int task)
     {
-        try
+        using var command = sqlConnection.CreateCommand();
+        command.CommandText = "msdb.dbo.rds_task_status";
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.Add("task_id", SqlDbType.Int).Value = task;
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
         {
-            using var command = sqlConnection.CreateCommand();
-            command.CommandText = "msdb.dbo.rds_task_status";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add("task_id", SqlDbType.Int).Value = task;
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
+            if (reader.HasRows)
             {
-                if (reader.HasRows)
+                var s = new StringBuilder();
+
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    var s = new StringBuilder();
+                    s.AppendLine($"{i}={reader[i]}");
+                }
+                //LambdaLogger.Log(s.ToString());
 
-                    for (int i = 0; i < reader.FieldCount; i++)
-                    {
-                        s.AppendLine($"{i}={reader[i]}");
-                    }
-                    //LambdaLogger.Log(s.ToString());
-
-                    var status = reader.GetString(5);
-                    return status == "SUCCESS";
+                var status = reader.GetString(5);
+                switch (status)
+                {
+                    case "SUCCESS":
+                        return true;
+                    case "ERROR":
+                        throw new InvalidOperationException("ERROR");
+                    default:
+                        return false;
                 }
             }
-
-            return false;
-
         }
-        catch (Exception e)
-        {
-            //LambdaLogger.Log(e.ToString());
-            throw;
-        }
+
+        return false;
 
     }
 
@@ -130,28 +129,32 @@ public abstract class DatabaseFunctionBase
 
     internal async Task BackupDatabaseImplementationAsync(string backupBucket)
     {
-        await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
-        sqlConnection.Open();
-        await using var command = sqlConnection.CreateCommand();
-        command.CommandText = "msdb.dbo.rds_backup_database";
-        command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.Add("source_db_name", SqlDbType.VarChar).Value = SqlConnectionStringBuilder.InitialCatalog;
-        var datetime = DateTime.Now.ToString("u").Replace(':', '-').Replace('/', '-').Replace('+', '-').Replace('.', '-').Replace(' ', '-');
-        command.Parameters.Add("s3_arn_to_backup_to", SqlDbType.VarChar).Value = $"{backupBucket}/{SqlConnectionStringBuilder.InitialCatalog}{datetime}.bak";
-        command.Parameters.Add("overwrite_S3_backup_file", SqlDbType.TinyInt).Value = 1;
-        command.ExecuteNonQuery();
-
-        var taskId = GetTaskId(sqlConnection, SqlConnectionStringBuilder.InitialCatalog);
-
-        do
+        using (Logger.AddMember(nameof(BackupDatabaseImplementationAsync)))
         {
-            if (IsTaskComplete(sqlConnection, taskId))
-            {
-                break;
-            }
 
-            await Task.Delay(TimeSpan.FromSeconds(15));
-        } while (true);
+            await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
+            sqlConnection.Open();
+            await using var command = sqlConnection.CreateCommand();
+            command.CommandText = "msdb.dbo.rds_backup_database";
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add("source_db_name", SqlDbType.VarChar).Value = SqlConnectionStringBuilder.InitialCatalog;
+            var datetime = DateTime.Now.ToString("u").Replace(':', '-').Replace('/', '-').Replace('+', '-').Replace('.', '-').Replace(' ', '-');
+            command.Parameters.Add("s3_arn_to_backup_to", SqlDbType.VarChar).Value = $"{backupBucket}/{SqlConnectionStringBuilder.InitialCatalog}{datetime}.bak";
+            command.Parameters.Add("overwrite_S3_backup_file", SqlDbType.TinyInt).Value = 1;
+            command.ExecuteNonQuery();
+
+            var taskId = GetTaskId(sqlConnection, SqlConnectionStringBuilder.InitialCatalog);
+
+            do
+            {
+                if (IsTaskComplete(sqlConnection, taskId))
+                {
+                    break;
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(15));
+            } while (true);
+        }
     }
 
     private async Task<bool> CheckDatabaseAlreadyExistsAsync(BackupRestoreDatabaseInfo info, ILambdaContext context)
