@@ -24,6 +24,7 @@ public class DatabaseBackupStatus
         using (_logger.BeginScope(nameof(IsBusy)))
         {
             using var sqlConnection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+            sqlConnection.Open();
             using var command = sqlConnection.CreateCommand();
             command.CommandText = "msdb.dbo.rds_task_status";
             command.CommandType = CommandType.StoredProcedure;
