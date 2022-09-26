@@ -7,4 +7,5 @@ public interface IMigrationInfo
     string StackName { get; set; }
     string InitialCatalog { get; set; }
     string BackupBucket { get; set; }
+    string BackupAfterApply { get; set; }
 }

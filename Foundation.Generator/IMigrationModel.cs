@@ -15,4 +15,5 @@ public interface IMigrationModel
     public string MigrationsFunctionArn { get; set; }
     public string InitialCatalog { get; set; }
     public string BackupBucket { get; set; }
+    public bool BackupAfterApply { get; set; }
 }

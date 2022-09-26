@@ -93,8 +93,7 @@ public class RestoreFunctions : DatabaseFunctionBase
 
     private async Task DeleteDatabase(BackupRestoreDatabaseInfo backupRestoreDatabaseInfo, ILambdaContext context)
     {
-        bool dropDatabase;
-        if (!bool.TryParse(backupRestoreDatabaseInfo.DropDatabase, out dropDatabase))
+        if (!bool.TryParse(backupRestoreDatabaseInfo.DropDatabase, out var dropDatabase))
         {
             throw new InvalidOperationException();
         }

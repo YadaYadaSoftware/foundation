@@ -11,15 +11,12 @@ namespace Foundation.Generators;
 public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
 {
     private readonly IFileManager _fileManager;
-    private readonly IDirectoryManager _directoryManager;
     private readonly IJsonWriter _jsonWriter;
     private readonly IDiagnosticReporter _diagnosticReporter;
-    public const string MetadataToolPropertyNameSuffix = ".Metadata.Tool";
 
     public FoundationCloudFormationJsonWriter(IFileManager fileManager, IDirectoryManager directoryManager, IJsonWriter jsonWriter, IDiagnosticReporter diagnosticReporter)
     {
         _fileManager = fileManager;
-        _directoryManager = directoryManager;
         _jsonWriter = jsonWriter;
         _diagnosticReporter = diagnosticReporter;
     }
@@ -58,8 +55,10 @@ public class FoundationCloudFormationJsonWriter : IAnnotationReportWriter
         var migrationsToProcess = foundationAnnotationReport.Migrations.ToList();
         migrationsToProcess.Sort(new MigrationSorter());
         string lastMigration = string.Empty;
-        foreach (var migrationModel in migrationsToProcess)
+        for (var i = 0; i < migrationsToProcess.Count; i++)
         {
+            IMigrationModel? migrationModel = migrationsToProcess[i];
+            migrationModel.BackupAfterApply = i == migrationsToProcess.Count - 1;
             lastMigration = ProcessMigration(migrationModel, jsonWriter, lastMigration);
             processedMigrations.Add(lastMigration);
         }

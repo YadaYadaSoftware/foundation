@@ -13,6 +13,7 @@ public class MigrationModel : IMigrationModel
     public string MigrationsFunctionArn { get; set; }
     public string InitialCatalog { get; set; }
     public string BackupBucket { get; set; }
+    public bool BackupAfterApply { get; set; }
 
     public MigrationModel(string migrationId, TypeModel dataMigrationFunction, string migrationMethod, string dependsOn, string migrationsAssemblyPath, string migrationsFunctionArn, string initialCatalog, string backupBucket)
     {

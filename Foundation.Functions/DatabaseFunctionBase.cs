@@ -327,8 +327,6 @@ public abstract class DatabaseFunctionBase
 
 
             return true;
-
-            return false;
         }
         catch (Exception e)
         {

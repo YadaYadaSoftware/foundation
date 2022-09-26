@@ -7,4 +7,5 @@ public class MigrationInfoProperties : IMigrationInfo
     public string StackName { get; set; }
     public string InitialCatalog { get; set; }
     public string BackupBucket { get; set; }
+    public string BackupAfterApply { get; set; }
 }

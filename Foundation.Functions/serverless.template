@@ -39,24 +39,6 @@
     }
   },
   "Resources": {
-    "DataServerlessMigrateMigrationFunctionsApplyMigrationGenerated": {
-      "Type": "AWS::Serverless::Function",
-      "Metadata": {
-        "Tool": "Amazon.Lambda.Annotations"
-      },
-      "Properties": {
-        "Runtime": "dotnet6",
-        "CodeUri": ".",
-        "MemorySize": 2048,
-        "Timeout": 900,
-        "Role": {
-          "Ref": "LambdaExecutionRole"
-        },
-        "PackageType": "Zip",
-        "Handler": "Foundation.Functions::Data.Serverless.Migrate.MigrationFunctions_ApplyMigration_Generated::ApplyMigration",
-        "AutoPublishAlias": "live"
-      }
-    },
     "DataServerlessRestoreRestoreFunctionsRestoreDatabaseGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
@@ -73,6 +55,23 @@
         "PackageType": "Zip",
         "Handler": "Foundation.Functions::Data.Serverless.Restore.RestoreFunctions_RestoreDatabase_Generated::RestoreDatabase",
         "AutoPublishAlias": "live"
+      }
+    },
+    "DataServerlessMigrateMigrationFunctionsApplyMigrationGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations"
+      },
+      "Properties": {
+        "Runtime": "dotnet6",
+        "CodeUri": ".",
+        "MemorySize": 2048,
+        "Timeout": 900,
+        "Role": {
+          "Ref": "LambdaExecutionRole"
+        },
+        "PackageType": "Zip",
+        "Handler": "Foundation.Functions::Data.Serverless.Migrate.MigrationFunctions_ApplyMigration_Generated::ApplyMigration"
       }
     }
   },

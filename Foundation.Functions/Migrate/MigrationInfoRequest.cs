@@ -40,4 +40,10 @@ public class MigrationInfoRequest : CloudFormationRequest<MigrationInfoPropertie
         set => ResourceProperties.BackupBucket = value;
     }
 
+    public string BackupAfterApply
+    {
+        get => ResourceProperties.BackupAfterApply;
+        set => ResourceProperties.BackupAfterApply = value;
+    }
+
 }
