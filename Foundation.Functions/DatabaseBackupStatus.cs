@@ -21,28 +21,39 @@ public class DatabaseBackupStatus
     internal bool IsBusy()
     {
         using (_logger.BeginScope(nameof(IsBusy)))
+        using(_logger.Add(_sqlConnectionStringBuilder.InitialCatalog))
         {
-            using var sqlConnection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
-            sqlConnection.Open();
-            using var command = sqlConnection.CreateCommand();
-            command.CommandText = "msdb.dbo.rds_task_status";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add("db_name", SqlDbType.VarChar).Value = _sqlConnectionStringBuilder.InitialCatalog;
-            using var reader = command.ExecuteReader();
-            if (!reader.Read())
+            string status;
+            try
             {
-                _logger.LogInformation("No Read"); 
-                return false;
-            }
+                using var sqlConnection = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+                sqlConnection.Open();
+                using var command = sqlConnection.CreateCommand();
+                command.CommandText = "msdb.dbo.rds_task_status";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("db_name", SqlDbType.VarChar).Value = _sqlConnectionStringBuilder.InitialCatalog;
+                using var reader = command.ExecuteReader();
 
-            if (!reader.HasRows)
+                if (!reader.Read())
+                {
+                    _logger.LogInformation("No Read");
+                    return false;
+                }
+
+                if (!reader.HasRows)
+                {
+                    _logger.LogInformation("No HasRows");
+                    return false;
+                }
+
+                status = reader.GetString(5);
+
+            }
+            catch (Exception e)
             {
-                _logger.LogInformation("No HasRows");
-                return false;
+                _logger.LogError(e,e.Message);
+                throw;
             }
-
-            var status = reader.GetString(5);
-
             _logger.LogInformation("{0}={1}",nameof(status), status);
 
             bool returnValue;
