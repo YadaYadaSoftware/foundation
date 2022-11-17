@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Linq;
+using System.Data;
 using System.Text;
 using Amazon.Lambda.Core;
 using Amazon.RDS;
@@ -133,36 +134,44 @@ public abstract class DatabaseFunctionBase
         using (Logger.AddMember(nameof(BackupDatabaseImplementationAsync)))
         {
 
-            await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
-            sqlConnection.Open();
-            await using var command = sqlConnection.CreateCommand();
-            command.CommandText = "msdb.dbo.rds_backup_database";
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add("source_db_name", SqlDbType.VarChar).Value = SqlConnectionStringBuilder.InitialCatalog;
-            command.Parameters.Add("s3_arn_to_backup_to", SqlDbType.VarChar).Value = $"{backupBucket}/{filename}.bak";
-            command.Parameters.Add("overwrite_S3_backup_file", SqlDbType.TinyInt).Value = 1;
+            SqlCommand? command = null;
 
-            while (_databaseBackupStatus.IsBusy())
+            try
             {
-                Logger.LogInformation("Waiting....");
-                await Task.Delay(TimeSpan.FromSeconds(15));
+                await using var sqlConnection = new SqlConnection(SqlConnectionStringBuilder.ConnectionString);
+                sqlConnection.Open();
+                command = sqlConnection.CreateCommand();
+                command.CommandText = "msdb.dbo.rds_backup_database";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("source_db_name", SqlDbType.VarChar).Value = SqlConnectionStringBuilder.InitialCatalog;
+                command.Parameters.Add("s3_arn_to_backup_to", SqlDbType.VarChar).Value = $"{backupBucket}/{filename}.bak";
+                command.Parameters.Add("overwrite_S3_backup_file", SqlDbType.TinyInt).Value = 1;
+
+                while (_databaseBackupStatus.IsBusy())
+                {
+                    Logger.LogInformation("Waiting....");
+                    await Task.Delay(TimeSpan.FromSeconds(15));
+                }
+
+                command.ExecuteNonQuery();
+
             }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                Logger.LogTrace($"{{{nameof(command.CommandText)}}}={0}", command?.CommandText);
+                Logger.LogTrace($"{{{nameof(command.CommandType)}}}={0}", command?.CommandType);
+                foreach (SqlParameter commandParameter in command.Parameters)
+                {
+                    Logger.LogTrace($"{{{nameof(commandParameter.ParameterName)}}}={0},{{{nameof(commandParameter.Value)}}}={1}", commandParameter.ParameterName, commandParameter.Value);
 
-            command.ExecuteNonQuery();
-
-            //var taskId = GetTaskId(sqlConnection, SqlConnectionStringBuilder.InitialCatalog);
-
-            //Logger.LogInformation("{0}={1}", nameof(taskId), taskId);
-
-            //do
-            //{
-            //    if (IsTaskComplete(sqlConnection, taskId))
-            //    {
-            //        break;
-            //    }
-
-            //    await Task.Delay(TimeSpan.FromSeconds(15));
-            //} while (true);
+                }
+                throw;
+            }
+            finally
+            {
+                command?.Dispose();
+            }
         }
     }
 
