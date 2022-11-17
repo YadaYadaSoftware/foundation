@@ -49,6 +49,10 @@ public class DatabaseBackupStatus
                 status = reader.GetString(5);
 
             }
+            catch (Exception e) when (e.ToString().Contains("Could not find the specified task. Execute without any parameters to show all tasks."))
+            {
+                return false;
+            }
             catch (Exception e)
             {
                 _logger.LogError(e,e.Message);
