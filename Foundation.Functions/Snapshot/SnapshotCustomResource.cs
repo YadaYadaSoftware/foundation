@@ -2,7 +2,7 @@
 using YadaYada.Bisque.Annotations;
 using YadaYada.Bisque.Aws.CloudFormation;
 
-namespace Data.Serverless.Snapshot
+namespace Foundation.Functions.Snapshot
 {
     public class SnapshotCustomResource : CustomResource, ISnapshotInfo
     {

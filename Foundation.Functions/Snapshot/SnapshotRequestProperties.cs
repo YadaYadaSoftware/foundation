@@ -1,6 +1,6 @@
 ﻿using YadaYada.Bisque.Annotations;
 
-namespace Data.Serverless.Snapshot;
+namespace Foundation.Functions.Snapshot;
 
 public class SnapshotRequestProperties : ISnapshotInfo
 {

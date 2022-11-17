@@ -1,6 +1,4 @@
-﻿using YadaYada.Bisque.Annotations;
-
-namespace Data.Serverless.Backup;
+﻿namespace Foundation.Functions.Backup;
 
 internal interface IBackupRestoreDatabaseInfo
 {

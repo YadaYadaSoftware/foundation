@@ -39,7 +39,7 @@
     }
   },
   "Resources": {
-    "DataServerlessRestoreRestoreFunctionsRestoreDatabaseGenerated": {
+    "FoundationFunctionsRestoreRestoreFunctionsRestoreDatabaseGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
         "Tool": "Amazon.Lambda.Annotations"
@@ -53,11 +53,11 @@
           "Ref": "LambdaExecutionRole"
         },
         "PackageType": "Zip",
-        "Handler": "Foundation.Functions::Data.Serverless.Restore.RestoreFunctions_RestoreDatabase_Generated::RestoreDatabase",
+        "Handler": "Foundation.Functions::Foundation.Functions.Restore.RestoreFunctions_RestoreDatabase_Generated::RestoreDatabase",
         "AutoPublishAlias": "live"
       }
     },
-    "DataServerlessMigrateMigrationFunctionsApplyMigrationGenerated": {
+    "FoundationFunctionsMigrateMigrationFunctionsApplyMigrationGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
         "Tool": "Amazon.Lambda.Annotations"
@@ -71,7 +71,7 @@
           "Ref": "LambdaExecutionRole"
         },
         "PackageType": "Zip",
-        "Handler": "Foundation.Functions::Data.Serverless.Migrate.MigrationFunctions_ApplyMigration_Generated::ApplyMigration",
+        "Handler": "Foundation.Functions::Foundation.Functions.Migrate.MigrationFunctions_ApplyMigration_Generated::ApplyMigration",
         "AutoPublishAlias": "live"
       }
     }
@@ -79,12 +79,12 @@
   "Outputs": {
     "MigrationFunctionAlias": {
       "Value": {
-        "Ref": "DataServerlessMigrateMigrationFunctionsApplyMigrationGeneratedAliaslive"
+        "Ref": "FoundationFunctionsMigrateMigrationFunctionsApplyMigrationGeneratedAliaslive"
       }
     },
     "RestoreFunnctionAlias": {
       "Value": {
-        "Ref": "DataServerlessRestoreRestoreFunctionsRestoreDatabaseGeneratedAliaslive"
+        "Ref": "FoundationFunctionsRestoreRestoreFunctionsRestoreDatabaseGeneratedAliaslive"
       }
     }
   }

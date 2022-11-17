@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using YadaYada.Bisque.Annotations;
 
-namespace Data.Serverless.Migrate;
+namespace Foundation.Functions.Migrate;
 
 public class MigrationInfoRequest : CloudFormationRequest<MigrationInfoProperties>, IMigrationInfo
 {

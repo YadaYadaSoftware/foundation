@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Text;
 using Amazon.S3.Transfer;
-using Data.Serverless.Backup;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 

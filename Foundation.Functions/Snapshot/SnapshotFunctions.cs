@@ -1,12 +1,11 @@
 ﻿using Amazon.Lambda.Core;
 using Amazon.RDS.Model;
-using Foundation.Functions;
 using JetBrains.Annotations;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using YadaYada.Bisque.Annotations;
 
-namespace Data.Serverless.Snapshot
+namespace Foundation.Functions.Snapshot
 {
     public class SnapshotFunctions : DatabaseFunctionBase
     {

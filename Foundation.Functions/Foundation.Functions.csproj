@@ -25,9 +25,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
     <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" />
-    <PackageReference Include="YadaYadaSoftware.Amazon.CloudFormation" Version="1.233.112" />
-    <PackageReference Include="YadaYadaSoftware.Amazon.Lambda.S3Events" Version="1.233.112" />
-    <PackageReference Include="YadaYadaSoftware.Microsoft.EntityFrameworkCore" Version="1.233.112" />
+    <PackageReference Include="YadaYadaSoftware.Amazon.CloudFormation" Version="1.307.144" />
+    <PackageReference Include="YadaYadaSoftware.Amazon.Lambda.S3Events" Version="1.307.144" />
+    <PackageReference Include="YadaYadaSoftware.Microsoft.EntityFrameworkCore" Version="1.307.144" />
 
   </ItemGroup>
 </Project>

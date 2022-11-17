@@ -3,15 +3,14 @@ using Amazon.CloudFormation;
 using Amazon.CloudFormation.Model;
 using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Core;
-using Data.Serverless.Backup;
-using Foundation.Functions;
+using Foundation.Functions.Backup;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using YadaYada.Bisque.Annotations;
 using InvalidOperationException = System.InvalidOperationException;
 
 
-namespace Data.Serverless.Restore;
+namespace Foundation.Functions.Restore;
 
 public class RestoreFunctions : DatabaseFunctionBase
 {

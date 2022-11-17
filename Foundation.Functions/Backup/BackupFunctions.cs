@@ -1,11 +1,10 @@
 ﻿using Amazon.Lambda.Core;
-using Foundation.Functions;
 using JetBrains.Annotations;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using YadaYada.Bisque.Annotations;
 
-namespace Data.Serverless.Backup;
+namespace Foundation.Functions.Backup;
 
 public class BackupFunctions : DatabaseFunctionBase
 {

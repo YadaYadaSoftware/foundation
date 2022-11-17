@@ -1,15 +1,13 @@
-﻿using System.Linq;
-using System.Data;
+﻿using System.Data;
 using System.Text;
 using Amazon.Lambda.Core;
 using Amazon.RDS;
-using Data.Serverless.Backup;
-using Foundation.Functions;
+using Foundation.Functions.Backup;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using YadaYada.Bisque.Annotations;
 
-namespace Data.Serverless;
+namespace Foundation.Functions;
 
 public abstract class DatabaseFunctionBase
 {
@@ -164,7 +162,7 @@ public abstract class DatabaseFunctionBase
                 foreach (SqlParameter commandParameter in command.Parameters)
                 {
                     Logger.LogTrace($"{{{nameof(commandParameter.ParameterName)}}}={0},{{{nameof(commandParameter.Value)}}}={1}", commandParameter.ParameterName, commandParameter.Value);
-
+                        
                 }
                 throw;
             }

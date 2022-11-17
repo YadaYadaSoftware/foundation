@@ -1,9 +1,8 @@
-﻿using Data.Serverless.Backup;
+﻿using Foundation.Functions.Backup;
 using Newtonsoft.Json;
-using YadaYada.Bisque.Annotations;
 using YadaYada.Bisque.Aws.CloudFormation;
 
-namespace Data.Serverless.Restore;
+namespace Foundation.Functions.Restore;
 
 public class RestoreDatabaseCustomResource : CustomResource, IBackupRestoreDatabaseInfo
 {

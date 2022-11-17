@@ -1,4 +1,4 @@
-﻿namespace Data.Serverless.Migrate;
+﻿namespace Foundation.Functions.Migrate;
 
 public class MigrationInfoProperties : IMigrationInfo
 {
