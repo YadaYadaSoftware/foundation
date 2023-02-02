@@ -64,7 +64,7 @@ public class RestoreFunctions : DatabaseFunctionBase
 
                     if (!bool.TryParse(info.DropDatabase, out dropDatabase))
                     {
-                        throw new InvalidOperationException($"Cannot parse {nameof(info.BackupDatabase)}:'{info.BackupDatabase}'");
+                        throw new InvalidOperationException($"Cannot parse {nameof(info.DropDatabase)}:'{info.DropDatabase}'");
                     }
                     
                     if (dropDatabase)
@@ -90,11 +90,11 @@ public class RestoreFunctions : DatabaseFunctionBase
 
     }
 
-    private async Task DeleteDatabase(BackupRestoreDatabaseInfo backupRestoreDatabaseInfo, ILambdaContext context)
+    private async Task DeleteDatabase(BackupRestoreDatabaseInfo info, ILambdaContext context)
     {
-        if (!bool.TryParse(backupRestoreDatabaseInfo.DropDatabase, out var dropDatabase))
+        if (!bool.TryParse(info.DropDatabase, out var dropDatabase))
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException($"Cannot parse {nameof(info.DropDatabase)}:'{info.DropDatabase}'");
         }
         if (!dropDatabase)
         {
@@ -112,7 +112,7 @@ public class RestoreFunctions : DatabaseFunctionBase
 
             dropCommand.CommandText = "msdb.dbo.rds_drop_database";
             dropCommand.CommandType = CommandType.StoredProcedure;
-            dropCommand.Parameters.Add("db_name", SqlDbType.VarChar).Value = backupRestoreDatabaseInfo.DatabaseName;
+            dropCommand.Parameters.Add("db_name", SqlDbType.VarChar).Value = info.DatabaseName;
             dropCommand.ExecuteNonQuery();
 
         }

@@ -50,7 +50,8 @@ public abstract class DatabaseFunctionBase
                     case "SUCCESS":
                         return true;
                     case "ERROR":
-                        throw new InvalidOperationException("ERROR");
+                        var error = reader.GetString(6);
+                        throw new InvalidOperationException(error);
                     default:
                         return false;
                 }
