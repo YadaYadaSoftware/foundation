@@ -48,7 +48,7 @@ public class RestoreFunctions : DatabaseFunctionBase
 
                     if (!bool.TryParse(info.BackupDatabase, out backupDatabase))
                     {
-                        throw new InvalidOperationException();
+                        throw new InvalidOperationException($"Cannot parse {nameof(info.BackupDatabase)}:'{info.BackupDatabase}'");
                     }
 
                     if (backupDatabase)
@@ -64,9 +64,9 @@ public class RestoreFunctions : DatabaseFunctionBase
 
                     if (!bool.TryParse(info.DropDatabase, out dropDatabase))
                     {
-                        throw new InvalidOperationException();
+                        throw new InvalidOperationException($"Cannot parse {nameof(info.BackupDatabase)}:'{info.BackupDatabase}'");
                     }
-
+                    
                     if (dropDatabase)
                     {
                         await this.DeleteDatabase(info, context);
